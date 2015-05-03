@@ -1,0 +1,68 @@
+<?php
+
+/**
+ * @file
+ * Module file for agile_iit.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function agile_iit_menu() {
+  return array(
+    'admin/config/agile/iit' => array(
+      'title' => 'Agile IIT Configuration',
+      'description' => 'Configure IIT image viewing.',
+      'page callback' => 'drupal_get_form',
+      'access arguments' => array('administer site configuration'),
+      'page arguments' => array('agile_iit_admin'),
+      'file' => 'includes/agile_iit_admin.form.inc',
+      'type' => MENU_NORMAL_ITEM,
+    ),
+  );
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function agile_iit_block_info() {
+  $blocks['iit_content'] = array(
+    'info' => t('IIT Comparison tool'),
+    'cache' => DRUPAL_CACHE_PER_ROLE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function agile_iit_block_view($delta = '') {
+  module_load_include('inc', 'agile_iit', 'includes/utilities');
+  $has_content = FALSE;
+  switch ($delta) {
+    case 'iit_content':
+
+      break;
+
+
+  }
+  if ($has_content) {
+    return $block;
+  }
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * Defines the theming capabilities provided by this module.
+ */
+function agile_iit_theme() {
+  return array(
+    'agile_iit' => array(
+      'file' => 'theme/theme.inc',
+      'template' => 'theme/agile_iit',
+      'variables' => array('object' => NULL),
+    ),
+  );
+}
