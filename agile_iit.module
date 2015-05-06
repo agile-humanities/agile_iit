@@ -47,7 +47,7 @@ function agile_iit_block_view($delta = '') {
   switch ($delta) {
     case 'iit_content':
       $block['subject'] = t('IIT Tool');
-      $block['content'] = iit_get_html();
+      $block['content'] = theme('agile_iit', array());
       $has_content = TRUE;
       break;
   }
@@ -66,7 +66,6 @@ function agile_iit_theme() {
     'agile_iit' => array(
       'file' => 'theme/theme.inc',
       'template' => 'theme/agile_iit',
-      'variables' => array('object' => NULL),
     ),
   );
 }
