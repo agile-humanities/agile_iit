@@ -26,9 +26,13 @@ function agile_iit_menu() {
  * Implements hook_block_info().
  */
 function agile_iit_block_info() {
+
   $blocks['iit_content'] = array(
-    'info' => t('IIT Comparison tool'),
-    'cache' => DRUPAL_CACHE_PER_ROLE,
+    'info' => t('ITT Comparison Tool'),
+    'status' => TRUE,
+    'region' => 'content',
+    'visibility' => BLOCK_VISIBILITY_LISTED,
+   // 'pages' => '/selected',
   );
 
   return $blocks;
@@ -42,10 +46,10 @@ function agile_iit_block_view($delta = '') {
   $has_content = FALSE;
   switch ($delta) {
     case 'iit_content':
-
+      $block['subject'] = t('IIT Tool');
+      $block['content'] = iit_get_html();
+      $has_content = TRUE;
       break;
-
-
   }
   if ($has_content) {
     return $block;
@@ -65,4 +69,42 @@ function agile_iit_theme() {
       'variables' => array('object' => NULL),
     ),
   );
+}
+
+function iit_get_html() {
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $img1_src = $_POST['cf_img1'];
+    $img2_src = $_POST['cf_img2'];
+    $pre = $_POST['pre'];
+  }
+  $pre2 = str_replace("px", "", $pre);
+  $pre2 = (int) $pre2 + 10;
+
+  $html = <<<EOD
+
+
+
+<div id=cr_container>
+
+  <input type="button" name="cl_close" id="cl_close" value="close"/>
+  <div id="ol_i1">
+    <img src='$img1_src' id='crop_target' width='$pre' style="position:absolute; top:26px; left:0px;"/>
+  </div>
+  <div id="ol_i2">
+    <img src='$img2_src' width='$pre' style="position:absolute; top:26px; left:$pre2"/></a>
+    </a>
+  </div>
+  <div style="clear:both;"></div>
+  <form id="cropform2" method="post">
+    <input type="hidden" id="x" name="x" />
+    <input type="hidden" id="y" name="y" />
+    <input type="hidden" id="w" name="w" />
+    <input type="hidden" id="h" name="h" />
+    <input type="submit" value="Crop Image" class="btn btn-large btn-inverse" style=" position: relative; float:left;" />
+  </form>
+</div>
+<div id=results>
+</div>
+EOD;
+  return $html;
 }
