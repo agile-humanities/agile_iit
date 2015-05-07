@@ -1,8 +1,4 @@
-
-
-
 <div id="menu">
-
   <form id="viewform" method="post">
     <input type="hidden" id="vf_img1" name="vf_img1"/>
     <input type="hidden" id="vf_img2" name="vf_img2"/>
@@ -25,9 +21,7 @@
     <div id="table1" z-index="500" opacity="0.1">
     </div>
   </div>
-
   <div id="image2" class="img-container"> <h4> Image 2 </h4>
-
   </div>
 </div>
 
