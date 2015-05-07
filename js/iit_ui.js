@@ -76,7 +76,7 @@ $(function() {
     previousImagePrefix = next;
   }
 
-  $(".ui-thumb").draggable({
+  $(".views-field").draggable({
     cursor: "move",
     revert: "false",
     helper: "clone",
