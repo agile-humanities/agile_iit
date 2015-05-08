@@ -4,7 +4,6 @@ var image2Top = 350;
 var image1Left = 0;
 var image2Left = 150;
 
-
 $(function() {
   var image1_src, image2_src, image2_offset, image2_height, image2_width, image1_dimW, image1_dimH, image2_dimW, image2_dimH, image1_clientWidth, image2_clientWidth, imageSize, imageSizePrefix, screenRatio,
       previousImagePrefix;
@@ -76,15 +75,13 @@ $(function() {
     previousImagePrefix = next;
   }
 
-  $(".views-field").draggable({
+  $(".ui-thumb").draggable({
     cursor: "move",
     revert: "false",
     helper: "clone",
     scroll: false
 
   });
-
-
 
   function initializeImages() {
     $(".ui-thumb img").each(function() {
@@ -102,54 +99,58 @@ $(function() {
         tmpentry = tmpentry.pop();
 
         var re = /^(\d{2,3}px)\-(.*)$/;
-
         var match = re.exec(tmpentry);
         tmpentry = "../tmp2/images/" + match[1] + "/" + match[2];
         var entry3 = $(that).attr('data-lrg_url');
         $(that).attr('data-lrg_url', tmpentry);
-
-
         $.get(tmpentry)
             .done(function() {
           console.log("yes in tmp images folder");
         })
             .fail(function() {
-
           var values = new Array();
           values.push({src: entry2});
 
           entry2 = entry2.split("/", 6);
           entry2 = entry2.join("/");
           entry2 = entry2.replace("/thumb", "");
-
           $.post("makeimage.php", {src: entry2, pre: imageSizePrefix}, function(data) {
-
           });
-
         });
-
-
       });
-
-
     });
   }
 
+  function write_attributes() {
+    $('.iit-thumb a').each(function() {
+      largeurl = $(this).attr('href');
+      $(this).find('img').each(function() {
+        $(this).attr('data-lrg_url', largeurl);
+        $(this).unwrap();
+      });
+    });
+    $('.iit-thumb img').each(function() {
+      url = $(this).attr('src');
+      width = $(this).attr('width');
+      height = $(this).attr('height');
+      //$(this).attr("data-lrg_url", url);
+      $(this).attr("data-dimensions", width + 'x' + height);
+      $(this).attr("data-height", height);
+      $(this).attr("data-width", width);
+      $(this).attr("data-orientation", 'landscape');
+    });
+  }
+  write_attributes();
   replaceImagePrefix(previousImagePrefix, imageSizePrefix);
   initializeImages();
 
   $(".img-container").droppable({
     accept: ".ui-thumb",
     drop: function(event, ui) {
-      //console.log(this);
       var src = ui.draggable.find('img').attr("data-lrg_url");
       console.log(src);
       var vfsrc = src.replace(imageSizePrefix, "800px");
       var vf400src = src.replace(imageSizePrefix, "400px");
-      //src = src.replace("120px","800px");
-      console.log(src, vfsrc);
-      console.log(vf400src);
-
       $(this).find("img").remove();
 
       var title = ui.draggable.find('img').attr("alt");
@@ -165,25 +166,18 @@ $(function() {
         setLandscapeView();
       }
 
-      //console.log(title);
       $(this).find("h4").html(title);
-      // var newImage = "<a href='" + src + "'><img src='" + src + "'> </a>";
-
       var newImage = "<a href='" + src + "'><img onerror='imgError()'  alt='" + title + "' src='" + src + "' data-dimensions='" + dimensions + "' data-height='" + height + "' data-width='" + width + "' data-orientation='" + orientation + "'> </a>";
-      //console.log(newImage);
       var newImageElm = $(newImage).appendTo(this);
 
       if (this.id === "image1")
       {
         image1_src = src;
         image1_dimH = $(this).find('img').attr('data-height');
-        // console.log(image1_dimH);
         image1_dimW = $(this).find('img').attr('data-width');
         image1_clientWidth = $(this).find('img').width();
         console.log(image1_clientWidth);
-        // console.log(image1_dimW);
-        // console.log(image1_src);
-        // console.log(image2_src);
+
         $("#vf_img1").val(vfsrc);
         $("#cf_img1").val(src);
         var vf400img1 = new Image();
@@ -212,13 +206,9 @@ $(function() {
       {
         image2_src = src;
         image2_dimH = $(this).find('img').attr('data-height');
-        //console.log(image2_dimH);
         image2_dimW = $(this).find('img').attr('data-width');
         image2_clientWidth = $(this).find('img').width();
-        console.log(image2_clientWidth);
-        //console.log(image2_dimW);
-        //console.log(image1_src);
-        //console.log(image2_src);
+
         $("#vf_img2").val(vfsrc);
         $("#cf_img2").val(src);
         var vf400img2 = new Image();
@@ -240,20 +230,11 @@ $(function() {
           console.log("newvfsrc" + newvfsrc);
           $("#vf_img2").val(newvfsrc);
         });
-
-
       }
-
-
-
     }
-
-
   });
 
   var resizeListener = function() {
-    console.log($(window).width());
-
     imageSize = Math.floor(($(window).width() * screenRatio) / 2);
     imageSizePrefix = calculateImagePrefix(imageSize);
     console.log("resized" + imageSizePrefix);
@@ -261,10 +242,6 @@ $(function() {
       replaceImagePrefix(previousImagePrefix, imageSizePrefix);
       initializeImages();
     }
-
-
-
-
   };
 
   window.addEventListener('resize', resizeListener, false);
@@ -289,9 +266,7 @@ $(function() {
   window.addEventListener('resize', resizeOverlayListener, false);
 
   var listener = function() {
-    //alert("scroll");
     if (overlay) {
-      //alert("viewform overlay");
       overlay.style.top = window.pageYOffset + 'px';
       overlay.style.left = window.pageXOffset + 'px';
     }
@@ -300,19 +275,12 @@ $(function() {
       overlay2.style.left = window.pageXOffset + 'px';
     }
   };
-
   window.addEventListener('scroll', listener, false);
-
-
-
   $("#gridform").submit(function(e) {
     e.preventDefault();
 
-    //console.log(e);
     var tmp1 = $("#vf_img1").val();
     var tmp2 = $("#vf_img2").val();
-    //console.log(tmp1);
-    //console.log(tmp2);
     var elementExists = document.getElementById("img_overlay1");
 
     if (elementExists) {
@@ -322,8 +290,7 @@ $(function() {
       element2.parentNode.removeChild(element2);
     }
 
-    else if (tmp1 === "" || tmp2 === "")
-    {
+    else if (tmp1 === "" || tmp2 === "") {
       alert("Two images must be selected.");
       return false;
     }
@@ -336,12 +303,6 @@ $(function() {
       var img2top = $("#image2").find('img').position();
       var img2w = $("#image2").find('img').width();
       var img2h = $("#image2").find('img').height();
-
-
-
-      console.log(img1top.top, img1top.left, img1w, img1h);
-      console.log(img2top.top, img2top.left, img2w, img2h);
-
 
       var overlay1 = $('<div id="img_overlay1"> </div>');
       var overlay2 = $('<div id="img_overlay2"> </div>');
@@ -358,7 +319,6 @@ $(function() {
         table2.append(row);
       }
 
-
       overlay1.append(table1);
       overlay2.append(table2);
 
@@ -374,40 +334,25 @@ $(function() {
       $("#img_overlay2").css("left", img2top.left);
       $("#img_overlay2").css("width", img2w);
       $("#img_overlay2").css("height", img2h);
-
-
     }
   });
 
   $("#viewform").submit(function(e) {
     e.preventDefault();
-
-    //console.log(e);
     var tmp1 = $("#vf_img1").val();
     var tmp2 = $("#vf_img2").val();
-    //console.log(tmp1);
-    //console.log(tmp2);
-    if (tmp1 === "" || tmp2 === "")
-    {
+    if (tmp1 === "" || tmp2 === "") {
       alert("Two images must be selected.");
       return false;
     }
-    else
-    {
+    else {
       var myOverlay = document.createElement('div');
       myOverlay.id = 'overlay';
       document.body.appendChild(myOverlay);
-      /*var myPframe = window.parent.document.getElementById('globalWrapper');
-       myPframe.appendChild(myOverlay);
-       myOverlay.style.zIndex = '1001';
-       myOverlay.style.position = 'absolute';*/
       myOverlay.style.width = window.innerWidth + 'px';
       myOverlay.style.height = window.innerHeight + 1000 + 'px';
       myOverlay.style.top = window.pageYOffset + 'px';
       myOverlay.style.left = window.pageXOffset + 'px';
-      //myOverlay.style.top = 0 + 'px';
-      //myOverlay.style.left =0 + 'px';
-
 
       if (vf400img1Height != 0 && vf400img2Height != 0) {
         if (vf400img1Height >= vf400img2Height) {
@@ -419,19 +364,13 @@ $(function() {
       }
       else {
         imagesTop = window.innerHeight - 250;
-
-        //imagesTop=Math.max(imagesTop, vf400img2Height, vf400img1Height);
       }
 
-
       var values = $(this).serializeArray();
-      //console.log(values);
       $.post("twoviews.php", values, function(data) {
-        //alert(data);
         $("#overlay").append(data);
         $('.zoom').zoomy({border: '6px solid #fff'});
       });
-
     }
   });
 
@@ -443,9 +382,6 @@ $(function() {
     $('#w').val(c.w);
     $('#h').val(c.h);
   }
-  ;
-
-
 
   $("#cropform").submit(function(e) {
     e.preventDefault();
@@ -456,8 +392,7 @@ $(function() {
       alert("Two images must be selected.");
       return false;
     }
-    else
-    {
+    else {
       $(window).scrollTop(0);
       var myOverlay = document.createElement('div');
       myOverlay.id = 'overlay2';
@@ -471,25 +406,14 @@ $(function() {
       values.push({name: "pre", value: imageSizePrefix});
       console.log(values);
       $.post("cropviews.php", values, function(data) {
-        //alert(data);
         $("#overlay2").append(data);
         $("#cropform2").onSubmit = function() {
           return checkCoords();
         }
         $('#crop_target').Jcrop({onSelect: updateCoords});
-        //console.log($("#ol_i1 img:first-child").position());
-        //console.log($("#ol_i1 img:first-child").offset());
-        //console.log($("#ol_i2 img:first-child").position());
-        //console.log($("#ol_i2 img:first-child").offset());
         image2_offset = $("#ol_i2 img:first-child").offset();
         image2_height = $("#ol_i2 img:first-child").height();
         image2_width = $("#ol_i2 img:first-child").width();
-
-
-        //console.log(image2_offset);
-        //console.log(image2_height);
-        //console.log(image2_width);
-
 
       });
 
@@ -561,15 +485,7 @@ $(function() {
     }
 
     else if ($target.is(".ui-icon-info")) {
-      //console.log(event);
-      //console.log($target.offset());
-      //console.log($target.parent().find('img').offset());
-      //console.log($target.parent().find('img').position());
-      //console.log($target.parent().find('img').width());
-      //console.log($target.parent().find('img').height());
-      document.body.scrollTop = 0;
       var sectionOffset = $target.parent().find('img').offset();
-
       var sectionHeight = $target.parent().find('img').height();
       var sectionWidth = $target.parent().find('img').width();
       var sectionImage = $target.parent().find('img').attr("src");
@@ -612,34 +528,16 @@ $(function() {
         values.push({name: 'title2', value: title2});
         values.push({name: 'dimensions1', value: dimensions1});
         values.push({name: 'dimensions2', value: dimensions2});
-
-        //console.log(values);
-
-        $.post("crop3.php", values, function(data) {
-          //alert(data);
+        $.post("crop3.php", values, function(data) {;
           var myWindow = window.open('', 'cmpWindow', 'width=800, height=400, scrollbars=yes, toolbar=yes');
-          /*$(myWindow.document.body).ready(function(){
-           $(myWindow.document.body).append(data);
-
-           });*/
-
-
-
           myWindow.document.write(data);
           myWindow.focus();
-
-
         });
-
       }
       else {
         console.log("outbounds");
       }
-
-
     }
     return false;
-
   });
-
 });

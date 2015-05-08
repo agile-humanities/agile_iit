@@ -13,11 +13,11 @@
 .gallery li img {width: 100%; cursor: move;}
 
 
-#menu {position:absolute; top: 375px;}
+#menu {position:absolute; top: 250px;}
 
 #container{
 	position:absolute;
-	top: 460px;
+	top: 340px;
 	width: 100%;
 
 }
