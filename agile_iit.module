@@ -10,14 +10,23 @@
  */
 function agile_iit_menu() {
   return array(
-    'admin/config/agile/iit' => array(
-      'title' => 'Agile IIT Configuration',
-      'description' => 'Configure IIT image viewing.',
-      'page callback' => 'drupal_get_form',
-      'access arguments' => array('administer site configuration'),
-      'page arguments' => array('agile_iit_admin'),
-      'file' => 'includes/agile_iit_admin.form.inc',
-      'type' => MENU_NORMAL_ITEM,
+    'agile/iit/crop' => array(
+      'file' => 'includes/callbacks.inc',
+      'page callback' => 'agile_iit_crop_callback',
+      'type' => MENU_CALLBACK,
+      'access callback' => TRUE,
+    ),
+    'agile/iit/croptool' => array(
+      'file' => 'includes/callbacks.inc',
+      'page callback' => 'agile_iit_crop_tool_callback',
+      'type' => MENU_CALLBACK,
+      'access callback' => TRUE,
+    ),
+    'agile/iit/twoviews' => array(
+      'file' => 'includes/callbacks.inc',
+      'page callback' => 'agile_iit_twoviews',
+      'type' => MENU_CALLBACK,
+      'access callback' => TRUE,
     ),
   );
 }
@@ -32,7 +41,6 @@ function agile_iit_block_info() {
     'status' => TRUE,
     'region' => 'content',
     'visibility' => BLOCK_VISIBILITY_LISTED,
-
   );
 
   return $blocks;
@@ -67,43 +75,23 @@ function agile_iit_theme() {
       'file' => 'theme/theme.inc',
       'template' => 'theme/agile_iit',
     ),
+    'agile_iit_crop' => array(
+      'file' => 'theme/theme.inc',
+      'template' => 'theme/agile_iit_crop',
+      'variables' => array(
+        'img1_src' => NULL,
+        'img2_src' => NULL,
+        'pre' => NULL,
+        'pre' => NULL,
+      ),
+    ),
+    'agile_iit_twoviews' => array(
+      'file' => 'theme/theme.inc',
+      'template' => 'theme/agile_iit_twoviews',
+      'variables' => array(
+        'img1_src' => NULL,
+        'img2_src' => NULL,
+      ),
+    ),
   );
-}
-
-function iit_get_html() {
-  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $img1_src = $_POST['cf_img1'];
-    $img2_src = $_POST['cf_img2'];
-    $pre = $_POST['pre'];
-  }
-  $pre2 = str_replace("px", "", $pre);
-  $pre2 = (int) $pre2 + 10;
-
-  $html = <<<EOD
-
-
-
-<div id=cr_container>
-
-  <input type="button" name="cl_close" id="cl_close" value="close"/>
-  <div id="ol_i1">
-    <img src='$img1_src' id='crop_target' width='$pre' style="position:absolute; top:26px; left:0px;"/>
-  </div>
-  <div id="ol_i2">
-    <img src='$img2_src' width='$pre' style="position:absolute; top:26px; left:$pre2"/></a>
-    </a>
-  </div>
-  <div style="clear:both;"></div>
-  <form id="cropform2" method="post">
-    <input type="hidden" id="x" name="x" />
-    <input type="hidden" id="y" name="y" />
-    <input type="hidden" id="w" name="w" />
-    <input type="hidden" id="h" name="h" />
-    <input type="submit" value="Crop Image" class="btn btn-large btn-inverse" style=" position: relative; float:left;" />
-  </form>
-</div>
-<div id=results>
-</div>
-EOD;
-  return $html;
 }

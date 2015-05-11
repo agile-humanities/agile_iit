@@ -367,7 +367,7 @@ $(function() {
       }
 
       var values = $(this).serializeArray();
-      $.post("twoviews.php", values, function(data) {
+      $.post("agile/iit/twoviews", values, function(data) {
         $("#overlay").append(data);
         $('.zoom').zoomy({border: '6px solid #fff'});
       });
@@ -387,8 +387,7 @@ $(function() {
     e.preventDefault();
     var tmp1 = $("#cf_img1").val();
     var tmp2 = $("#cf_img2").val();
-    if (tmp1 === "" || tmp2 === "")
-    {
+    if (tmp1 === "" || tmp2 === "") {
       alert("Two images must be selected.");
       return false;
     }
@@ -404,8 +403,7 @@ $(function() {
 
       var values = $(this).serializeArray();
       values.push({name: "pre", value: imageSizePrefix});
-      console.log(values);
-      $.post("cropviews.php", values, function(data) {
+      $.post("agile/iit/crop", values, function(data) {
         $("#overlay2").append(data);
         $("#cropform2").onSubmit = function() {
           return checkCoords();
@@ -434,7 +432,7 @@ $(function() {
       values.push({name: 'c_w', value: c_w});
       values.push({name: 'c_h', value: c_h});
       //console.log(values);
-      $.post("crop2.php", values, function(data) {
+      $.post("agile/iit/croptool", values, function(data) {
         // alert(data);
         $("#results").append(data);
 
@@ -528,7 +526,8 @@ $(function() {
         values.push({name: 'title2', value: title2});
         values.push({name: 'dimensions1', value: dimensions1});
         values.push({name: 'dimensions2', value: dimensions2});
-        $.post("crop3.php", values, function(data) {;
+        $.post("crop3.php", values, function(data) {
+          ;
           var myWindow = window.open('', 'cmpWindow', 'width=800, height=400, scrollbars=yes, toolbar=yes');
           myWindow.document.write(data);
           myWindow.focus();
