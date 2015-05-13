@@ -22,9 +22,7 @@
     <div id="table1" z-index="500" opacity="0.1">
     </div>
   </div>
-
   <div id="image2" class="img-container"> <h4> Image 2 </h4>
-
   </div>
 </div>
 

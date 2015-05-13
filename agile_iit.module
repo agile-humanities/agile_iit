@@ -28,6 +28,12 @@ function agile_iit_menu() {
       'type' => MENU_CALLBACK,
       'access callback' => TRUE,
     ),
+     'agile/iit/imagecropper' => array(
+      'file' => 'includes/callbacks.inc',
+      'page callback' => 'agile_iit_image_cropper',
+      'type' => MENU_CALLBACK,
+      'access callback' => TRUE,
+    ),
   );
 }
 

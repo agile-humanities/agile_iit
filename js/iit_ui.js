@@ -90,7 +90,7 @@ $(function() {
 
       $.get(entry2)
           .done(function() {
-        console.log("yes in main images folder");
+        console.log("yes in main images folder 93");
       })
           .fail(function() {
         console.log("not in main images folder");
@@ -114,7 +114,8 @@ $(function() {
           entry2 = entry2.split("/", 6);
           entry2 = entry2.join("/");
           entry2 = entry2.replace("/thumb", "");
-          $.post("makeimage.php", {src: entry2, pre: imageSizePrefix}, function(data) {
+          console.log(118);
+          $.post("agile/iit/makeimage", {src: entry2, pre: imageSizePrefix}, function(data) {
           });
         });
       });
@@ -340,6 +341,7 @@ $(function() {
   $("#viewform").submit(function(e) {
     e.preventDefault();
     var tmp1 = $("#vf_img1").val();
+    console.log(tmp1);
     var tmp2 = $("#vf_img2").val();
     if (tmp1 === "" || tmp2 === "") {
       alert("Two images must be selected.");
@@ -526,7 +528,7 @@ $(function() {
         values.push({name: 'title2', value: title2});
         values.push({name: 'dimensions1', value: dimensions1});
         values.push({name: 'dimensions2', value: dimensions2});
-        $.post("crop3.php", values, function(data) {
+        $.post("agile/iit/imagecropper", values, function(data) {
           ;
           var myWindow = window.open('', 'cmpWindow', 'width=800, height=400, scrollbars=yes, toolbar=yes');
           myWindow.document.write(data);
