@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Menu drive callback to view default images.
+ */
 function agile_iit_crop_callback() {
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $img1_src = $_POST['cf_img1'];
@@ -31,6 +34,9 @@ function agile_iit_crop_callback() {
   return theme('agile_iit_crop', $theme_args);
 }
 
+/**
+ * Menu drive callback to view cropped images.
+ */
 function agile_iit_crop_tool_callback() {
 
   /**
@@ -86,7 +92,8 @@ function agile_iit_crop_tool_callback() {
     $dst_r1 = ImageCreateTrueColor($container_width, $container_height);
     imagecopyresampled($dst_r1, $img_replacement, 0, 0, 0, 0, $container_width, $container_height, $source_imagex, $source_imagey);
     imagecopy($dst_r, $dst_r1, 0, 0, $_POST['x'], $_POST['y'], $_POST['w'], $_POST['h']);
-    imagejpeg($dst_r, $cropfilepath, $jpeg_quality); //file is created here. Should be converted to managed
+    imagejpeg($dst_r, $cropfilepath, $jpeg_quality);
+    // Image created by imagejpeg is converted to Drupal managed file.
     $data = file_get_contents($cropfilepath);
     $file_object = file_save_data($data, "public://iit{$n}.jpg");
     $file_object->filemime = 'image/jpeg';
@@ -94,24 +101,23 @@ function agile_iit_crop_tool_callback() {
     unlink($cropfilepath);
     imagedestroy($dst_r1);
     imagedestroy($dst_r);
-
+//@TODO  convert to theme function.
     $string = "<div class='draggable imagecrop' style='z-index : 1001; float: left;'>";
-
     $string .="<a href='' class='ui-icon ui-icon-info'> info </a> <a> <span class='ui-icon ui-icon-close'> X </span></a> ";
-
     $string .="<div id='d" . $n . "' class='info'>  </div>";
     $string .="<img id='img" . $n . "' src='" . $image_url . "' style='opacity:0.6;filter:alpha(opacity=40);' ";
     $string .="data-ratiow='" . $ratio_width . "' data-ratioh='" . $ratio_height . "' ";
     $string .="data-dimensions='" . "$ratio_width x $ratio_height" . "'/>";
     $string .="<a href='' class='ui-icon ui-icon-arrowstop-1-e'> Flip Y-axis </a> ";
-
     $string .="<a href='' class='ui-resize'> Resize</a> ";
-
     $string .="</div>";
     echo $string;
   }
 }
 
+/**
+ * Menu driven callback to push off double image view.
+ */
 function agile_iit_twoviews() {
 
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -126,6 +132,9 @@ function agile_iit_twoviews() {
   );
 }
 
+/**
+ * Menu driven callback to push off image cropping.
+ */
 function agile_iit_image_cropper() {
   /**
    * Jcrop image cropping plugin for jQuery

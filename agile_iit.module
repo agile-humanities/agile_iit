@@ -87,8 +87,6 @@ function agile_iit_theme() {
       'variables' => array(
         'img1_src' => NULL,
         'img2_src' => NULL,
-        'pre' => NULL,
-        'pre' => NULL,
       ),
     ),
     'agile_iit_twoviews' => array(
