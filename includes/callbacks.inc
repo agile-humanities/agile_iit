@@ -4,31 +4,28 @@ function agile_iit_crop_callback() {
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $img1_src = $_POST['cf_img1'];
     $img2_src = $_POST['cf_img2'];
-    $pre = $_POST['pre'];
+    $container_width = $_POST['container_width'];
   }
-  $pre2 = str_replace("px", "", $pre);
-  $pre2 = (int) $pre2 + 10;
+
   $size1 = getimagesize($img1_src);
-  $width1 = $size1[0];
-  $height1 = $size1[1];
-  $ratio1 = $width1 / $height1;
-  $width1 = $width1 * $ratio1;
-  $height1 = $height1 * $ratio1;
+  $image_width1 = $size1[0];
+  $image_height1 = $size1[1];
+  $ratio1 = $image_width1 / $container_width;
+  $width1 = $container_width;
+  $height1 = $image_height1 / $ratio1;
 
   $size2 = getimagesize($img2_src);
-  $width2 = $size2[0];
-  $height2 = $size2[1];
-  $ratio2 = $width2 / $height2;
-  $width2 = $width2 * $ratio2;
-  $height2 = $height2 * $ratio2;
+  $image_width2 = $size2[0];
+  $image_height2 = $size2[1];
+  $ratio2 = $image_width2 / $container_width;
+  $height2 = $image_height2 / $ratio2;
 
   $theme_args = array(
     'img1_src' => $img1_src,
     'img2_src' => $img2_src,
-    'pre' => 350 + ' px',
-    'pre2' => 360,
-    'width1' => $width1,
+    'width' => $container_width,
     'height1' => $height1,
+    'height2' => $height2,
   );
 
   return theme('agile_iit_crop', $theme_args);
@@ -88,10 +85,13 @@ function agile_iit_crop_tool_callback() {
     /* new */
     $dst_r1 = ImageCreateTrueColor($container_width, $container_height);
     imagecopyresampled($dst_r1, $img_replacement, 0, 0, 0, 0, $container_width, $container_height, $source_imagex, $source_imagey);
-
     imagecopy($dst_r, $dst_r1, 0, 0, $_POST['x'], $_POST['y'], $_POST['w'], $_POST['h']);
-
-    $success = imagejpeg($dst_r, $cropfilepath, $jpeg_quality);//file is created here. Should be converted to managed
+    imagejpeg($dst_r, $cropfilepath, $jpeg_quality); //file is created here. Should be converted to managed
+    $data = file_get_contents($cropfilepath);
+    $file_object = file_save_data($data, "public://iit{$n}.jpg");
+    $file_object->filemime = 'image/jpeg';
+    $image_url = file_create_url($file_object->uri);
+    unlink($cropfilepath);
     imagedestroy($dst_r1);
     imagedestroy($dst_r);
 
@@ -100,7 +100,7 @@ function agile_iit_crop_tool_callback() {
     $string .="<a href='' class='ui-icon ui-icon-info'> info </a> <a> <span class='ui-icon ui-icon-close'> X </span></a> ";
 
     $string .="<div id='d" . $n . "' class='info'>  </div>";
-    $string .="<img id='img" . $n . "' src='" . $cropurl . "' style='opacity:0.6;filter:alpha(opacity=40);' ";
+    $string .="<img id='img" . $n . "' src='" . $image_url . "' style='opacity:0.6;filter:alpha(opacity=40);' ";
     $string .="data-ratiow='" . $ratio_width . "' data-ratioh='" . $ratio_height . "' ";
     $string .="data-dimensions='" . "$ratio_width x $ratio_height" . "'/>";
     $string .="<a href='' class='ui-icon ui-icon-arrowstop-1-e'> Flip Y-axis </a> ";

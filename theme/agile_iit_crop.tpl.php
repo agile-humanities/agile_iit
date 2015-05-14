@@ -2,10 +2,10 @@
 <div id=cr_container>
 
   <div id="ol_i1">
-    <img src='<? echo $img1_src ?>' id='crop_target' width='<? echo $pre ?>' style="position:absolute; top:26px; left:0px;"/>
+    <img src='<? echo $img1_src ?>' id='crop_target' width='<? echo $width ?> 'height='<? echo $height1 ?>' style="position:absolute; top:26px; left:0px;"/>
   </div>
   <div id="ol_i2">
-    <img src='<? echo $img2_src; ?>' width='<? echo $pre ?>' style="position:absolute; top:26px; left:<? echo $pre2 ?>px;"/></a>
+    <img src='<? echo $img2_src; ?>' width='<? echo $width ?>' 'height='<? echo $height2 ?>' style="position:absolute; top:26px; left:<? echo $width + 20 ?>px;"/></a>
     </a>
   </div>
 

@@ -404,7 +404,7 @@ $(function() {
       myOverlay.style.left = window.pageXOffset + 'px';
 
       var values = $(this).serializeArray();
-      values.push({name: "pre", value: imageSizePrefix});
+      values.push({name: "container_width", value: $('#image1').width()})
       $.post("agile/iit/crop", values, function(data) {
         $("#overlay2").append(data);
         $("#cropform2").onSubmit = function() {
@@ -414,9 +414,7 @@ $(function() {
         image2_offset = $("#ol_i2 img:first-child").offset();
         image2_height = $("#ol_i2 img:first-child").height();
         image2_width = $("#ol_i2 img:first-child").width();
-
       });
-
     }
   });
 
