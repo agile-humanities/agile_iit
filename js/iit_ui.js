@@ -396,7 +396,7 @@ $(function() {
     else {
       $(window).scrollTop(0);
       var myOverlay = document.createElement('div');
-      myOverlay.id = 'overlay';
+      myOverlay.id = 'overlay2';
       document.body.appendChild(myOverlay);
       myOverlay.style.width = window.innerWidth + 'px';
       myOverlay.style.height = window.innerHeight + 1000 + 'px';
@@ -404,9 +404,9 @@ $(function() {
       myOverlay.style.left = window.pageXOffset + 'px';
 
       var values = $(this).serializeArray();
-      values.push({name: "container_width", value: $('#image1').width()})
+      values.push({name: "container_width", value: window.innerWidth *.48 });
       $.post("agile/iit/crop", values, function(data) {
-        $("#overlay").append(data);
+        $("#overlay2").append(data);
         $("#cropform2").onSubmit = function() {
           return checkCoords();
         }

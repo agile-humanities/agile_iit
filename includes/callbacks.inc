@@ -31,7 +31,7 @@ function agile_iit_crop_callback() {
     'height2' => $height2,
   );
 
-  return theme('agile_iit_crop', $theme_args);
+  echo theme('agile_iit_crop', $theme_args);
 }
 
 /**
