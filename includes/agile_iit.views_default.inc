@@ -1,7 +1,16 @@
 <?php
+/**
+ * @file
+ * Default view.
+ */
 
-function agile_iit_views_default_views()
-{
+/**
+ * Provide default view required for IIT display.
+ *
+ * @return view
+ *   Default view
+ */
+function agile_iit_views_default_views() {
   $view = new view();
   $view->name = 'iit_selected';
   $view->description = 'A page listing the current user\'s selected images at /selected.';
@@ -92,11 +101,9 @@ function agile_iit_views_default_views()
   $handler = $view->new_display('block', 'Block', 'block_1');
   $handler->display->display_options['block_description'] = 'IIT Select';
   // Add view to list of views to provide.
-  $views [$view->name] = $view;
+  $views[$view->name] = $view;
 
   // ...Repeat all of the above for each view the module should provide.
-
   // At the end, return array of default views.
   return $views;
-
 }

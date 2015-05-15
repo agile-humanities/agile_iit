@@ -4,6 +4,7 @@
  * @file
  * Module file for agile_iit.
  */
+
 /**
  * Implements hook_views_api().
  */
@@ -13,6 +14,7 @@ function agile_iit_views_api() {
     'path' => drupal_get_path('module', 'agile_iit') . '/includes',
   );
 }
+
 /**
  * Implements hook_menu().
  */
@@ -36,7 +38,7 @@ function agile_iit_menu() {
       'type' => MENU_CALLBACK,
       'access callback' => TRUE,
     ),
-     'agile/iit/imagecropper' => array(
+    'agile/iit/imagecropper' => array(
       'file' => 'includes/callbacks.inc',
       'page callback' => 'agile_iit_image_cropper',
       'type' => MENU_CALLBACK,
