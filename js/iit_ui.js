@@ -453,7 +453,7 @@ $(function() {
   });
 
   $(document).on('click', '#cl_close', function() {
-    $('#overlay').remove();
+    $('#overlay2').remove();
   });
 
 
