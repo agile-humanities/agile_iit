@@ -256,11 +256,11 @@ $(function() {
       overlay.style.width = window.innerWidth + 'px';
       overlay.style.height = window.innerHeight + 'px';
     }
-    else if (overlay2) {
-      overlay2.style.top = window.pageYOffset + 'px';
-      overlay2.style.left = window.pageXOffset + 'px';
-      overlay2.style.width = window.innerWidth + 'px';
-      overlay2.style.height = window.innerHeight + 'px';
+    else if (overlay) {
+      overlay.style.top = window.pageYOffset + 'px';
+      overlay.style.left = window.pageXOffset + 'px';
+      overlay.style.width = window.innerWidth + 'px';
+      overlay.style.height = window.innerHeight + 'px';
     }
   };
 
@@ -271,9 +271,9 @@ $(function() {
       overlay.style.top = window.pageYOffset + 'px';
       overlay.style.left = window.pageXOffset + 'px';
     }
-    else if (overlay2) {
-      overlay2.style.top = window.pageYOffset + 'px';
-      overlay2.style.left = window.pageXOffset + 'px';
+    else if (overlay) {
+      overlay.style.top = window.pageYOffset + 'px';
+      overlay.style.left = window.pageXOffset + 'px';
     }
   };
   window.addEventListener('scroll', listener, false);
@@ -287,7 +287,7 @@ $(function() {
     if (elementExists) {
       var element1 = document.getElementById("img_overlay1");
       element1.parentNode.removeChild(element1);
-      var element2 = document.getElementById("img_overlay2");
+      var element2 = document.getElementById("img_overlay");
       element2.parentNode.removeChild(element2);
     }
 
@@ -306,7 +306,7 @@ $(function() {
       var img2h = $("#image2").find('img').height();
 
       var overlay1 = $('<div id="img_overlay1"> </div>');
-      var overlay2 = $('<div id="img_overlay2"> </div>');
+      var overlay = $('<div id="img_overlay"> </div>');
 
 
       var table1 = $('<table></table>').addClass('imgtbl');
@@ -321,20 +321,20 @@ $(function() {
       }
 
       overlay1.append(table1);
-      overlay2.append(table2);
+      overlay.append(table2);
 
       $("#image1").append(overlay1);
-      $("#image2").append(overlay2);
+      $("#image2").append(overlay);
 
       $("#img_overlay1").css("top", img1top.top);
       $("#img_overlay1").css("left", img1top.left);
       $("#img_overlay1").css("width", img1w);
       $("#img_overlay1").css("height", img1h);
 
-      $("#img_overlay2").css("top", img2top.top);
-      $("#img_overlay2").css("left", img2top.left);
-      $("#img_overlay2").css("width", img2w);
-      $("#img_overlay2").css("height", img2h);
+      $("#img_overlay").css("top", img2top.top);
+      $("#img_overlay").css("left", img2top.left);
+      $("#img_overlay").css("width", img2w);
+      $("#img_overlay").css("height", img2h);
     }
   });
 
@@ -396,7 +396,7 @@ $(function() {
     else {
       $(window).scrollTop(0);
       var myOverlay = document.createElement('div');
-      myOverlay.id = 'overlay2';
+      myOverlay.id = 'overlay';
       document.body.appendChild(myOverlay);
       myOverlay.style.width = window.innerWidth + 'px';
       myOverlay.style.height = window.innerHeight + 1000 + 'px';
@@ -406,7 +406,7 @@ $(function() {
       var values = $(this).serializeArray();
       values.push({name: "container_width", value: $('#image1').width()})
       $.post("agile/iit/crop", values, function(data) {
-        $("#overlay2").append(data);
+        $("#overlay").append(data);
         $("#cropform2").onSubmit = function() {
           return checkCoords();
         }
@@ -453,7 +453,7 @@ $(function() {
   });
 
   $(document).on('click', '#cl_close', function() {
-    $('#overlay2').remove();
+    $('#overlay').remove();
   });
 
 
