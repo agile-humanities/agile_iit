@@ -90,11 +90,8 @@ $(function() {
 
       $.get(entry2)
           .done(function() {
-        console.log("yes in main images folder 93");
       })
           .fail(function() {
-        console.log("not in main images folder");
-
         var tmpentry = entry2.split("/");
         tmpentry = tmpentry.pop();
 
@@ -404,7 +401,7 @@ $(function() {
       myOverlay.style.left = window.pageXOffset + 'px';
 
       var values = $(this).serializeArray();
-      values.push({name: "container_width", value: window.innerWidth *.48 });
+      values.push({name: "container_width", value: window.innerWidth * .48});
       $.post("agile/iit/crop", values, function(data) {
         $("#overlay2").append(data);
         $("#cropform2").onSubmit = function() {
@@ -453,7 +450,7 @@ $(function() {
   });
 
   $(document).on('click', '#cl_close', function() {
-    $('#overlay').remove();
+    $('#overlay2').remove();
   });
 
 
@@ -527,7 +524,7 @@ $(function() {
         values.push({name: 'dimensions1', value: dimensions1});
         values.push({name: 'dimensions2', value: dimensions2});
         $.post("agile/iit/imagecropper", values, function(data) {
-          ;
+          console.log("Line 530" + data);
           var myWindow = window.open('', 'cmpWindow', 'width=800, height=400, scrollbars=yes, toolbar=yes');
           myWindow.document.write(data);
           myWindow.focus();
