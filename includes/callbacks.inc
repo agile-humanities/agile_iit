@@ -100,17 +100,13 @@ function agile_iit_crop_tool_callback() {
     unlink($cropfilepath);
     imagedestroy($dst_r1);
     imagedestroy($dst_r);
-    // @TODO  convert to theme function.
-    $string = "<div class='draggable imagecrop' style='z-index : 1001; float: left;'>";
-    $string .= "<a href='' class='ui-icon ui-icon-info'> info </a> <a> <span class='ui-icon ui-icon-close'> X </span></a> ";
-    $string .= "<div id='d" . $n . "' class='info'>  </div>";
-    $string .= "<img id='img" . $n . "' src='" . $image_url . "' style='opacity:0.6;filter:alpha(opacity=40);' ";
-    $string .= "data-ratiow='" . $ratio_width . "' data-ratioh='" . $ratio_height . "' ";
-    $string .= "data-dimensions='$ratio_width x $ratio_height'/>";
-    $string .= "<a href='' class='ui-icon ui-icon-arrowstop-1-e'> Flip Y-axis </a> ";
-    $string .= "<a href='' class='ui-resize'> Resize</a> ";
-    $string .= "</div>";
-    echo $string;
+    $theme_args = array(
+      'n' => $n,
+      'image_url' => $image_url,
+      'ratio_width' => $ratio_width,
+      'ratio_height' => $ratio_height,
+    );
+    echo theme('agile_iit_croptool', $theme_args);
   }
 }
 
@@ -167,7 +163,6 @@ function agile_iit_image_cropper() {
       default:
         $img_r = FALSE;
         break;
-
     }
 
     $ratio_w = $targ_w / $size[0];
