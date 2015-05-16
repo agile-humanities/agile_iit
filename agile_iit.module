@@ -57,6 +57,7 @@ function agile_iit_block_info() {
     'status' => TRUE,
     'region' => 'content',
     'visibility' => BLOCK_VISIBILITY_LISTED,
+    'pages' => 'selected',
   );
 
   return $blocks;
