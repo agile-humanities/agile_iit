@@ -120,8 +120,8 @@ function agile_iit_crop_tool_callback() {
 function agile_iit_twoviews() {
 
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $img1_src = filter_input(INPUT_POST, 'cf_img1');
-    $img2_src = filter_input(INPUT_POST, 'cf_img2');
+    $img1_src = filter_input(INPUT_POST, 'vf_img1');
+    $img2_src = filter_input(INPUT_POST, 'vf_img2');
   }
 
   echo theme('agile_iit_twoviews', array(
