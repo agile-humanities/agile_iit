@@ -97,9 +97,7 @@ function agile_iit_views_default_views() {
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
 
-  /* Display: Block */
-  $handler = $view->new_display('block', 'Block', 'block_1');
-  $handler->display->display_options['block_description'] = 'IIT Select';
+
   // Add view to list of views to provide.
   $views[$view->name] = $view;
 
