@@ -57,6 +57,7 @@ function agile_iit_block_info() {
     'status' => TRUE,
     'region' => 'content',
     'visibility' => BLOCK_VISIBILITY_LISTED,
+    'pages' => 'selected',
   );
 
   return $blocks;
@@ -107,5 +108,16 @@ function agile_iit_theme() {
         'img2_src' => NULL,
       ),
     ),
+    'agile_iit_croptool' => array(
+      'file' => 'theme/theme.inc',
+      'template' => 'theme/agile_iit_croptool',
+      'variables' => array(
+        'n' => NULL,
+        'image_url' => NULL,
+        'ratio_width' => NULL,
+        'ratio_height' => NULL,
+      ),
+    ),
   );
 }
+

@@ -102,7 +102,6 @@ $(function() {
         $(that).attr('data-lrg_url', tmpentry);
         $.get(tmpentry)
             .done(function() {
-          console.log("yes in tmp images folder");
         })
             .fail(function() {
           var values = new Array();
@@ -111,7 +110,6 @@ $(function() {
           entry2 = entry2.split("/", 6);
           entry2 = entry2.join("/");
           entry2 = entry2.replace("/thumb", "");
-          console.log(118);
           $.post("agile/iit/makeimage", {src: entry2, pre: imageSizePrefix}, function(data) {
           });
         });
@@ -146,7 +144,6 @@ $(function() {
     accept: ".ui-thumb",
     drop: function(event, ui) {
       var src = ui.draggable.find('img').attr("data-lrg_url");
-      console.log(src);
       var vfsrc = src.replace(imageSizePrefix, "800px");
       var vf400src = src.replace(imageSizePrefix, "400px");
       $(this).find("img").remove();
@@ -174,7 +171,6 @@ $(function() {
         image1_dimH = $(this).find('img').attr('data-height');
         image1_dimW = $(this).find('img').attr('data-width');
         image1_clientWidth = $(this).find('img').width();
-        console.log(image1_clientWidth);
 
         $("#vf_img1").val(vfsrc);
         $("#cf_img1").val(src);
@@ -182,20 +178,15 @@ $(function() {
         vf400img1.src = vf400src;
         vf400img1Height = vf400img1.height;
         vf400img1Width = vf400img1.width;
-        console.log("vf400img1Height " + vf400img1Height);
         delete vf400img1;
         $.get(vfsrc)
             .done(function() {
-          console.log("vfsrc done" + vfsrc);
           var newvfsrc = vfsrc.split("/");
-          console.log("newvfsrc" + newvfsrc);
         })
             .fail(function() {
-          console.log("vfsrc fail" + vfsrc);
           var newvfsrc = vfsrc.split("/", 6);
           newvfsrc = newvfsrc.join("/");
           newvfsrc = newvfsrc.replace("/thumb", "");
-          console.log("newvfsrc" + newvfsrc);
           $("#vf_img1").val(newvfsrc);
         });
 
@@ -212,20 +203,15 @@ $(function() {
         var vf400img2 = new Image();
         vf400img2.src = vf400src;
         vf400img2Height = vf400img2.height;
-        console.log("vf400img2Height " + vf400img2Height);
         delete vf400img2;
         $.get(vfsrc)
             .done(function() {
-          console.log("vfsrc done" + vfsrc);
           var newvfsrc = vfsrc.split("/");
-          console.log("newvfsrc" + newvfsrc);
         })
             .fail(function() {
-          console.log("vfsrc fail" + vfsrc);
           var newvfsrc = vfsrc.split("/", 6);
           newvfsrc = newvfsrc.join("/");
           newvfsrc = newvfsrc.replace("/thumb", "");
-          console.log("newvfsrc" + newvfsrc);
           $("#vf_img2").val(newvfsrc);
         });
       }
@@ -235,7 +221,6 @@ $(function() {
   var resizeListener = function() {
     imageSize = Math.floor(($(window).width() * screenRatio) / 2);
     imageSizePrefix = calculateImagePrefix(imageSize);
-    console.log("resized" + imageSizePrefix);
     if (imageSizePrefix !== previousImagePrefix) {
       replaceImagePrefix(previousImagePrefix, imageSizePrefix);
       initializeImages();
@@ -338,7 +323,6 @@ $(function() {
   $("#viewform").submit(function(e) {
     e.preventDefault();
     var tmp1 = $("#vf_img1").val();
-    console.log(tmp1);
     var tmp2 = $("#vf_img2").val();
     if (tmp1 === "" || tmp2 === "") {
       alert("Two images must be selected.");
@@ -408,9 +392,10 @@ $(function() {
           return checkCoords();
         }
         $('#crop_target').Jcrop({onSelect: updateCoords});
-        image2_offset = $("#ol_i2 img:first-child").offset();
-        image2_height = $("#ol_i2 img:first-child").height();
-        image2_width = $("#ol_i2 img:first-child").width();
+        image2_offset = $("#ol_i2 img").offset();
+        image2_height = $("#ol_i2 img").height();
+        image2_width = $("#ol_i2 img").width();
+
       });
     }
   });
@@ -420,7 +405,6 @@ $(function() {
   $(document).on('submit', '#cropform2', function(e) {
     e.preventDefault();
     if (parseInt($('#w').val())) {
-      //console.log(e);
       var values = $(this).serializeArray();
       var src = $("#cf_img1").val();
       var c_w = $("#crop_target").width();
@@ -428,11 +412,8 @@ $(function() {
       values.push({name: 'src', value: src});
       values.push({name: 'c_w', value: c_w});
       values.push({name: 'c_h', value: c_h});
-      //console.log(values);
       $.post("agile/iit/croptool", values, function(data) {
-        // alert(data);
         $("#results").append(data);
-
         $(".draggable").draggable({containment: "window"});
       });
 
@@ -497,7 +478,6 @@ $(function() {
       var title2 = $("#image2").find('img').attr("alt");
       var dimensions2 = $("#image2").find('img').attr("data-dimensions");
 
-
       if (x >= image2_offset.left && x <= image2_offset.left + image2_width &&
           y >= image2_offset.top && y <= image2_offset.top + image2_height &&
           x1 >= image2_offset.left && x1 <= image2_offset.left + image2_width &&
@@ -524,7 +504,6 @@ $(function() {
         values.push({name: 'dimensions1', value: dimensions1});
         values.push({name: 'dimensions2', value: dimensions2});
         $.post("agile/iit/imagecropper", values, function(data) {
-          console.log("Line 530" + data);
           var myWindow = window.open('', 'cmpWindow', 'width=800, height=400, scrollbars=yes, toolbar=yes');
           myWindow.document.write(data);
           myWindow.focus();
