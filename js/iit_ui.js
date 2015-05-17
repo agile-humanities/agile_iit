@@ -486,7 +486,7 @@ $(function() {
         console.log("inbounds");
         console.log(sectionImage);
         var values = new Array();
-
+        image2_src = $("#cf_img2").val();
         values.push({name: 'sectImg', value: sectionImage});
         values.push({name: 'sectImgW', value: sectionWidth});
         values.push({name: 'sectImgH', value: sectionHeight});
