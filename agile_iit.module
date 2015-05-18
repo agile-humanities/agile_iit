@@ -121,3 +121,45 @@ function agile_iit_theme() {
   );
 }
 
+/**
+ * Implements hook_flag_default_flags().
+ */
+function agile_iit_flag_default_flags() {
+  $flags = array();
+// Exported flag: "Selected Images".
+  $flags['selected_images'] = array (
+    'entity_type' => 'node',
+    'title' => 'Selected Images',
+    'roles' => array('2'),
+    'global' => '0',
+    'types' =>
+      array (
+        0 => 'article',
+      ),
+    'flag_short' => 'Add <em>[node:title]</em> to your list',
+    'flag_long' => '',
+    'flag_message' => '',
+    'unflag_short' => 'Remove <em>[node:title]</em> from your favorites',
+    'unflag_long' => 'Unselect',
+    'unflag_message' => '<em>[node:title]</em> has been removed.',
+    'unflag_denied_text' => '',
+    'link_type' => 'toggle',
+    'weight' => -7,
+    'show_in_links' =>
+      array (
+        'full' => 'full',
+        'teaser' => 'teaser',
+        'rss' => 0,
+        'search_index' => 0,
+        'search_result' => 0,
+        'token' => 0,
+      ),
+    'show_as_field' => 0,
+    'show_on_form' => 1,
+    'access_author' => '',
+    'show_contextual_link' => 0,
+    'i18n' => 0,
+    'api_version' => 3,
+  );
+  return $flags;
+}
