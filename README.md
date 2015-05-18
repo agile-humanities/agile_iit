@@ -14,11 +14,15 @@ Install as usual, see [this](https://drupal.org/documentation/install/modules-th
 
 ## Usage
 
-Installing this module will automatically create the "Selected" flag (selected_images), and users who have permission to 
-use this flag (by default, all authenticated users) will see a link to "My Selected Images" on the Navigation menu. This
-link leads to "/selected" which is a menu path defined in a view. 
+Installing this module will cause three things to be automatically created:
 
+* A flag called "Selected" (machine name: selected_images), with permissions to flag/unflag given to all authenticated users,
+* A view at /selected (i.e. at URL http://DRUPAL_ROOT/selected) where users can see their own selected images, and
+* A block that contains the IIT Viewer, and shows up only on at /selected. 
 
+A link to /selected ("My Selected Images") will appear on the Navigation menu, which is by default visible in the first sidebar. 
+
+After dragging two images into the IIT Image viewer, the "View Two Images", "Crop Sections", and "Show/Hide Grid" buttons are functional. 
 
 ## License
 
