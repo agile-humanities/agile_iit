@@ -16,7 +16,7 @@ function agile_iit_enable() {
   include_once drupal_get_path('module', 'flag') . '/flag.module';
 
   $existing_flags = flag_get_flags();
-  if (!$existing_flags['selected_images']) {
+  if (!isset($existing_flags['selected_images'])) {
     // Install a demonstration flag only if no flag exists. This is to prevent
     // a case where a disables and enables the module, and the demonstration
     // flag is overwritten or re-created.
@@ -32,7 +32,7 @@ function agile_iit_enable() {
       // The following UI labels aren't wrapped in t() because they are written
       // to the DB in English. They are passed to t() later, thus allowing for
       // multilingual sites.
-      'title' => 'Douchebag',
+      'title' => 'Selected Images',
       'flag_short' => 'Select this',
       'flag_long' => 'Add this node to your selected',
       'flag_message' => 'This node has been added to your selected',
