@@ -1,0 +1,68 @@
+<?php
+
+/**
+ * @file
+ * The Agile IIT module install hooks.
+ */
+
+/**
+ * Implements hook_enable().
+ *
+ * We create the demonstration flag on enable, so hook implementations in flag
+ * module will fire correctly, as the APIs are not available on install.
+ */
+function agile_iit_enable() {
+  // Load the flag API in case we want to use it when enabling.
+  include_once drupal_get_path('module', 'flag') . '/flag.module';
+
+  $existing_flags = flag_get_flags();
+  if (!$existing_flags['selected_images']) {
+    // Install a demonstration flag only if no flag exists. This is to prevent
+    // a case where a disables and enables the module, and the demonstration
+    // flag is overwritten or re-created.
+    $flag = flag_flag::factory_by_entity_type('node');
+    $configuration = array(
+      'name' => 'selected_images',
+      'global' => 0,
+      'show_in_links' => array(
+        'full' => 1,
+        'teaser' => 1,
+      ),
+      'show_on_form' => 1,
+      // The following UI labels aren't wrapped in t() because they are written
+      // to the DB in English. They are passed to t() later, thus allowing for
+      // multilingual sites.
+      'title' => 'Douchebag',
+      'flag_short' => 'Select this',
+      'flag_long' => 'Add this node to your selected',
+      'flag_message' => 'This node has been added to your selected',
+      'unflag_short' => 'Unselect this',
+      'unflag_long' => 'Remove this post from your selected',
+      'unflag_message' => 'This post has been removed from your selected',
+      'types' => _agile_iit_install_get_suggested_node_types(),
+    );
+    $flag->form_input($configuration);
+    $flag->save();
+
+    // Clear the flag cache so the new permission is seen by core.
+    drupal_static_reset('flag_get_flags');
+
+    // Grant permissions.
+    $permissions = array('flag selected_images', 'unflag selected_images');
+    user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, $permissions);
+  }
+}
+
+/**
+ * Returns some node types to which the demonstration 'selected' flag will
+ * apply.
+ */
+function _agile_iit_install_get_suggested_node_types() {
+  $preferred = array('article', 'story', 'forum', 'blog', 'image');
+  $existing = array_intersect($preferred, array_keys(node_type_get_types()));
+  if (!$existing) {
+    // As a last resort, take the first preference.
+    return array($preferred[0]);
+  }
+  return $existing;
+}

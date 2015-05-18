@@ -12,11 +12,14 @@ A Drupal 7 wrapper for the IIT Image Comparison Tool.
 
 Install as usual, see [this](https://drupal.org/documentation/install/modules-themes/modules-7) for further information.
 
-[Download](http://kolber.github.com/audiojs/audiojs.zip) and install [audio.js](http://kolber.github.io/audiojs/) to your sites/libraries folder.  
+## Usage
+
+Installing this module will automatically create the "Selected" flag (selected_images), and users who have permission to 
+use this flag (by default, all authenticated users) will see a link to "My Selected Images" on the Navigation menu. This
+link leads to "/selected" which is a menu path defined in a view. 
+
 
 
 ## License
 
 [GPLv3](http://www.gnu.org/licenses/gpl-3.0.txt)
-
-**Note** This module requires Audio.js. Audio.js is licensed under an [MIT License](http://opensource.org/licenses/mit-license.php)
