@@ -1,5 +1,7 @@
 name = Agile Humanities IIT
 description = Allows use of IIT Jquery library
 core = 7.x
+dependencies[] = flag
+dependencies[] = views
 package = Agile Humanities
 version = 7.x-1.0
