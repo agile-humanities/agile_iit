@@ -9,11 +9,11 @@
     <form id="cropform" method="post">
         <input type="hidden" id="cf_img1" name="cf_img1"/>
         <input type="hidden" id="cf_img2" name="cf_img2"/>
-        <input type="submit" value="Crop Sections" class=" agile_btnbtn btn-large btn-inverse" />
+        <input type="submit" value="Crop Sections" class="agile_btn btn btn-large btn-inverse" />
     </form>
 
     <form id="gridform" method="post">
-        <input type="submit" value="Show/Hide Grid" class=" agile_btnbtn btn-large btn-inverse" />
+        <input type="submit" value="Show/Hide Grid" class="agile_btn btn btn-large btn-inverse" />
     </form>
     <form id="view_reset" method="post">
         <input type="submit" value="Reset" class="agile_btn btn btn-large btn-inverse" />
