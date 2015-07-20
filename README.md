@@ -6,7 +6,7 @@ A Drupal 7 wrapper for the IIT Image Comparison Tool.
 ## Requirements
 
 * [Flag](https://www.drupal.org/project/flag)
-* [Views](https://github.com/islandora/tuque)
+
 
 ## Installation
 

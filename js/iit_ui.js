@@ -141,7 +141,7 @@ $(function() {
   initializeImages();
 
   $(".img-container").droppable({
-    accept: ".ui-thumb",
+   // accept: ".ui-thumb",
     drop: function(event, ui) {
       var src = ui.draggable.find('img').attr("data-lrg_url");
       var vfsrc = src.replace(imageSizePrefix, "800px");

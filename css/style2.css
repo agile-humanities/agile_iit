@@ -13,7 +13,9 @@
 .gallery li img {width: 100%; cursor: move;}
 
 
-#menu {position:absolute; top: 250px;}
+#menu {
+    top: 1250px;
+}
 
 #container{
 	position:absolute;
