@@ -427,7 +427,8 @@ $(function () {
 
     $(document).on('submit', '#view_reset', function (e) {
         e.preventDefault();
-        $('.img-container').empty();
+        $('.img-container > a').empty();
+        $('.img-container > h4').text("Image");
 
     });
 
