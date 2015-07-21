@@ -37,6 +37,7 @@ must be configured.
 Configure the field within the Drupal views editor by adding an "image" 
 formatter from the Formatter dropdown, linking the image to 'File" if the image 
 is to be linked to the original asset, and adding custom Style Settings.
+
 Choose Customize field HTML, Create a CSS class, and adding 'iit-thumb ui-thumb'
 
 ## License
