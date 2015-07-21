@@ -269,7 +269,7 @@ $(function () {
         if (elementExists) {
             var element1 = document.getElementById("img_overlay1");
             element1.parentNode.removeChild(element1);
-            var element2 = document.getElementById("img_overlay");
+            var element2 = document.getElementById("img_overlay2");
             element2.parentNode.removeChild(element2);
         }
 
@@ -288,7 +288,7 @@ $(function () {
             var img2h = $("#image2").find('img').height();
 
             var overlay1 = $('<div id="img_overlay1"> </div>');
-            var overlay = $('<div id="img_overlay"> </div>');
+            var overlay2 = $('<div id="img_overlay2"> </div>');
 
 
             var table1 = $('<table></table>').addClass('imgtbl');
@@ -303,20 +303,20 @@ $(function () {
             }
 
             overlay1.append(table1);
-            overlay.append(table2);
+            overlay2.append(table2);
 
             $("#image1").append(overlay1);
-            $("#image2").append(overlay);
+            $("#image2").append(overlay2);
 
             $("#img_overlay1").css("top", img1top.top);
             $("#img_overlay1").css("left", img1top.left);
             $("#img_overlay1").css("width", img1w);
             $("#img_overlay1").css("height", img1h);
 
-            $("#img_overlay").css("top", img2top.top);
-            $("#img_overlay").css("left", img2top.left);
-            $("#img_overlay").css("width", img2w);
-            $("#img_overlay").css("height", img2h);
+            $("#img_overlay2").css("top", img2top.top);
+            $("#img_overlay2").css("left", img2top.left);
+            $("#img_overlay2").css("width", img2w);
+            $("#img_overlay2").css("height", img2h);
         }
     });
 
@@ -429,6 +429,13 @@ $(function () {
         e.preventDefault();
         $('.img-container > a').empty();
         $('.img-container > h4').text("Image");
+        var elementExists = document.getElementById("img_overlay1");
+        if (elementExists) {
+            var element1 = document.getElementById("img_overlay1");
+            element1.parentNode.removeChild(element1);
+            var element2 = document.getElementById("img_overlay2");
+            element2.parentNode.removeChild(element2);
+        }
 
     });
 
