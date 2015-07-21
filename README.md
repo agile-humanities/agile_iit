@@ -24,6 +24,19 @@ A link to /selected ("My Selected Images") will appear on the Navigation menu, w
 
 After dragging two images into the IIT Image viewer, the "View Two Images", "Crop Sections", and "Show/Hide Grid" buttons are functional. 
 
+If a link other than "selected' is desired, the view link must be changed by navigating to
+admin/structure/views/view/iit_selected/edit and changing the url.
+
+This same value must now be placed in the 'Show Block on specific pages' found at
+admin/structure/block/manage/agile_iit/iit_content/configure
+
+## Modification
+
+If an image is suppplied to the view from any source other than the default,it must be configured.
+Configure the filed within the Drupal views editor by adding an "image" formatter from the Formatter dropdown
+Linking the image to 'File" if the image is to be linked to the original asset, and adding custom Style Settings.
+Choose Customize field HTML, Create a CSS class, and adding 'iit-thumb ui-thumb'
+
 ## License
 
 [GPLv3](http://www.gnu.org/licenses/gpl-3.0.txt)
