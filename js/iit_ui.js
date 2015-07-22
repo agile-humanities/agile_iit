@@ -330,7 +330,7 @@ $(function () {
         }
         else {
             var myOverlay = document.createElement('div');
-            myOverlay.id = 'overlay';
+            myOverlay.id = 'overlay2';
             document.body.appendChild(myOverlay);
             myOverlay.style.width = window.innerWidth + 'px';
             myOverlay.style.height = window.innerHeight + 1000 + 'px';
@@ -351,7 +351,7 @@ $(function () {
 
             var values = $(this).serializeArray();
             $.post("agile/iit/twoviews", values, function (data) {
-                $("#overlay").append(data);
+                $("#overlay2").append(data);
                 $('.zoom').zoomy({border: '6px solid #fff'});
             });
         }
@@ -441,7 +441,7 @@ $(function () {
 
     $(document).on('click', '#ol_close', function () {
         $('.zoom').find('.zoomy').remove();
-        $('#overlay').remove();
+        $('#overlay2').remove();
     });
 
     $(document).on('click', '#cl_close', function () {

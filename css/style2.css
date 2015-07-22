@@ -16,9 +16,9 @@
 
 
 #container{
-	top: 340px;
-	width: 100%;
-        height: 800px;
+    top: 340px;
+    width: 100%;
+    height: 800px;
 
 }
 
@@ -40,8 +40,8 @@
 }
 
 .img-container img{
-	width: 100%;
-	max-width: 800px; 
+    width: 100%;
+    max-width: 800px; 
 }
 
 #image1 {float: left;  background: #eee; text-align: center;}
@@ -50,17 +50,17 @@
 #image2 {float: left;  background: #eee; text-align: center;}
 
 #overlay1 {
-	position: absolute;
-	top: 0;
-	background: rgba(0,0,0,1.0);
-	cursor: pointer;
+    position: absolute;
+    top: 0;
+    background: rgba(0,0,0,1.0);
+    cursor: pointer;
 }
 
 #overlay2 {
-	position: absolute;
-	top: 0;
-	background: rgba(255,255,255,1.0);
-	cursor: pointer;
+    position: absolute;
+    top: 0;
+    background: rgba(255,255,255,1.0);
+    cursor: pointer;
 
 }
 
@@ -76,15 +76,15 @@
 .info p {float: left; font-size: x-small;}
 
 .flip {-webkit-transform: scale(-1, 1);
-/*Chrome, Safari*/
-		transform: scale(-1, 1);
-/*Firefox*/
-		-moz-transform: scale(-1, 1);
-/*Microsoft Internet Explorer*/
--ms-transform: scale(-1, 1);
+       /*Chrome, Safari*/
+       transform: scale(-1, 1);
+       /*Firefox*/
+       -moz-transform: scale(-1, 1);
+       /*Microsoft Internet Explorer*/
+       -ms-transform: scale(-1, 1);
 
-/*Opera*/
--o-transform: scale(-1, 1);}
+       /*Opera*/
+       -o-transform: scale(-1, 1);}
 
 .ui-state-disabled {
     opacity: 1;
@@ -94,19 +94,19 @@
 
 
 .imgtbl{
-	width: 100%;
-	height: 100%;
-    	border-spacing: 0px 0px;
-	border: 1px solid white;
-	border-width: 1px;
-	border-color: white;
-	z-index: 11000;
+    width: 100%;
+    height: 100%;
+    border-spacing: 0px 0px;
+    border: 1px solid white;
+    border-width: 1px;
+    border-color: white;
+    z-index: 11000;
 
 }
 
 .imgtbl td{
-	border: 1px solid white;
-	padding: 0px;
+    border: 1px solid white;
+    padding: 0px;
 
 }
 
@@ -139,18 +139,25 @@
 }
 
 #content {
-  width:100%;
-  height:950px;
-  overflow: auto;
+    width:100%;
+    height:950px;
+    overflow: auto;
 }
 #ol_close{
-  margin-top: 40px;
+    margin-top: 40px;
 }
 
 .agile_btn {
     width:20%;
-       opacity: 0.4;
+    opacity: 0.4;
 }
 form.inline {
     display:inline;
+}
+
+#ol_container{
+    width: 1000px;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
 }
