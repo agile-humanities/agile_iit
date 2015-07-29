@@ -329,37 +329,22 @@ $(function () {
             return false;
         }
         else {
+            var container_width = $('#container').width();
             var myOverlay = document.createElement('div');
             myOverlay.id = 'overlay2';
-            document.body.appendChild(myOverlay);
-            myOverlay.style.width = window.innerWidth + 'px';
-            myOverlay.style.height = window.innerHeight + 1000 + 'px';
-            myOverlay.style.top = window.pageYOffset + 'px';
-            myOverlay.style.left = window.pageXOffset + 'px';
-
-            if (vf400img1Height != 0 && vf400img2Height != 0) {
-                if (vf400img1Height >= vf400img2Height) {
-                    imagesTop = vf400img1Height;
-                }
-                else {
-                    imagesTop = vf400img2Height;
-                }
-            }
-            else {
-                imagesTop = window.innerHeight - 250;
-            }
-
+            $('#container').append(myOverlay);
+            $('#overlay2').width(container_width);
             var values = $(this).serializeArray();
             $.post("agile/iit/twoviews", values, function (data) {
                 $("#overlay2").append(data);
                 $('.zoom').zoomy({border: '6px solid #fff'});
             });
+
         }
     });
 
 
-    function updateCoords(c)
-    {
+    function updateCoords(c){
         $('#x').val(c.x);
         $('#y').val(c.y);
         $('#w').val(c.w);
@@ -378,11 +363,8 @@ $(function () {
             $(window).scrollTop(0);
             var myOverlay = document.createElement('div');
             myOverlay.id = 'overlay2';
-            document.body.appendChild(myOverlay);
-            myOverlay.style.width = window.innerWidth + 'px';
-            myOverlay.style.height = window.innerHeight + 1000 + 'px';
-            myOverlay.style.top = window.pageYOffset + 'px';
-            myOverlay.style.left = window.pageXOffset + 'px';
+            $('#container').append(myOverlay);
+
 
             var values = $(this).serializeArray();
             values.push({name: "container_width", value: window.innerWidth * .48});

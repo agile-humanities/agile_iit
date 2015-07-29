@@ -71,7 +71,7 @@ function agile_iit_block_view($delta = '') {
   $has_content = FALSE;
   switch ($delta) {
     case 'iit_content':
-      $block['subject'] = t('IIT Tool');
+      $block['subject'] = t('Image Investigation Workspace');
       $block['content'] = theme('agile_iit', array());
       $has_content = TRUE;
       break;
