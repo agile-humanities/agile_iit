@@ -1,4 +1,4 @@
-<div id = ol_container>
+<div id = twoviews_container>
     <p>
         <input type = "button" name = "ol_close" id = "ol_close" value = "Close"/>
     </p>

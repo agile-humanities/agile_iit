@@ -367,7 +367,8 @@ $(function () {
 
 
             var values = $(this).serializeArray();
-            values.push({name: "container_width", value: window.innerWidth * .48});
+            values.push({name: "container_width", value: $('#container').width()});
+            $(".img-container").hide();
             $.post("agile/iit/crop", values, function (data) {
                 $("#overlay2").append(data);
                 $("#cropform2").onSubmit = function () {
@@ -428,6 +429,7 @@ $(function () {
 
     $(document).on('click', '#cl_close', function () {
         $('#overlay2').remove();
+        $(".img-container").show();
     });
 
 

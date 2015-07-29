@@ -12,26 +12,25 @@ function agile_iit_crop_callback() {
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $img1_src = filter_input(INPUT_POST, 'cf_img1');
     $img2_src = filter_input(INPUT_POST, 'cf_img2');
-    $container_width = filter_input(INPUT_POST, 'container_width');
+    $image_width = filter_input(INPUT_POST, 'container_width') * .48;
   }
 
   $size1 = getimagesize($img1_src);
   $image_width1 = $size1[0];
   $image_height1 = $size1[1];
-  $ratio1 = $image_width1 / $container_width;
-  $width1 = $container_width;
+  $ratio1 = $image_width1 / $image_width;
   $height1 = $image_height1 / $ratio1;
 
   $size2 = getimagesize($img2_src);
   $image_width2 = $size2[0];
   $image_height2 = $size2[1];
-  $ratio2 = $image_width2 / $container_width;
+  $ratio2 = $image_width2 / $image_width;
   $height2 = $image_height2 / $ratio2;
 
   $theme_args = array(
     'img1_src' => $img1_src,
     'img2_src' => $img2_src,
-    'width' => $container_width,
+    'width' => $image_width,
     'height1' => $height1,
     'height2' => $height2,
   );
