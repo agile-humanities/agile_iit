@@ -329,10 +329,10 @@ $(function () {
             return false;
         }
         else {
-            var container_width = $('#container').width();
+            var container_width = $('#iit_container').width();
             var myOverlay = document.createElement('div');
             myOverlay.id = 'overlay2';
-            $('#container').append(myOverlay);
+            $('#iit_container').append(myOverlay);
             $('#overlay2').width(container_width);
             var values = $(this).serializeArray();
             $.post("agile/iit/twoviews", values, function (data) {
@@ -363,11 +363,11 @@ $(function () {
             $(window).scrollTop(0);
             var myOverlay = document.createElement('div');
             myOverlay.id = 'overlay2';
-            $('#container').append(myOverlay);
+            $('#iit_container').append(myOverlay);
 
 
             var values = $(this).serializeArray();
-            values.push({name: "container_width", value: $('#container').width()});
+            values.push({name: "container_width", value: $('#iit_container').width()});
             $(".img-container").hide();
             $.post("agile/iit/crop", values, function (data) {
                 $("#overlay2").append(data);
