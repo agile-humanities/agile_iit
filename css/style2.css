@@ -44,6 +44,10 @@
     max-width: 800px; 
 }
 
+.jcrop-holder img {
+    max-width: unset;
+}
+
 #image1 {float: left;  background: #eee; text-align: center;}
 
 

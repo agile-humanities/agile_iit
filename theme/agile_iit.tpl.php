@@ -3,7 +3,7 @@
     <form id="viewform" method="post" class ='inline'>
         <input type="hidden" id="vf_img1" name="vf_img1"/>
         <input type="hidden" id="vf_img2" name="vf_img2"/>
-        <input type="submit" value="View Two Images" class="agile_btn btn btn-inverse"  />
+        <input type="submit" value="Comparison Viewer" class="agile_btn btn btn-inverse"  />
     </form>
 
     <form id="cropform" method="post" class ='inline'>

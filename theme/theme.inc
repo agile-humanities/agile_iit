@@ -42,7 +42,6 @@ function agile_iit_add_requirements() {
   drupal_add_js("$path/js/jquery-ui.js");
   drupal_add_js("$path/js/jquery.Jcrop.js");
   drupal_add_js("$path/js/iit_ui.js");
-  drupal_add_js("$path/js/iit_init.js");
   drupal_add_js("$path/js/zoomy.js");
   drupal_add_css("$path/css/zoomy.css");
   drupal_add_css("$path/css/style2.css");

@@ -51,7 +51,7 @@
     function getPos(obj) //{{{
     {
       var pos = $(obj).offset();
-      return [pos.left, pos.top];
+      return [pos.left, pos.top ];
     }
     //}}}
     function mouseAbs(e) //{{{
@@ -339,7 +339,7 @@
     if (options.addClass) {
       $div.addClass(options.addClass);
     }
-
+ 
     var $img2 = $('<div />'),
 
         $img_holder = $('<div />') 

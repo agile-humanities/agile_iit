@@ -227,38 +227,6 @@ $(function () {
         }
     };
 
-    window.addEventListener('resize', resizeListener, false);
-
-    var resizeOverlayListener = function () {
-
-        if (overlay) {
-            //alert("viewform overlay");
-            overlay.style.top = window.pageYOffset + 'px';
-            overlay.style.left = window.pageXOffset + 'px';
-            overlay.style.width = window.innerWidth + 'px';
-            overlay.style.height = window.innerHeight + 'px';
-        }
-        else if (overlay) {
-            overlay.style.top = window.pageYOffset + 'px';
-            overlay.style.left = window.pageXOffset + 'px';
-            overlay.style.width = window.innerWidth + 'px';
-            overlay.style.height = window.innerHeight + 'px';
-        }
-    };
-
-    window.addEventListener('resize', resizeOverlayListener, false);
-
-    var listener = function () {
-        if (overlay) {
-            overlay.style.top = window.pageYOffset + 'px';
-            overlay.style.left = window.pageXOffset + 'px';
-        }
-        else if (overlay) {
-            overlay.style.top = window.pageYOffset + 'px';
-            overlay.style.left = window.pageXOffset + 'px';
-        }
-    };
-    window.addEventListener('scroll', listener, false);
     $("#gridform").submit(function (e) {
         e.preventDefault();
 
@@ -371,9 +339,6 @@ $(function () {
             $(".img-container").hide();
             $.post("agile/iit/crop", values, function (data) {
                 $("#overlay2").append(data);
-                $("#cropform2").onSubmit = function () {
-                    return checkCoords();
-                }
                 $('#crop_target').Jcrop({onSelect: updateCoords});
                 image2_offset = $("#ol_i2 img").offset();
                 image2_height = $("#ol_i2 img").height();
