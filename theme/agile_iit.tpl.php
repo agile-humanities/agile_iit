@@ -22,12 +22,12 @@
 
 <div id="iit_container">
     <div id="image1" class="img-container"> 
-        <h4>Image</h4>
+        <h4><?php print($placeholder_text); ?></h4>
         <div id="table1" z-index="500" opacity="0.1">
         </div>
     </div>
     <div id="image2" class="img-container"> 
-        <h4>Image</h4>
+        <h4><?php print($placeholder_text); ?></h4>
     </div>
 </div>
 
