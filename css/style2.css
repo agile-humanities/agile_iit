@@ -28,15 +28,18 @@
     width: 48%;
     min-height: 300px;
     /*height: auto;*/
-    border: 2px #333;
+    border: 2px #333 solid;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px;
     margin: 0 0 0 0 px;
-    background: #fff;
-    border-style: dashed;
+    background: #eee;
     z-index: -1;
     opacity: .9;
+}
+.img-container.iit-ui-state-hover {
+    border: 2px #000 solid;
+    background-color: #ccc;
 }
 
 .img-container img{
@@ -48,10 +51,10 @@
     max-width: unset;
 }
 
-#image1 {float: left;  background: #eee; text-align: center;}
+#image1 {float: left; text-align: center;}
 
 
-#image2 {float: left;  background: #eee; text-align: center;}
+#image2 {float: left; text-align: center;}
 
 #overlay1 {
     position: absolute;
@@ -155,7 +158,6 @@
 
 .agile_btn {
     width:20%;
-    opacity: 0.4;
 }
 form.inline {
     display:inline;

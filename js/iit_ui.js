@@ -81,6 +81,8 @@ $(function () {
         helper: "clone",
         scroll: false
 
+    }).on('dragstart', function (e, ui) {
+        $(ui.helper).css('z-index', '99999');
     });
 
     function initializeImages() {
@@ -142,6 +144,7 @@ $(function () {
 
     $(".img-container").droppable({
         // accept: ".ui-thumb",
+        hoverClass: "iit-ui-state-hover",
         drop: function (event, ui) {
             var src = ui.draggable.find('img').attr("data-lrg_url");
             var vfsrc = src.replace(imageSizePrefix, "800px");
