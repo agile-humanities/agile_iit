@@ -298,10 +298,12 @@ $(function () {
         }
         else {
             var container_width = $('#iit_container').width();
+            var container_height = $('#iit_container').height();
             var myOverlay = document.createElement('div');
             myOverlay.id = 'overlay2';
             $('#iit_container').append(myOverlay);
             $('#overlay2').width(container_width);
+            $('#overlay2').height(container_height);
             var values = $(this).serializeArray();
             $.post("agile/iit/twoviews", values, function (data) {
                 $("#overlay2").append(data);
