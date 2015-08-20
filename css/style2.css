@@ -44,7 +44,7 @@
 
 .img-container img{
     width: 100%;
-    max-width: 800px; 
+    max-width: 800px;
 }
 
 .jcrop-holder img {
@@ -64,13 +64,14 @@
 }
 
 #overlay2 {
-    position: absolute;
+    position: fixed;
     top: 0;
-    background: rgba(255,255,255,1.0);
+    left:0;
+    background: rgba(0,0,0,1.0);
     cursor: pointer;
-    width: inherit;
-    top:30px;
-
+    width: 100%;
+    min-height: 100%;
+    z-index: 700;
 }
 
 #results {float: left;  border-style:dashed; border-width:1px; border-color:#CCC}
@@ -171,7 +172,7 @@ form.inline {
 }
 
 #twoviews_container{
-    width: 1000px;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
 }
@@ -180,4 +181,8 @@ form.inline {
 }
 .zoomy {
     left:0 !important;
+}
+
+#ol_i1, #ol_i2 {
+    float:left;
 }

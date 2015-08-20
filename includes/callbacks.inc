@@ -122,6 +122,7 @@ function agile_iit_twoviews() {
   echo theme('agile_iit_twoviews', array(
     'img1_src' => $img1_src,
     'img2_src' => $img2_src,
+    // Add the width here!
       )
   );
 }

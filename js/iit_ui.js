@@ -291,6 +291,7 @@ $(function () {
         }
     });
 
+    // Comparison Viewer
     $("#viewform").submit(function (e) {
         e.preventDefault();
         var tmp1 = $("#vf_img1").val();
@@ -305,11 +306,14 @@ $(function () {
             var myOverlay = document.createElement('div');
             myOverlay.id = 'overlay2';
             $('#iit_container').append(myOverlay);
-            $('#overlay2').width(container_width);
-            $('#overlay2').height(container_height);
+            //$('#overlay2').width(container_width);
+            //$('#overlay2').height(container_height);
             var values = $(this).serializeArray();
             $.post("agile/iit/twoviews", values, function (data) {
                 $("#overlay2").append(data);
+                var ol_width = $("#overlay2").width();
+                $("#ol_i1").css("width", ol_width/2 - 50);
+                $("#ol_i2").css("width", ol_width/2 - 50);
                 $('.zoom').zoomy({border: '6px solid #fff'});
             });
 
