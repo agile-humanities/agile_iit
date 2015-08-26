@@ -16,7 +16,10 @@
 .gallery li img {width: 100%; cursor: move;}
 
 
-
+.iit-wrapper {
+    background-color: #FFF;
+    color: #222;
+}
 
 #iit_container{
     top: 340px;
