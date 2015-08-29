@@ -376,6 +376,7 @@ $(function () {
             $.post("agile/iit/croptool", values, function (data) {
                 $("#results").append(data);
                 $(".draggable").draggable({containment: "window"});
+                $(".resizable").resizable().find('img').css({"width": "78%"});
             });
 
         }
@@ -421,13 +422,6 @@ $(function () {
             $target.parent().parent().fadeOut(300, function () {
                 $(this).remove();
             })
-        }
-
-        else if ($target.is(".ui-resize")) {
-            console.log(event);
-            $target.parent().resizable();
-            $target.parent().find('img').css({"width": "78%"});
-
         }
         else if ($target.is(".ui-icon-arrowstop-1-e")) {
 
