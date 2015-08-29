@@ -6,7 +6,7 @@
             <input type="hidden" id="y" name="y" />
             <input type="hidden" id="w" name="w" />
             <input type="hidden" id="h" name="h" />
-            <input type="submit" value="Crop Image" class="btn btn-large btn-inverse" style=" position: relative; float:left;" />
+            <input type="submit" value="Extract Detail" class="btn btn-large btn-inverse" style=" position: relative; float:left;" />
         </form>
         <input type="button" name="cl_close" id="cl_close" value="close"/>
     </div>

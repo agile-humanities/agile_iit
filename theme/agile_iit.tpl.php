@@ -9,7 +9,7 @@
     <form id="cropform" method="post" class ='inline'>
         <input type="hidden" id="cf_img1" name="cf_img1"/>
         <input type="hidden" id="cf_img2" name="cf_img2"/>
-        <input type="submit" value="Crop Sections" class="agile_btn btn btn-large btn-inverse" />
+        <input type="submit" value="Extract Detail" class="agile_btn btn btn-large btn-inverse" />
     </form>
 
     <form id="gridform" method="post" class ='inline'>

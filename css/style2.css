@@ -21,6 +21,10 @@
     color: #222;
 }
 
+#iit-content #menu {
+    max-width: 1200px;
+}
+
 #iit_container{
     top: 340px;
     width: 100%;
@@ -79,7 +83,9 @@
     z-index: 700;
 }
 
-#results {float: left;  border-style:dashed; border-width:1px; border-color:#CCC}
+#results {
+    float: left;
+}
 
 
 #results .ui-icon-close {float: right}
