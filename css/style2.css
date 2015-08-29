@@ -186,7 +186,7 @@ form.inline {
     width:99%;
 }
 .zoomy {
-    left:0 !important;
+    position: fixed !important;
 }
 
 #ol_i1, #ol_i2 {

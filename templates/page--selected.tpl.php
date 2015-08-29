@@ -86,8 +86,8 @@
  */
 ?>
 <div id="page-wrapper"><div id="page">
-    <div id="main-wrapper" class="clearfix"><div id="main" class="clearfix">
-        <div id="content" class="column"><div class="section iit-wrapper">
+    <div id="iit-main-wrapper" class="clearfix"><div id="iit-main" class="clearfix">
+        <div id="iit-content" class="column"><div class="section iit-wrapper">
             <?php if ($page['highlighted']): ?><div id="highlighted"><?php print render($page['highlighted']); ?></div><?php endif; ?>
             <a id="main-content"></a>
             <?php print render($title_prefix); ?>

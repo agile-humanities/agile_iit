@@ -56,10 +56,10 @@ $(function () {
 
     }
     function setLandscapeView() {
-        image1Top = 350;
-        image2Top = 350;
+        image1Top = 400;
+        image2Top = 400;
         image1Left = 0;
-        image2Left = 150;
+        image2Left = 270;
 
     }
 
@@ -312,9 +312,13 @@ $(function () {
             $.post("agile/iit/twoviews", values, function (data) {
                 $("#overlay2").append(data);
                 var ol_width = $("#overlay2").width();
+                // Set image dimensions before calling zoomy.
                 $("#ol_i1").css("width", ol_width/2 - 50);
-                $("#ol_i2").css("width", ol_width/2 - 50);
-                $('.zoom').zoomy({border: '6px solid #fff'});
+                $("#ol_i2").css("width", ol_width/2 - 50); // note: this gets called during window resize.
+                $('.zoom').zoomy({border: '5px solid #fff'});
+                $('.zoomy').css("top", '').css("bottom", '20px');
+
+
             });
 
         }
