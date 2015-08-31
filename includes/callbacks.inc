@@ -201,3 +201,16 @@ function agile_iit_image_cropper() {
     echo $string;
   }
 }
+
+/**
+ * Callback to return the URL of an image derivative.
+ */
+function agile_iit_image_derivative() {
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $path = filter_input(INPUT_POST, 'path');
+    $style = 'iit-' . filter_input(INPUT_POST, 'size');
+    $style = str_replace('px', '', $style);
+    $url = image_style_url($style, $path);
+    echo $url;
+  }
+}

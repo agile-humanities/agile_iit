@@ -44,6 +44,12 @@ function agile_iit_menu() {
       'type' => MENU_CALLBACK,
       'access callback' => TRUE,
     ),
+    'agile/iit/imagederivative' => array(
+      'file' => 'includes/callbacks.inc',
+      'page callback' => 'agile_iit_image_derivative',
+      'type' => MENU_CALLBACK,
+      'access callback' => TRUE,
+    ),
   );
 }
 

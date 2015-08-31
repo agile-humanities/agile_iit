@@ -12,10 +12,11 @@ $(function () {
     screenRatio = 0.96;
     previousImagePrefix = '800px';
     var cl_windowWidth = $(window).width();
-    console.log("window width" + cl_windowWidth);
+    console.log("window width: " + cl_windowWidth);
     var cl_windowHeight = $("#image1").height();
-    console.log("window img1 height" + cl_windowHeight);
+    console.log("window img1 height: " + cl_windowHeight);
     imageSize = Math.floor((cl_windowWidth * screenRatio) / 2);
+    console.log("image size: " + imageSize);
     imageSizePrefix = calculateImagePrefix(imageSize);
 
 
@@ -65,12 +66,12 @@ $(function () {
 
 
     function replaceImagePrefix(prev, next) {
-
         $(".ui-thumb img").each(function () {
-            var entry2 = $(this).attr('data-lrg_url');
-            entry2 = entry2.replace(prev, next);
-            $(this).attr('data-lrg_url', entry2);
-
+            var src = $(this).attr('data-lrg-url');
+            var that = this;
+            $.post("agile/iit/imagederivative", {size: next, path: src}, function (data) {
+                $(that).attr('data-lrg_url', data);
+            });
         });
         previousImagePrefix = next;
     }
@@ -85,48 +86,7 @@ $(function () {
         $(ui.helper).css('z-index', '99999');
     });
 
-    function initializeImages() {
-        $(".ui-thumb img").each(function () {
-            var entry2 = $(this).attr('data-lrg_url');
-            var that = this;
-
-            $.get(entry2)
-                    .done(function () {
-                    })
-                    .fail(function () {
-                        var tmpentry = entry2.split("/");
-                        tmpentry = tmpentry.pop();
-
-                        var re = /^(\d{2,3}px)\-(.*)$/;
-                        var match = re.exec(tmpentry);
-                        tmpentry = "../tmp2/images/" + match[1] + "/" + match[2];
-                        var entry3 = $(that).attr('data-lrg_url');
-                        $(that).attr('data-lrg_url', tmpentry);
-                        $.get(tmpentry)
-                                .done(function () {
-                                })
-                                .fail(function () {
-                                    var values = new Array();
-                                    values.push({src: entry2});
-
-                                    entry2 = entry2.split("/", 6);
-                                    entry2 = entry2.join("/");
-                                    entry2 = entry2.replace("/thumb", "");
-                                    $.post("agile/iit/makeimage", {src: entry2, pre: imageSizePrefix}, function (data) {
-                                    });
-                                });
-                    });
-        });
-    }
-
     function write_attributes() {
-        $('.iit-thumb a').each(function () {
-            largeurl = $(this).attr('href');
-            $(this).find('img').each(function () {
-                $(this).attr('data-lrg_url', largeurl);
-                $(this).unwrap();
-            });
-        });
         $('.iit-thumb img').each(function () {
             url = $(this).attr('src');
             width = $(this).attr('width');
@@ -140,7 +100,6 @@ $(function () {
     }
     write_attributes();
     replaceImagePrefix(previousImagePrefix, imageSizePrefix);
-    initializeImages();
 
     $(".img-container").droppable({
         // accept: ".ui-thumb",
@@ -226,7 +185,6 @@ $(function () {
         imageSizePrefix = calculateImagePrefix(imageSize);
         if (imageSizePrefix !== previousImagePrefix) {
             replaceImagePrefix(previousImagePrefix, imageSizePrefix);
-            initializeImages();
         }
     };
 
