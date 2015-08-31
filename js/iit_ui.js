@@ -89,10 +89,8 @@ $(function () {
 
     function write_attributes() {
         $('.iit-thumb img').each(function () {
-            url = $(this).attr('src');
             width = $(this).attr('width');
             height = $(this).attr('height');
-            //$(this).attr("data-lrg_url", url);
             $(this).attr("data-dimensions", width + 'x' + height);
             $(this).attr("data-height", height);
             $(this).attr("data-width", width);
