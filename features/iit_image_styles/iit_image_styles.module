@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the IIT Image Styles feature.
+ */
+
+include_once 'iit_image_styles.features.inc';

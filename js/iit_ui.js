@@ -71,6 +71,7 @@ $(function () {
             var that = this;
             $.post("agile/iit/imagederivative", {size: next, path: src}, function (data) {
                 $(that).attr('data-lrg_url', data);
+                $.get(data); // This initializes the derivatives.
             });
         });
         previousImagePrefix = next;
