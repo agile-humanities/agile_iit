@@ -1,5 +1,5 @@
 name = Agile Humanities IIT
-description = Allows use of IIT Jquery library
+description = Drupal wrapper for IIT jQuery library
 core = 7.x
 dependencies[] = flag
 dependencies[] = views
