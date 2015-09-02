@@ -89,11 +89,12 @@ $(function () {
 
     function write_attributes() {
         $('.iit-thumb img').each(function () {
-            width = $(this).attr('width');
-            height = $(this).attr('height');
+            width = $(this).attr('data-width');
+            height = $(this).attr('data-height');
             $(this).attr("data-dimensions", width + 'x' + height);
-            $(this).attr("data-height", height);
-            $(this).attr("data-width", width);
+            //$(this).attr("data-height", height);
+            //$(this).attr("data-width", width);
+            
             $(this).attr("data-orientation", 'landscape');
         });
     }
