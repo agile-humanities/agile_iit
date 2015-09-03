@@ -78,8 +78,8 @@ function agile_iit_crop_tool_callback() {
         break;
     }
 
-    $ratio_width = $targ_w / $size[0];
-    $ratio_height = $targ_h / $size[1];
+    $ratio_width = $targ_w / $container_width;
+    $ratio_height = $targ_h / $container_height;
     $ratio_width = round($ratio_width, 8);
     $ratio_height = round($ratio_height, 8);
 
@@ -158,6 +158,12 @@ function agile_iit_image_cropper() {
     $title2 = $_POST['title2'];
     $dimensions1 = $_POST['dimensions1'];
     $dimensions2 = $_POST['dimensions2'];
+    $support1 = $_POST['support1'];
+    $support2 = $_POST['support2'];
+    $date1 = $_POST['date1'];
+    $date2 = $_POST['date2'];
+    $image2w = $_POST['image2w'];
+    $image2h = $_POST['image2h'];
     $size = getimagesize($src);
     switch ($size["mime"]) {
       case "image/jpeg":
@@ -173,8 +179,8 @@ function agile_iit_image_cropper() {
         $img_r = false;
         break;
     }
-    $ratio_w = $targ_w / $size[0];
-    $ratio_h = $targ_h / $size[1];
+    $ratio_w = $targ_w / $image2w;
+    $ratio_h = $targ_h / $image2h;
     $ratio_w = round($ratio_w, 8);
     $ratio_h = round($ratio_h, 8);
     $dim1W = (double) $sect_WRatio * $img1dimW;
@@ -186,17 +192,30 @@ function agile_iit_image_cropper() {
     $dim2W = round($dim2W, 2);
     $dim2H = round($dim2H, 2);
     $dst_r = ImageCreateTrueColor($targ_w, $targ_h);
+    // Deal with the fact that image2 is scaled.
+    $scale_factor_image_2 = $size[0]/$image2w;
+    $x = round($x * $scale_factor_image_2);
+    $y = round($y * $scale_factor_image_2);
+    $targ_w = round($targ_w * $scale_factor_image_2);
+    $targ_h = round($targ_h * $scale_factor_image_2);
+
     imagecopy($dst_r, $img_r, 0, 0, $x, $y, $targ_w, $targ_h);
     imagejpeg($dst_r, $cropfilepath, $jpeg_quality);
     $string = "<div>";
-    $string .= "<p><i>" . $title1 . "</i> (Full size of original is: " . $dimensions1 . ").<br>";
-    $string .= "Section is approx." . $dim1H . "(H) x " . $dim1W . "(W) cm. </p>";
+    $string .= "<div>Title: $title1</div>";
+    $string .= "<div>Date: $date1</div>";
+    $string .= "<div>Support: $support1</div>";
+    $string .= "<div>Dimensions of the cropped section: $dim1W cm (W) x $dim1H cm (H)</div>";
+    $string .= "<div>(Based off the original dimensions of the painting $dimensions1)</div>";
     $string .= "<img src='" . $sect_src . "'/>' ";
     $string .= "<br>";
-    $string .= "<p><i>" . $title2 . "</i> (Full size of original is: " . $dimensions2 . "). <br>";
-    $string .= "Section is approx." . $dim2H . "(H) x " . $dim2W . "(W) cm. </p>";
+    $string .= "<div>Title: $title2</div>";
+    $string .= "<div>Date: $date2</div>";
+    $string .= "<div>Support: $support2</div>";
+    $string .= "<div>Dimensions of the cropped section: $dim2W cm (W) x $dim2H cm (H)</div>";
+    $string .= "<div>(Based off the original dimensions of the painting $dimensions2)</div>";
     $string .= "<img id='img" . $n . "' src='" . $cropurl . "'/>' ";
-    $string .= "<br><br>";
+    $string .= "<br/>";
     $string .= "</div>";
     echo $string;
   }

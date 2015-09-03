@@ -91,10 +91,7 @@ $(function () {
         $('.iit-thumb img').each(function () {
             width = $(this).attr('data-width');
             height = $(this).attr('data-height');
-            $(this).attr("data-dimensions", width + 'x' + height);
-            //$(this).attr("data-height", height);
-            //$(this).attr("data-width", width);
-            
+            $(this).attr("data-dimensions", width + ' cm x ' + height + ' cm');
             $(this).attr("data-orientation", 'landscape');
         });
     }
@@ -114,6 +111,8 @@ $(function () {
             var dimensions = ui.draggable.find('img').attr("data-dimensions");
             var height = ui.draggable.find('img').attr("data-height");
             var width = ui.draggable.find('img').attr("data-width");
+            var date = ui.draggable.find('img').attr("data-date");
+            var support = ui.draggable.find('img').attr("data-support");
 
             var orientation = ui.draggable.find('img').attr("data-orientation");
             if (orientation === "portrait") {
@@ -124,7 +123,7 @@ $(function () {
             }
 
             $(this).find("h4").html(title);
-            var newImage = "<a href='" + src + "'><img onerror='imgError()'  alt='" + title + "' src='" + src + "' data-dimensions='" + dimensions + "' data-height='" + height + "' data-width='" + width + "' data-orientation='" + orientation + "'> </a>";
+            var newImage = "<a href='" + src + "'><img onerror='imgError()'  alt='" + title + "' src='" + src + "' data-dimensions='" + dimensions + "' data-height='" + height + "' data-width='" + width + "' data-orientation='" + orientation + "' data-date='" + date + "' data-support='" + support + "'> </a>";
             var newImageElm = $(newImage).appendTo(this);
 
             if (this.id === "image1")
@@ -402,9 +401,19 @@ $(function () {
             var y1 = y + sectionHeight;
 
             var title1 = $("#image1").find('img').attr("alt");
-            var dimensions1 = $("#image1").find('img').attr("data-dimensions");
             var title2 = $("#image2").find('img').attr("alt");
+
+            var dimensions1 = $("#image1").find('img').attr("data-dimensions");
             var dimensions2 = $("#image2").find('img').attr("data-dimensions");
+
+            var date1 = $("#image1").find('img').attr("data-date");
+            var date2 = $("#image2").find('img').attr("data-date");
+
+            var support1 = $("#image1").find('img').attr("data-support");
+            var support2 = $("#image2").find('img').attr("data-support");
+
+            var image2w = $('#ol_i2').find('img').width();
+            var image2h = $('#ol_i2').find('img').height();
 
             if (x >= image2_offset.left && x <= image2_offset.left + image2_width &&
                     y >= image2_offset.top && y <= image2_offset.top + image2_height &&
@@ -431,6 +440,12 @@ $(function () {
                 values.push({name: 'title2', value: title2});
                 values.push({name: 'dimensions1', value: dimensions1});
                 values.push({name: 'dimensions2', value: dimensions2});
+                values.push({name: 'date1', value: date1});
+                values.push({name: 'date2', value: date2});
+                values.push({name: 'support1', value: support1});
+                values.push({name: 'support2', value: support2});
+                values.push({name: 'image2w', value: image2w});
+                values.push({name: 'image2h', value: image2h});
                 $.post("agile/iit/imagecropper", values, function (data) {
                     var myWindow = window.open('', 'cmpWindow', 'width=800, height=400, scrollbars=yes, toolbar=yes');
                     myWindow.document.write(data);
