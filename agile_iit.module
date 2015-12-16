@@ -143,3 +143,177 @@ function agile_iit_theme_registry_alter(&$theme_registry) {
     }
   }
 }
+
+/**
+ * Implements hook_image_effect_info().
+ */
+function agile_iit_image_effect_info() {
+  $effects = array();
+
+  $effects['scale_from_data'] = array(
+    'label' => t('Scale with field data'),
+    'help' => t('Resize an image using data in the host entity, making a scaled-to-life representation.'),
+    'effect callback' => 'agile_iit_resize_effect',
+    //'dimensions callback' => 'agile_iit_resize_dimensions',
+    'form callback' => 'agile_iit_resize_form',
+    'summary theme' => 'agile_iit_resize_summary',
+  );
+
+  return $effects;
+}
+
+// DEPRECATED. Unless i can find a way to get info about the image itself here.
+function agile_iit_resize_dimensions(array &$dimensions, array $data) {
+  // The new image will have the exact dimensions defined for the effect. Data contains all the settings that i entered for the effect. dims are the original dimensions.
+  //$dimensions['width'] = $data['width']; // this runs first.
+  $dimensions['height'] = 150;
+  $a = 3; //breakpoint
+}
+
+function agile_iit_resize_form($data) {
+
+  $form = array();
+  $types = node_type_get_names();
+  $fields = agile_iit_get_number_fields();
+  if (isset($data['host_entity'])) {
+    if (array_key_exists($data['host_entity'],  field_info_bundles('node'))) {
+      $fields = agile_iit_get_number_fields($data['host_entity']);
+    }
+  }
+  $form['host_entity'] = array(
+    // select, with options from exisiting content types.
+    '#type' => 'select',
+    '#options' => $types,
+    '#title' => 'Host entity type',
+    '#required' => TRUE,
+    '#default_value' => isset($data['host_entity']) ? $data['host_entity'] : '',
+    '#ajax' => array(
+      'wrapper' => 'width-field',
+      'callback' => 'agile_iit_refresh_fields_callback',
+      'method' => 'replace',
+      'effect' => 'fade',
+    ),
+  );
+
+  $form['width_field'] = array(
+    // select, with fields from fields in host_entity.
+    '#type' => 'select',
+    '#options' => $fields,
+    '#title' => t('Width field'),
+    '#description' => t('Must be a number field.'),
+    '#prefix' => '<div id="width-field">',
+    '#suffix' => '</div>',
+    '#default_value' =>  isset($data['width_field']) ? $data['width_field'] : '',
+    //'#field_suffix' => ' ' . t('pixels'),
+  );
+  $form['default_width'] = array(
+    // select, with fields from host_entity.
+    '#type' => 'textfield',
+    '#title' => t('Default width'),
+    '#default_value' => isset($data['default_width']) ? $data['default_width'] : '',
+    '#description' => 'If the value in the field above is not available, assume the image has this actual width.',
+    '#field_suffix' => ' ' . t('cm'),
+    '#required' => TRUE,
+    '#size' => 10,
+    '#allow_negative' => FALSE,
+  );
+  $form['scale_factor'] = array(
+    // select, with fields from host_entity.
+    '#type' => 'textfield',
+    '#title' => t('Scaling Factor'),
+    '#default_value' => isset($data['scale_factor']) ? $data['scale_factor'] : '',
+    '#field_suffix' => ' ' . t('pixels per cm'),
+    '#required' => TRUE,
+    '#size' => 10,
+    '#allow_negative' => FALSE,
+  );
+  return $form;
+  // $data is empty.
+}
+
+function agile_iit_resize_effect(&$image, $data) {
+  $file = file_uri_to_object($image->source);
+  $physical_width = $data['default_width'];
+  $parent_nid = NULL;
+  if ($file) {
+    $objects = file_usage_list($file);
+    if (isset($objects['file']) and isset($objects['file']['node'])) {
+      foreach($objects['file']['node'] as $nid => $count) {
+        if ($parent_nid === NULL) {
+          $parent_nid = $nid; // Test if this is the right type
+        }
+        elseif ($nid < $parent_nid) {
+          $parent_nid = $nid; // test if this is the right type.
+        }
+      }
+    }
+  }
+  if ($parent_nid) {
+    $parent_node = node_load($parent_nid);
+    if ($parent_node AND property_exists($parent_node, $data['width_field'])) {
+      $wrapper = entity_metadata_wrapper('node', $parent_node);
+      $physical_width = $wrapper->{$data['width_field']}->value();
+    }
+  }
+  $scaled_width = $physical_width * $data['scale_factor'];
+  $scaled_height = $image->info['height'] / $image->info['width'] * $scaled_width;
+
+
+  // get field from width thing.
+  // get field from height thing?
+  if (!image_resize($image, $scaled_width, $scaled_height)) {
+    watchdog('image', 'Image resize failed using the %toolkit toolkit on %path (%mimetype, %dimensions)', array('%toolkit' => $image->toolkit, '%path' => $image->source, '%mimetype' => $image->info['mime_type'], '%dimensions' => $image->info['width'] . 'x' . $image->info['height']), WATCHDOG_ERROR);
+    return FALSE;
+  }
+  return TRUE;
+  // you might be able to get the host entity here?
+
+  // here you have the data from the form that was filled out.
+  // but this gets called as you save the form with the sample image.
+  // $image is a StdClass iwth a source but doesn't seem to be a media entity in this case.
+}
+/**
+ * Returns HTML for a summary of an image resize effect.
+ *
+ * @param $variables
+ *   An associative array containing:
+ *   - data: The current configuration for this resize effect.
+ *
+ * @ingroup themeable
+ */
+function theme_agile_iit_resize_summary($variables) {
+  // This is copied verbatim from the vanilla resize. Fixme when we know what should be here.
+  $data = $variables['data'];
+
+  if ($data['width'] && $data['height']) {
+    return check_plain($data['width']) . 'x' . check_plain($data['height']);
+  }
+  else {
+    return ($data['width']) ? t('width @width', array('@width' => $data['width'])) : t('height @height', array('@height' => $data['height']));
+  }
+}
+
+
+function agile_iit_refresh_fields_callback($form, &$form_state) {
+  $host_entity_type = !empty($form_state['values']['data']['host_entity']) ? $form_state['values']['data']['host_entity'] : NULL;
+  $fields_available = agile_iit_get_number_fields($host_entity_type);
+  $form['data']['width_field']['#options'] = $fields_available;
+  return $form['data']['width_field'];
+}
+
+function agile_iit_get_number_fields($entity_type = NULL) {
+  $fields_available = array();
+  if (!$entity_type) {
+    $all_instances = field_info_instances('node');
+    foreach($all_instances as $bundle => $fields) {
+      $fields_available += $fields;
+    }
+  }
+  else {
+    $fields_available = field_info_instances('node', $entity_type);
+  }
+  foreach($fields_available as $machine_name => $field) {
+    $fields_available[$machine_name] = $field['label'];
+  }
+  return $fields_available;
+}
