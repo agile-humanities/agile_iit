@@ -127,6 +127,7 @@ function agile_iit_theme() {
  * Implements hook_theme_registry_alter().
  * Adds the custom template in the templates folder.
  */
+
 function agile_iit_theme_registry_alter(&$theme_registry) {
   // Defined path to the current module.
   $module_path = drupal_get_path('module', 'agile_iit');
@@ -154,7 +155,7 @@ function agile_iit_image_effect_info() {
     'label' => t('Scale with field data'),
     'help' => t('Resize an image using data in the host entity, making a scaled-to-life representation.'),
     'effect callback' => 'agile_iit_resize_effect',
-    //'dimensions callback' => 'agile_iit_resize_dimensions',
+    'dimensions callback' => 'agile_iit_resize_dimensions',
     'form callback' => 'agile_iit_resize_form',
     'summary theme' => 'agile_iit_resize_summary',
   );
@@ -171,20 +172,22 @@ function agile_iit_resize_dimensions(array &$dimensions, array $data) {
 }
 
 function agile_iit_resize_form($data) {
-
-  $form = array();
-  $types = node_type_get_names();
+  module_load_include('inc', 'agile_iit', 'includes/utilities');
+  $form = [];
   $fields = agile_iit_get_number_fields();
   if (isset($data['host_entity'])) {
-    if (array_key_exists($data['host_entity'],  field_info_bundles('node'))) {
+    if (array_key_exists($data['host_entity'], field_info_bundles('node'))) {
       $fields = agile_iit_get_number_fields($data['host_entity']);
     }
   }
+
+  $types = agile_iit_get_candidates();
   $form['host_entity'] = array(
-    // select, with options from exisiting content types.
+    // select, with options from existing content types.
     '#type' => 'select',
     '#options' => $types,
     '#title' => 'Host entity type',
+    '#description' => t('Only entity types with number fields are shown.'),
     '#required' => TRUE,
     '#default_value' => isset($data['host_entity']) ? $data['host_entity'] : '',
     '#ajax' => array(
@@ -194,17 +197,22 @@ function agile_iit_resize_form($data) {
       'effect' => 'fade',
     ),
   );
-
+  $default_field = NULL;
+  foreach ($fields as $key => $value) {
+    $test_string = strtolower($value);
+    if (strpos($test_string, 'width') !== FALSE) {
+      $default_field = $key;
+    }
+  }
   $form['width_field'] = array(
     // select, with fields from fields in host_entity.
     '#type' => 'select',
     '#options' => $fields,
     '#title' => t('Width field'),
-    '#description' => t('Must be a number field.'),
     '#prefix' => '<div id="width-field">',
     '#suffix' => '</div>',
-    '#default_value' =>  isset($data['width_field']) ? $data['width_field'] : '',
-    //'#field_suffix' => ' ' . t('pixels'),
+    '#default_value' => isset($data['width_field']) ? $data['width_field'] : $default_field,
+      //'#field_suffix' => ' ' . t('pixels'),
   );
   $form['default_width'] = array(
     // select, with fields from host_entity.
@@ -238,7 +246,7 @@ function agile_iit_resize_effect(&$image, $data) {
   if ($file) {
     $objects = file_usage_list($file);
     if (isset($objects['file']) and isset($objects['file']['node'])) {
-      foreach($objects['file']['node'] as $nid => $count) {
+      foreach ($objects['file']['node'] as $nid => $count) {
         if ($parent_nid === NULL) {
           $parent_nid = $nid; // Test if this is the right type
         }
@@ -267,11 +275,11 @@ function agile_iit_resize_effect(&$image, $data) {
   }
   return TRUE;
   // you might be able to get the host entity here?
-
   // here you have the data from the form that was filled out.
   // but this gets called as you save the form with the sample image.
   // $image is a StdClass iwth a source but doesn't seem to be a media entity in this case.
 }
+
 /**
  * Returns HTML for a summary of an image resize effect.
  *
@@ -293,27 +301,9 @@ function theme_agile_iit_resize_summary($variables) {
   }
 }
 
-
 function agile_iit_refresh_fields_callback($form, &$form_state) {
   $host_entity_type = !empty($form_state['values']['data']['host_entity']) ? $form_state['values']['data']['host_entity'] : NULL;
   $fields_available = agile_iit_get_number_fields($host_entity_type);
   $form['data']['width_field']['#options'] = $fields_available;
   return $form['data']['width_field'];
-}
-
-function agile_iit_get_number_fields($entity_type = NULL) {
-  $fields_available = array();
-  if (!$entity_type) {
-    $all_instances = field_info_instances('node');
-    foreach($all_instances as $bundle => $fields) {
-      $fields_available += $fields;
-    }
-  }
-  else {
-    $fields_available = field_info_instances('node', $entity_type);
-  }
-  foreach($fields_available as $machine_name => $field) {
-    $fields_available[$machine_name] = $field['label'];
-  }
-  return $fields_available;
 }
