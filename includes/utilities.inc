@@ -25,15 +25,16 @@ function agile_iit_get_candidates() {
   }
   return $candidates;
 }
- /**
-  * Returns number fields from enity type.
-  *
-  * @param type $entity_type
-  *   Entity type of node
-  *
-  * @return array
-  *   Candidate fields as associative array.
-  */
+
+/**
+ * Returns number fields from enity type.
+ *
+ * @param type $entity_type
+ *   Entity type of node
+ *
+ * @return array
+ *   Candidate fields as associative array.
+ */
 function agile_iit_get_number_fields($entity_type = NULL) {
   $fields_available = [];
   $candidates = [];
@@ -52,4 +53,19 @@ function agile_iit_get_number_fields($entity_type = NULL) {
     }
   }
   return $candidates;
+}
+
+/**
+ * Determines whether nid is of node type with one or more number fields.
+ *
+ * @param string $nid
+ *  Node identifier
+ *
+ * @return bool
+ *   True if node type has number field
+ */
+function agile_iit_has_number_type($nid) {
+  $node = node_load($nid);
+  $candidates = agile_iit_get_number_fields($node->type);
+  return count($candidates) > 0;
 }

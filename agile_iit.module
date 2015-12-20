@@ -197,22 +197,52 @@ function agile_iit_resize_form($data) {
       'effect' => 'fade',
     ),
   );
-  $default_field = NULL;
+  $default_width_field = NULL;
+  $default_height_field = NULL;
+  $default_diameter_field = NULL;
   foreach ($fields as $key => $value) {
     $test_string = strtolower($value);
     if (strpos($test_string, 'width') !== FALSE) {
-      $default_field = $key;
+      $default_width_field = $key;
+    }
+    if (strpos($test_string, 'height') !== FALSE) {
+      $default_height_field = $key;
+    }
+    if (strpos($test_string, 'diameter') !== FALSE) {
+      $default_diameter_field = $key;
     }
   }
-  $form['width_field'] = array(
+  $form['dimensions'] = array(
+    '#title' => t('Physical dimensions of original object'),
+    '#type' => 'fieldset',
+  );
+  $form['dimensions']['width_field'] = array(
     // select, with fields from fields in host_entity.
     '#type' => 'select',
     '#options' => $fields,
     '#title' => t('Width field'),
     '#prefix' => '<div id="width-field">',
     '#suffix' => '</div>',
-    '#default_value' => isset($data['width_field']) ? $data['width_field'] : $default_field,
-      //'#field_suffix' => ' ' . t('pixels'),
+    '#default_value' => isset($data['width_field']) ? $data['width_field'] : $default_width_field,
+  );
+
+  $form['dimensions']['height_field'] = array(
+    // select, with fields from fields in host_entity.
+    '#type' => 'select',
+    '#options' => $fields,
+    '#title' => t('Height field'),
+    '#prefix' => '<div id="height-field">',
+    '#suffix' => '</div>',
+    '#default_value' => isset($data['height_field']) ? $data['height_field'] : $default_height_field,
+  );
+  $form['dimensions']['diameter_field'] = array(
+    // select, with fields from fields in host_entity.
+    '#type' => 'select',
+    '#options' => $fields,
+    '#title' => t('Diameter field'),
+    '#prefix' => '<div id="diameter-field">',
+    '#suffix' => '</div>',
+    '#default_value' => isset($data['diameter_field']) ? $data['diameter_field'] : $default_diameter_field,
   );
   $form['default_width'] = array(
     // select, with fields from host_entity.
@@ -240,15 +270,19 @@ function agile_iit_resize_form($data) {
 }
 
 function agile_iit_resize_effect(&$image, $data) {
+  module_load_include('inc', 'agile_iit', 'includes/utilities');
   $file = file_uri_to_object($image->source);
   $physical_width = $data['default_width'];
   $parent_nid = NULL;
-  if ($file) {
+  if ($file && isset($file->fid)) {
     $objects = file_usage_list($file);
     if (isset($objects['file']) and isset($objects['file']['node'])) {
       foreach ($objects['file']['node'] as $nid => $count) {
         if ($parent_nid === NULL) {
-          $parent_nid = $nid; // Test if this is the right type
+          if (agile_iit_has_number_type($parent_nid)) {
+            $parent_nid = $nid;
+          }
+          // Test if this is the right type
         }
         elseif ($nid < $parent_nid) {
           $parent_nid = $nid; // test if this is the right type.
@@ -256,28 +290,45 @@ function agile_iit_resize_effect(&$image, $data) {
       }
     }
   }
+  $physical_width = NULL;
+  $physical_height = NULL;
   if ($parent_nid) {
     $parent_node = node_load($parent_nid);
-    if ($parent_node AND property_exists($parent_node, $data['width_field'])) {
+    if ($parent_node) {
       $wrapper = entity_metadata_wrapper('node', $parent_node);
+    }
+    if ($wrapper && property_exists($parent_node, $data['width_field'])) {
       $physical_width = $wrapper->{$data['width_field']}->value();
     }
+    if ($wrapper && property_exists($parent_node, $data['height_field'])) {
+      $physical_height = $wrapper->{$data['height_field']}->value();
+    }
+    if ($wrapper && property_exists($parent_node, $data['diameter_field'])) {
+      $physical_height = $wrapper->{$data['diameter_field']}->value();
+    }
   }
-  $scaled_width = $physical_width * $data['scale_factor'];
-  $scaled_height = $image->info['height'] / $image->info['width'] * $scaled_width;
+  if ($physical_width) {
+    $scaled_width = $physical_width * $data['scale_factor'];
+  }
+  if ($physical_height) {
+    $scaled_height = $physical_height * $data['scale_factor'];
+  }
 
-
-  // get field from width thing.
-  // get field from height thing?
+  if (!$physical_width && $scaled_height) {
+    $scaled_width = $image->info['width'] / $image->info['height'] * $scaled_height;
+  }
+  if (!$physical_height && $scaled_width) {
+    $scaled_height = $image->info['height'] / $image->info['width'] * $scaled_width;
+  }
+  if (!$physical_height && !$physical_width) {
+    $scaled_width = $data['default_width'] * $data['scale_factor'];
+    $scaled_height = $scaled_width * $image->info['height'] / $image->info['width'];
+  }
   if (!image_resize($image, $scaled_width, $scaled_height)) {
     watchdog('image', 'Image resize failed using the %toolkit toolkit on %path (%mimetype, %dimensions)', array('%toolkit' => $image->toolkit, '%path' => $image->source, '%mimetype' => $image->info['mime_type'], '%dimensions' => $image->info['width'] . 'x' . $image->info['height']), WATCHDOG_ERROR);
     return FALSE;
   }
   return TRUE;
-  // you might be able to get the host entity here?
-  // here you have the data from the form that was filled out.
-  // but this gets called as you save the form with the sample image.
-  // $image is a StdClass iwth a source but doesn't seem to be a media entity in this case.
 }
 
 /**
