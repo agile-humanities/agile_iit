@@ -272,7 +272,6 @@ function agile_iit_resize_form($data) {
 function agile_iit_resize_effect(&$image, $data) {
   module_load_include('inc', 'agile_iit', 'includes/utilities');
   $file = file_uri_to_object($image->source);
-  $physical_width = $data['default_width'];
   $parent_nid = NULL;
   if ($file && isset($file->fid)) {
     $objects = file_usage_list($file);
@@ -282,10 +281,9 @@ function agile_iit_resize_effect(&$image, $data) {
           if (agile_iit_has_number_type($parent_nid)) {
             $parent_nid = $nid;
           }
-          // Test if this is the right type
         }
         elseif ($nid < $parent_nid) {
-          $parent_nid = $nid; // test if this is the right type.
+          $parent_nid = $nid;
         }
       }
     }
@@ -313,13 +311,14 @@ function agile_iit_resize_effect(&$image, $data) {
   if ($physical_height) {
     $scaled_height = $physical_height * $data['scale_factor'];
   }
-
+  // Compute missing dimension, if possible.
   if (!$physical_width && $scaled_height) {
     $scaled_width = $image->info['width'] / $image->info['height'] * $scaled_height;
   }
   if (!$physical_height && $scaled_width) {
     $scaled_height = $image->info['height'] / $image->info['width'] * $scaled_width;
   }
+  // USe defaults if  no dimensions are available.
   if (!$physical_height && !$physical_width) {
     $scaled_width = $data['default_width'] * $data['scale_factor'];
     $scaled_height = $scaled_width * $image->info['height'] / $image->info['width'];
@@ -352,6 +351,17 @@ function theme_agile_iit_resize_summary($variables) {
   }
 }
 
+/**
+ * AJAX Callback.
+ *
+ * @param array $form
+ *   Drupal form
+ * @param array $form_state
+ *   Drupal form state
+ * 
+ * @return string
+ *   Width field
+ */
 function agile_iit_refresh_fields_callback($form, &$form_state) {
   $host_entity_type = !empty($form_state['values']['data']['host_entity']) ? $form_state['values']['data']['host_entity'] : NULL;
   $fields_available = agile_iit_get_number_fields($host_entity_type);
