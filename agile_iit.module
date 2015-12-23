@@ -163,17 +163,9 @@ function agile_iit_image_effect_info() {
   return $effects;
 }
 
-// DEPRECATED. Unless i can find a way to get info about the image itself here.
-function agile_iit_resize_dimensions(array &$dimensions, array $data) {
-  // The new image will have the exact dimensions defined for the effect. Data contains all the settings that i entered for the effect. dims are the original dimensions.
-  //$dimensions['width'] = $data['width']; // this runs first.
-  $dimensions['height'] = 150;
-  $a = 3; //breakpoint
-}
-
 function agile_iit_resize_form($data) {
   module_load_include('inc', 'agile_iit', 'includes/utilities');
-  $form = [];
+  $form = array();
   $fields = agile_iit_get_number_fields();
   if (isset($data['host_entity'])) {
     if (array_key_exists($data['host_entity'], field_info_bundles('node'))) {
