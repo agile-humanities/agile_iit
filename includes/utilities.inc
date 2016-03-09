@@ -66,6 +66,14 @@ function agile_iit_get_number_fields($entity_type = NULL) {
  */
 function agile_iit_has_number_type($nid) {
   $node = node_load($nid);
-  $candidates = agile_iit_get_number_fields($node->type);
+  // Check if the node exists - I was getting this called on nothing
+  // possibly out of a configuration error.
+  if ($node) {
+    $candidates = agile_iit_get_number_fields($node->type);
+  }
+  else {
+    watchdog('agile', 'no node found for nid: ' . $nid);
+    $candidates = array();
+  }
   return count($candidates) > 0;
 }
