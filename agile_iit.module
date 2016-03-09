@@ -363,3 +363,13 @@ function agile_iit_refresh_fields_callback($form, &$form_state) {
   $form['data']['width_field']['#options'] = $fields_available;
   return $form['data']['width_field'];
 }
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function agile_iit_preprocess_page(&$vars, $hook) {
+  drupal_add_js(drupal_get_path('module', 'agile_iit') . "/js/jquery.js");
+  drupal_add_js(drupal_get_path('module', 'agile_iit') . "/js/jquery-ui.js");
+  drupal_add_js(drupal_get_path('module', 'agile_iit') . "/js/iit-gallery-view.js");
+
+}

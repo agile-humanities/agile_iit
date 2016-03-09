@@ -108,10 +108,16 @@
                 <?php print render($action_links); ?>
               </ul>
             <?php endif; ?>
-            <?php print render($page['content']); ?>
 
+            <div id="resizable-gallery-wrapper">
+              <div class="resizable-gallery-scroll-content">
+                <?php print render($page['content']); ?>
+              </div>
+              <div id="resizable-gallery-handle" class="ui-resizable-handle ui-resizable-s"></div>
+            </div>
+            <div class="iit-droppable-wrapper">
             <?php $block = module_invoke('agile_iit', 'block_view', 'iit_content'); print render($block['content']); ?>
-
+            </div>
             <?php print $feed_icons; ?>
 
           </div></div> <!-- /.section, /#content -->

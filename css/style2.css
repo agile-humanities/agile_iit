@@ -18,10 +18,28 @@
 .gallery li img {width: 100%; cursor: move;}
 
 
+#resizable-gallery-handle {
+    background: #ccc;
+    position: absolute;
+    padding-bottom: 5px;
+}
+
+.resizable-gallery-scroll-content {
+    overflow: auto;
+    padding: 0;
+    margin: 0;
+    max-height: 100%;
+}
+
+.iit-droppable-wrapper {
+    position: relative;
+}
+
 .iit-wrapper {
     background-color: #FFF;
     color: #222;
 }
+
 
 #iit-content #menu {
     max-width: 1200px;
