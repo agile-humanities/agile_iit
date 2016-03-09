@@ -261,6 +261,9 @@ function agile_iit_resize_form($data) {
   // $data is empty.
 }
 
+/**
+ * Definition of custom resizing effect.
+ */
 function agile_iit_resize_effect(&$image, $data) {
   module_load_include('inc', 'agile_iit', 'includes/utilities');
   $file = file_uri_to_object($image->source);

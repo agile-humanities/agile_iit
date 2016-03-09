@@ -8,7 +8,7 @@
 /**
  * Implements hook_enable().
  *
- * We create the demonstration flag on enable, so hook implementations in flag
+ * We create the agile_iit flag on enable, so hook implementations in flag
  * module will fire correctly, as the APIs are not available on install.
  */
 function agile_iit_enable() {
@@ -17,9 +17,7 @@ function agile_iit_enable() {
 
   $existing_flags = flag_get_flags();
   if (!isset($existing_flags['selected_images'])) {
-    // Install a demonstration flag only if no flag exists. This is to prevent
-    // a case where a disables and enables the module, and the demonstration
-    // flag is overwritten or re-created.
+    // Only install the flag if it doesn't exist already.
     $flag = flag_flag::factory_by_entity_type('node');
     $configuration = array(
       'name' => 'selected_images',
