@@ -85,10 +85,14 @@
  * @see html.tpl.php
  */
 ?>
-<div id="page-wrapper"><div id="page">
-    <div id="iit-main-wrapper" class="clearfix"><div id="iit-main" class="clearfix">
-        <div id="iit-content" class="column"><div class="section iit-wrapper">
-            <?php if ($page['highlighted']): ?><div id="highlighted"><?php print render($page['highlighted']); ?></div><?php endif; ?>
+<div id="page-wrapper">
+  <div id="page">
+    <div id="iit-main-wrapper" class="clearfix">
+      <div id="iit-main" class="clearfix">
+        <div id="iit-content" class="column">
+          <div class="section iit-wrapper">
+            <?php if ($page['highlighted']): ?>
+              <div id="highlighted"><?php print render($page['highlighted']); ?></div><?php endif; ?>
             <a id="main-content"></a>
             <?php print render($title_prefix); ?>
             <?php if ($title): ?>
@@ -116,15 +120,18 @@
               <div id="resizable-gallery-handle" class="ui-resizable-handle ui-resizable-s"></div>
             </div>
             <div class="iit-droppable-wrapper">
-            <?php $block = module_invoke('agile_iit', 'block_view', 'iit_content'); print render($block['content']); ?>
+              <?php $block = module_invoke('agile_iit', 'block_view', 'iit_content');
+              print render($block['content']); ?>
             </div>
             <?php print $feed_icons; ?>
 
-          </div></div> <!-- /.section, /#content -->
+          </div>
+        </div> <!-- /.section, /#content -->
 
 
+      </div>
+    </div> <!-- /#main, /#main-wrapper -->
 
-      </div></div> <!-- /#main, /#main-wrapper -->
 
-
-  </div></div> <!-- /#page, /#page-wrapper -->
+  </div>
+</div> <!-- /#page, /#page-wrapper -->
