@@ -117,7 +117,7 @@
               <div class="resizable-gallery-scroll-content">
                 <?php print render($page['content']); ?>
               </div>
-              <div id="resizable-gallery-handle" class="ui-resizable-handle ui-resizable-s"></div>
+              <div id="resizable-gallery-handle" class="ui-resizable-handle ui-resizable-s"><div class="rszr-icon">&nbsp;</div></div>
             </div>
             <div class="iit-droppable-wrapper">
               <?php $block = module_invoke('agile_iit', 'block_view', 'iit_content');
