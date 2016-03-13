@@ -1,6 +1,6 @@
 
 
-<div class='draggable imagecrop resizable' style='z-index : 1001; float: left;'>
+<div class='draggable imagecrop resizable rotatable' style='z-index : 1001; float: left;'>
   <a href='' class='ui-icon ui-icon-info'> info </a> <a> <span class='ui-icon ui-icon-close'> X </span></a>
   <div id='d<?php echo $n ?>' class='info'>  </div>
   <img id='img<?php echo $n ?>' src='<?php echo $image_url ?>' style='opacity:0.6;filter:alpha(opacity=40);'

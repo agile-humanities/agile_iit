@@ -334,6 +334,8 @@ $(function () {
                 $("#results").append(data);
                 $(".draggable").draggable({containment: "window"});
                 $(".resizable").resizable().find('img').css({"width": "78%"});
+                $(".rotatable").rotatable();
+
             });
 
         }
