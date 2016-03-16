@@ -57,10 +57,11 @@ $(function () {
 
     }
     function setLandscapeView() {
-        image1Top = 400;
-        image2Top = 400;
+
+        image1Top = 468;
+        image2Top = 468;
         image1Left = 0;
-        image2Left = 270;
+        image2Left = 0;
 
     }
 
@@ -265,10 +266,7 @@ $(function () {
 
     });
 
-    $(document).on('click', '#ol_close', function () {
-        $('.zoom').find('.zoomy').remove();
-        $('#overlay2').remove();
-    });
+
 
     $(document).on('click', '#cl_close', function () {
         $('#overlay2').remove();

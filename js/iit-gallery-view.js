@@ -1,5 +1,5 @@
 $(function () {
-    $( "#resizable-gallery-wrapper" ).resizable({
+    $("#resizable-gallery-wrapper" ).resizable({
         handles: { 's': '#resizable-gallery-handle'},
     });
 });
