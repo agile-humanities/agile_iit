@@ -12,11 +12,8 @@ $(function () {
     screenRatio = 0.96;
     previousImagePrefix = '800px';
     var cl_windowWidth = $(window).width();
-    console.log("window width: " + cl_windowWidth);
     var cl_windowHeight = $("#image1").height();
-    console.log("window img1 height: " + cl_windowHeight);
     imageSize = Math.floor((cl_windowWidth * screenRatio) / 2);
-    console.log("image size: " + imageSize);
     imageSizePrefix = calculateImagePrefix(imageSize);
 
 
@@ -104,6 +101,7 @@ $(function () {
         hoverClass: "iit-ui-state-hover",
         drop: function (event, ui) {
             var src = ui.draggable.find('img').attr("data-lrg_url");
+            var nid = ui.draggable.find('img').attr("nid");
             var vfsrc = src.replace(imageSizePrefix, "800px");
             var vf400src = src.replace(imageSizePrefix, "400px");
             $(this).find("img").remove();
@@ -124,7 +122,7 @@ $(function () {
             }
 
             $(this).find("h4").html(title);
-            var newImage = "<a href='" + src + "'><img onerror='imgError()'  alt='" + title + "' src='" + src + "' data-dimensions='" + dimensions + "' data-height='" + height + "' data-width='" + width + "' data-orientation='" + orientation + "' data-date='" + date + "' data-support='" + support + "'> </a>";
+            var newImage = "<a href='" + src + "'><img onerror='imgError()'  alt='" + title + "' src='" + src + "' data-nid='" + nid + "' data-dimensions='" + dimensions + "' data-height='" + height + "' data-width='" + width + "' data-orientation='" + orientation + "' data-date='" + date + "' data-support='" + support + "'> </a>";
             var newImageElm = $(newImage).appendTo(this);
 
             if (this.id === "image1")
@@ -325,8 +323,6 @@ $(function () {
                     x1 >= image2_offset.left && x1 <= image2_offset.left + image2_width &&
                     y1 >= image2_offset.top && y1 <= image2_offset.top + image2_height
                     ) {
-                console.log("inbounds");
-                console.log(sectionImage);
                 var values = new Array();
                 image2_src = $("#cf_img2").val();
                 values.push({name: 'sectImg', value: sectionImage});

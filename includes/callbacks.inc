@@ -115,14 +115,15 @@ function agile_iit_crop_tool_callback() {
 function agile_iit_twoviews() {
 
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $img1_src = filter_input(INPUT_POST, 'vf_img1');
-    $img2_src = filter_input(INPUT_POST, 'vf_img2');
+    $node1 = node_load(filter_input(INPUT_POST, 'node1'));
+    $img1_src = file_create_url($node1->field_object_image['und'][0]['uri']);
+    $node2 = node_load(filter_input(INPUT_POST, 'node2'));
+    $img2_src = file_create_url($node2->field_object_image['und'][0]['uri']);
   }
 
   echo theme('agile_iit_twoviews', array(
     'img1_src' => $img1_src,
     'img2_src' => $img2_src,
-    // Add the width here!
       )
   );
 }
@@ -193,7 +194,7 @@ function agile_iit_image_cropper() {
     $dim2H = round($dim2H, 2);
     $dst_r = ImageCreateTrueColor($targ_w, $targ_h);
     // Deal with the fact that image2 is scaled.
-    $scale_factor_image_2 = $size[0]/$image2w;
+    $scale_factor_image_2 = $size[0] / $image2w;
     $x = round($x * $scale_factor_image_2);
     $y = round($y * $scale_factor_image_2);
     $targ_w = round($targ_w * $scale_factor_image_2);

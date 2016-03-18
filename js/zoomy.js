@@ -124,10 +124,6 @@
                                 'left': a[2] + 'px'
                             };
 
-
-                            //  console.log(test2);
-                            // test.css({'backgroundPosition'  : '-' + a[0] + 'px ' + '-' + a[1] + 'px'}, movement);
-                            //console.log(test2);
                             var myextend = $.extend({'backgroundPosition': '-' + a[0] + 'px ' + '-' + a[1] + 'px'}, movement);
 
                             $(".zoomy").eq(1).css({
@@ -138,10 +134,6 @@
                                 'backgroundPosition': '-' + a[0] + 'px ' + '-' + a[1] + 'px',
                                 'transform': movement
                             });
-                            /*         return $.extend({'backgroundPosition'  : '-' + a[0] + 'px ' + '-' + a[1] + 'px'}, movement);*/
-                            console.log("myextend:", myextend);
-                            //return myextend;
-
                             return {};
                         } else {
                             return {};
@@ -238,8 +230,6 @@
             },
             // Move Zoom Cursor
             move: function (ele, zoom, e) {
-                //for (var c in zoom){if (zoom.hasOwnProperty(c)) console.log(c);}
-                console.log("in move - zoom", zoom);
 
                 // need to stop as many of these variable in data object to avoid recalulation of variables
                 var id = zoom.attr('rel'),
@@ -256,7 +246,6 @@
 
 
                         move = utils.css(change.possibilities(cssArrIndex, dataset, leftX, topY, posX, posY));
-                console.log("Move", move);
 
                 var id2 = (id == 1) ? 0 : 1;
                 var dataset2 = {};
@@ -275,8 +264,6 @@
                     zoom2[prop] = zoom[prop];
                 }
                 zoom2.selector = sel;
-                console.log("in move - zoom2:", zoom2);
-                console.log("id", id, "id2", id2);
                 zoom.css(move);
                 zoom2.css(move2);
 
