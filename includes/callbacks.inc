@@ -115,10 +115,11 @@ function agile_iit_crop_tool_callback() {
 function agile_iit_twoviews() {
 
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $field = variable_get('iit_image_fields', 'field_image');
     $node1 = node_load(filter_input(INPUT_POST, 'node1'));
-    $img1_src = file_create_url($node1->field_object_image['und'][0]['uri']);
+    $img1_src = file_create_url($node1->{$field}['und'][0]['uri']);
     $node2 = node_load(filter_input(INPUT_POST, 'node2'));
-    $img2_src = file_create_url($node2->field_object_image['und'][0]['uri']);
+    $img2_src = file_create_url($node2->{$field}['und'][0]['uri']);
   }
 
   echo theme('agile_iit_twoviews', array(
