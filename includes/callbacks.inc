@@ -6,7 +6,7 @@
  */
 
 /**
- * Menu drive callback to view default images.
+ * Menu callback to make the Crop (Detail) Tool Workspace.
  */
 function agile_iit_crop_callback() {
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -16,12 +16,12 @@ function agile_iit_crop_callback() {
   }
 
   $size1 = getimagesize($img1_src);
-  $image_width1 = $size1[0];
-  $image_height1 = $size1[1];
-  $ratio1 = $image_width1 / $image_width;
-  $height1 = $image_height1 / $ratio1;
+  $image_width1 = $size1[0]; // Width in pixels of the image at cf_img1. Currently is an image derivative, so will be x00.
+  $image_height1 = $size1[1]; // Height in pixels of the image at cf_img2
+  $ratio1 = $image_width1 / $image_width; // The ratio of the cf_img1 image's actual width to the width we want to fit it in. Note that because we chose cf_img1 to fit in half the screen width, this might be less than 1
+  $height1 = $image_height1 / $ratio1; // The calculated height of the image when its width is stretched(/shrunken) to image_width.
 
-  $size2 = getimagesize($img2_src);
+  $size2 = getimagesize($img2_src); // Same as img1.
   $image_width2 = $size2[0];
   $image_height2 = $size2[1];
   $ratio2 = $image_width2 / $image_width;
@@ -35,21 +35,30 @@ function agile_iit_crop_callback() {
     'height2' => $height2,
   );
 
-  echo theme('agile_iit_crop', $theme_args);
+  echo theme('agile_iit_crop', $theme_args); // return a themed div that will be thrown in an overlay.
 }
 
 /**
- * Menu drive callback to view cropped images.
+ * Menu callback to create a cropped (detail) section.
+ *
+ * Input POST arguments should include:
+ *   w: width of the cropping rectangle
+ *   h: height of the cropping rectangle
+ *   x: x-offset of the leftmost side of the cropping rectangle (from the parent image)
+ *   y: y-offset of the top side of the cropping rectangle (from the parent image).
+ *   c_w: width of the #crop_target element (note: may be different from image that user drew on).
+ *   c_h: height of the #crop_target element (note: may be different from image that user drew on).
+ *   src: the source of the image to use as the cropping source. (currently comes out of the original cropform).
  */
 function agile_iit_crop_tool_callback() {
 
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $n = rand(0, 100000);
+    $n = rand(0, 100000); // It's highly unlikely but possible that we'll overwrite something that we're using.
     $file_dir = 'public://';
     $real_path = drupal_realpath("$file_dir");
     $real_url = file_create_url($file_dir);
     $cropfilepath = "$real_path/{$n}.jpg";
-    $cropurl = "$real_url/{$n}.jpg";
+    $cropurl = "$real_url/{$n}.jpg"; // All that was to make the filename for the cropped section that we're about to make.
     $targ_w = filter_input(INPUT_POST, 'w');
     $targ_h = filter_input(INPUT_POST, 'h');
     $x = filter_input(INPUT_POST, 'x');
@@ -59,7 +68,7 @@ function agile_iit_crop_tool_callback() {
     $jpeg_quality = 90;
     $src = filter_input(INPUT_POST, 'src');
 
-    $size = getimagesize($src);
+    $size = getimagesize($src); // is it possible that the src we pass as the cropping source is different from the image that the crop was drawn on? Yes;
     switch ($size["mime"]) {
       case "image/jpeg":
         $img_replacement = imagecreatefromjpeg($src);
@@ -78,19 +87,21 @@ function agile_iit_crop_tool_callback() {
         break;
     }
 
-    $ratio_width = $targ_w / $container_width;
-    $ratio_height = $targ_h / $container_height;
-    $ratio_width = round($ratio_width, 8);
+    $ratio_width = $targ_w / $container_width; // Width of crop rectangle over width of #crop_source.
+    $ratio_height = $targ_h / $container_height; // height of crop rectangle over height of #crop_source
+    $ratio_width = round($ratio_width, 8); // Round to 8 decimal places...???!!!
     $ratio_height = round($ratio_height, 8);
 
-    $source_imagex = imagesx($img_replacement);
+    $source_imagex = imagesx($img_replacement); // why would this be different from the results of getimagesize() above?
     $source_imagey = imagesy($img_replacement);
 
-    $dst_r = imagecreatetruecolor($targ_w, $targ_h);
-    $dst_r1 = imagecreatetruecolor($container_width, $container_height);
-    imagecopyresampled($dst_r1, $img_replacement, 0, 0, 0, 0, $container_width, $container_height, $source_imagex, $source_imagey);
+    $dst_r = imagecreatetruecolor($targ_w, $targ_h); // Create an image resource sized to crop rectangle.
+    $dst_r1 = imagecreatetruecolor($container_width, $container_height); // Create an image resource sized to the crop source.
+    imagecopyresampled($dst_r1, $img_replacement, 0, 0, 0, 0, $container_width, $container_height, $source_imagex, $source_imagey); // copy the replacement image into this new image resource.
+    //What i think this should do is copy the crop_target (however big) into an image the size of the image that the user drew a rectangle on.
+    // But even then, our section would be the same res as the shrunken image that fits in half the window.
     imagecopy($dst_r, $dst_r1, 0, 0, filter_input(INPUT_POST, 'x'), filter_input(INPUT_POST, 'y'), filter_input(INPUT_POST, 'w'), filter_input(INPUT_POST, 'h'));
-    imagejpeg($dst_r, $cropfilepath, $jpeg_quality);
+    imagejpeg($dst_r, $cropfilepath, $jpeg_quality); // Write this image as a jpg file to the filename we made at the top of this function.
     // Image created by imagejpeg is converted to Drupal managed file.
     $data = file_get_contents($cropfilepath);
     $file_object = file_save_data($data, "public://iit{$n}.jpg");
@@ -100,10 +111,10 @@ function agile_iit_crop_tool_callback() {
     imagedestroy($dst_r1);
     imagedestroy($dst_r);
     $theme_args = array(
-      'n' => $n,
-      'image_url' => $image_url,
-      'ratio_width' => $ratio_width,
-      'ratio_height' => $ratio_height,
+      'n' => $n, // The image id. So we can make the <img>'s #. Also so we can destroy it? :D
+      'image_url' => $image_url, // use for src of this <img>
+      'ratio_width' => $ratio_width, // Saved as data-ratiow, this is the width of the rectangle over the width of the image it was drawn on
+      'ratio_height' => $ratio_height, // Saved as data-ratioh, this is the height of the rectangle over the height of the image it was drawn on.
     );
     echo theme('agile_iit_croptool', $theme_args);
   }
