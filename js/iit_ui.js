@@ -215,7 +215,7 @@ $(function () {
         $('#w').val(c.w); // seemingly accurately and independent of whether you made the rectangle by dragging down-right or up-left.
         $('#h').val(c.h);
     }
-
+    var jcrop_api = [];
     // Set the submit handlers for the cropform, viewform, gridform.
     $("#cropform").submit(function (e) {
         e.preventDefault();
@@ -237,11 +237,27 @@ $(function () {
             $(".img-container").hide(); // Hize the dropzones.
             $.post("agile/iit/crop", values, function (data) { // POST the form values to crop, which returns themed stuff to create the cropping workspace based on the images at cf_img1 and cf_img2.
                 $("#overlay2").append(data);
-                $('#crop_target').Jcrop({onSelect: updateCoords}); // This means that on selecting a rectangle, it runs updateCoords.
+                $('#crop_target').Jcrop({onSelect: updateCoords}, function(){
+                    jcrop_api.push(this);
+                }); // This means that on selecting a rectangle, it runs updateCoords.
                 image2_offset = $("#ol_i2 img").offset(); // Calculates the position of image2 relative to document (absolute position).
                 image2_height = $("#ol_i2 img").height();
                 image2_width = $("#ol_i2 img").width();
 
+            });
+            $(window).resize(function(){
+                if(jcrop_api.length > 0)
+                {
+                    $.each( jcrop_api, function( key, api ) {
+                        api.destroy();
+                    } );
+                    $('#crop_target').removeAttr('style');
+                    $('.jcrop-holder').remove();
+
+                    $('#crop_target').each(function(){
+                        $.Jcrop(this, {onSelect: updateCoords});
+                        });
+                }
             });
         }
     });
