@@ -10,32 +10,12 @@
  */
 function agile_iit_crop_callback() {
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $img1_src = filter_input(INPUT_POST, 'cf_img1');
-    $img2_src = filter_input(INPUT_POST, 'cf_img2');
-    $image_width = filter_input(INPUT_POST, 'container_width') * .48;
+    $theme_args = array(
+      'img1_src' => filter_input(INPUT_POST, 'cf_img1'),
+      'img2_src' => filter_input(INPUT_POST, 'cf_img2'),
+     );
+  echo theme('agile_iit_crop', $theme_args);
   }
-
-  $size1 = getimagesize($img1_src);
-  $image_width1 = $size1[0]; // Width in pixels of the image at cf_img1. Currently is an image derivative, so will be x00.
-  $image_height1 = $size1[1]; // Height in pixels of the image at cf_img2
-  $ratio1 = $image_width1 / $image_width; // The ratio of the cf_img1 image's actual width to the width we want to fit it in. Note that because we chose cf_img1 to fit in half the screen width, this might be less than 1
-  $height1 = $image_height1 / $ratio1; // The calculated height of the image when its width is stretched(/shrunken) to image_width.
-
-  $size2 = getimagesize($img2_src); // Same as img1.
-  $image_width2 = $size2[0];
-  $image_height2 = $size2[1];
-  $ratio2 = $image_width2 / $image_width;
-  $height2 = $image_height2 / $ratio2;
-
-  $theme_args = array(
-    'img1_src' => $img1_src,
-    'img2_src' => $img2_src,
-    'width' => $image_width,
-    'height1' => $height1,
-    'height2' => $height2,
-  );
-
-  echo theme('agile_iit_crop', $theme_args); // return a themed div that will be thrown in an overlay.
 }
 
 /**
