@@ -107,8 +107,8 @@ $(function () {
     // Set them as data-dimensions (which is nicer to read). We should refactor this whole thing out because we don't need the real-life dimensions at this point.
     function write_attributes() {
         $('.iit-thumb img').each(function () {
-            width = $(this).attr('data-width');
-            height = $(this).attr('data-height');
+            width = $(this).attr('data-width'); // This is the raw number in cm of the image, which was passed in from the view.
+            height = $(this).attr('data-height'); // Height. raw number in cm.
             $(this).attr("data-dimensions", width + ' cm x ' + height + ' cm');
             $(this).attr("data-orientation", 'landscape');     // It also sets the data-orientation which we're not using effectively at all.
         });
@@ -119,9 +119,9 @@ $(function () {
 
     // Make the .img-container's droppable.
     $(".img-container").droppable({
-        // accept: ".ui-thumb", // Why is this commented out?
+        accept: ".ui-thumb",
         hoverClass: "iit-ui-state-hover",
-        drop: function (event, ui) {  // It's not clear to me yet if ui includes everything on the page, or the object currently being dropped?
+        drop: function (event, ui) {  // ui is the object currently being dropped.
             var src = ui.draggable.find('img').attr("data-lrg_url"); // get the url of the "big" image (which at the moment is also the half-the-viewport image), e.g. http://localhost:8181/sites/default/files/styles/iit-200/public/Mona_Lisa_%28copy%2C_Hermitage%29.jpg?itok=rDQt89Lv
             var nid = ui.draggable.find('img').attr("nid");  // get the nid!
             var vfsrc = src.replace(imageSizePrefix, "800px"); // Not sure why we need vfsrc. note that vf means view form, which means it's maybe populating values to be used in the comparison viewer. Also not sure if this line of code is useful as src now includes iit-x00 instead of x00px.
@@ -250,7 +250,7 @@ $(function () {
     // This runs when you click "Extract Detail" and it throws a little detail guy under the two images.
     $(document).on('submit', '#cropform2', function (e) {
         e.preventDefault();
-        if (parseInt($('#w').val())) { // If the selected rectangle has a width (note: isn't this element included in the form data? why do we search for it by id?)
+        if (parseInt($('#w').val())) { // Check that a crop window exists.
             var values = $(this).serializeArray(); // Make that name: value: array out of the four input elements in the form (x,y,w,h)
             var src = $("#cf_img1").val(); // Oddly enough, we dig back down into the original "cropform" to get this value. It's still "underneath" the crop workspace.
             var c_w = $("#crop_target").width(); // Note that the crop_target is actually a different, hidden image, just happens to be the same size as the one we see.
