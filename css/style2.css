@@ -238,3 +238,14 @@ form.inline {
     left: 2px;
     bottom: 2px;
 }
+
+.iit-image-holder {
+    width: 49%;
+    padding: 0 5px;
+    box-sizing: border-box;
+
+}
+
+.iit-image-holder img {
+    width: 100%;
+}

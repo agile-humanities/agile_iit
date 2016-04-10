@@ -11,10 +11,10 @@
         <input type="button" name="cl_close" id="cl_close" value="close"/>
     </div>
     <div style="clear:both;"></div>
-    <div id="ol_i1">
+    <div id="ol_i1" class="iit-image-holder">
         <img src='<?php echo $img1_src ?>' id='crop_target'/>
     </div>
-    <div id="ol_i2">
+    <div id="ol_i2" class="iit-image-holder">
         <img src='<?php echo $img2_src; ?>'/>
     </div>
 </div>
