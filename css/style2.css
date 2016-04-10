@@ -121,10 +121,45 @@
     float: left;
 }
 
+#results .ui-icon-close, #results .ui-icon-info, #results .ui-icon-arrowstop-1-e, #results .ui-icon-gripsmall-diagonal-se {
+    background-image: url(images/ui-icons_high-contrast_256x240.png);
+}
 
-#results .ui-icon-close {float: right}
-#results .ui-icon-info {float: left}
-#results .ui-icon-arrowstop-1-e {float: bottom}
+#results .resizable img {
+    width: 100%;
+}
+
+#results .ui-icon-close {
+    position: absolute;
+    right: -16px;
+    top: -16px;
+}
+#results .ui-icon-info {
+    position: absolute;
+    left: -16px;
+    top: -16px;
+}
+#results .ui-icon-arrowstop-1-e {
+    position: absolute;
+    bottom: -16px;
+}
+
+#results .ui-rotatable-handle {
+    height: 16px;
+    width: 16px;
+    cursor: pointer;
+    background-image: url(images/ui-icons_high-contrast_256x240.png);
+    background-position: -144px -64px;
+    position: absolute;
+    left: -16px;
+}
+#results .ui-icon-gripsmall-diagonal-se {
+    position: absolute;
+    right: -16px;
+    bottom: -8px;
+}
+
+
 
 .info {float: left; min-height: 0.2em;}
 .info p {float: left; font-size: x-small;}
@@ -229,15 +264,7 @@ form.inline {
     float:left;
 }
 
-.ui-rotatable-handle {
-    height: 16px;
-    width: 16px;
-    cursor: pointer;
-    background-image: url(images/rotate.png);
-    background-size: 100%;
-    left: 2px;
-    bottom: 2px;
-}
+
 
 .iit-image-holder {
     width: 49%;

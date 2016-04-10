@@ -261,7 +261,7 @@ $(function () {
             $.post("agile/iit/croptool", values, function (data) {
                 $("#results").append(data);
                 $(".draggable").draggable({containment: "window"});
-                $(".resizable").resizable().find('img').css({"width": "78%"}); // This does weird things to the size. We shouldn't.
+                $(".resizable").resizable({aspectRatio: true, handles: 'se'});
                 $(".rotatable").rotatable();
 
             });
@@ -304,7 +304,7 @@ $(function () {
         // Close button fades out then vanishes the #results.
         if ($target.is(".ui-icon-close")) {
             //$target.parent().parent().remove();
-            $target.parent().parent().fadeOut(300, function () {
+            $target.parent().parent().parent().fadeOut(300, function () {
                 $(this).remove();
             })
         }
