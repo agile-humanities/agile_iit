@@ -119,6 +119,7 @@
 
 #results {
     float: left;
+    cursor: move;
 }
 
 #results .ui-icon-close, #results .ui-icon-info, #results .ui-icon-arrowstop-1-e, #results .ui-icon-gripsmall-diagonal-se {
@@ -133,11 +134,13 @@
     position: absolute;
     right: -16px;
     top: -16px;
+    cursor: pointer;
 }
 #results .ui-icon-info {
     position: absolute;
     left: -16px;
     top: -16px;
+    cursor: context-menu;
 }
 #results .ui-icon-arrowstop-1-e {
     position: absolute;
@@ -157,6 +160,7 @@
     position: absolute;
     right: -16px;
     bottom: -8px;
+    cursor: se-resize;
 }
 
 
