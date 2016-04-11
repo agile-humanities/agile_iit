@@ -5,20 +5,22 @@ var image1Left = 0;
 var image2Left = 150;
 
 $(function () {
-    // QUESTION what are all these for?
-    var image1_src, image2_src, image2_offset, image2_height, image2_width, image1_dimW, image1_dimH, image2_dimW, image2_dimH, image1_clientWidth, image2_clientWidth, imageSize, imageSizePrefix, screenRatio,
+    /* New variables for passing useful stuff. */
+    var image1 = {};
+    var image2 = {};
+    var section1 = {};
+    var section2 = {};
+
+    /* OLD - delete these */
+    var image1_src, image2_src, image1_dimW, image1_dimH, image2_dimW, image2_dimH, image1_clientWidth, image2_clientWidth, imageSize, imageSizePrefix, screenRatio,
             previousImagePrefix;
 
     var vf400img1Height, vf400img2Height; // Do we ever use these?
-    // This defines that we will use up to 96% of the window width.
-    screenRatio = 0.96;
+
     // QUESTION what is the deal with these previous image prefixes?
     previousImagePrefix = '800px'; // We never actually use this value anywhere, it gets overridden the first time that replaceImagePrefix gets called.
     var cl_windowWidth = $(window).width();
-    var cl_windowHeight = $("#image1").height(); // This is completely useless.
-    imageSize = Math.floor((cl_windowWidth * screenRatio) / 2);
-    // Finally, something legible. This calculates the image width based on having to be smaller or equal to half
-    // of the window width.
+    imageSize = Math.floor(cl_windowWidth / 2);
     imageSizePrefix = calculateImagePrefix(imageSize);
 
     // If we keep this, we should refactor it. But maybe there's a better way than jumping down in 200px increments.
@@ -28,22 +30,22 @@ $(function () {
             result = '800px';
         }
         else if (number >= 700) {
-            result = '600px';
+            result = '800px';
         }
         else if (number >= 600) {
-            result = '600px';
+            result = '800px';
         }
         else if (number >= 500) {
-            result = '400px';
+            result = '600px';
         }
         else if (number >= 400) {
-            result = '400px';
+            result = '600px';
         }
         else if (number >= 300) {
-            result = '200px';
+            result = '400px';
         }
         else if (number >= 200) {
-            result = '200px';
+            result = '400px';
         }
         else {
             result = '200px';
@@ -86,7 +88,7 @@ $(function () {
             var that = this;
             $.post("agile/iit/imagederivative", {size: next, path: src}, function (data) { // Get the url of the derivative of size 'next'.
                 $(that).attr('data-lrg_url', data); // Set it to data-lrg_url (does this mean we have a zoom ratio of 1?)
-                $.get(data); // Are we calling 'get' to initialize the derivatives? It takes a while. are we maybe better to initialize them as needed?
+                //$.get(data); // Are we calling 'get' to initialize the derivatives? It takes a while. are we maybe better to initialize them as needed?
             });
         });
         previousImagePrefix = next;
