@@ -125,6 +125,7 @@ function agile_iit_twoviews() {
  */
 function agile_iit_image_cropper() {
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    /* Set up a place to put the cropped images. */
     $n = rand(0, 100000);
     $file_dir = 'public://';
     $real_path = drupal_realpath("$file_dir");
@@ -132,84 +133,52 @@ function agile_iit_image_cropper() {
     $cropfilepath = "$real_path/{$n}.jpg";
     $cropurl = "$real_url/{$n}.jpg";
 
-    $targ_w = $_POST['sectImgW'];
-    $targ_h = $_POST['sectImgH'];
-    $x = $_POST['x'];
-    $y = $_POST['y'];
-    //$c_w=$_POST['c_w'];
-    //$c_h=$_POST['c_h'];
-    $jpeg_quality = 90;
-    $src = $_POST['image2'];
-    $sect_src = $_POST['sectImg'];
-    $sect_WRatio = $_POST['w1ratio'];
-    $sect_HRatio = $_POST['h1ratio'];
-    $img1dimW = $_POST['img1_dimW'];
-    $img1dimH = $_POST['img1_dimH'];
-    $img2dimW = $_POST['img2_dimW'];
-    $img2dimH = $_POST['img2_dimH'];
-    $title1 = $_POST['title1'];
-    $title2 = $_POST['title2'];
-    $dimensions1 = $_POST['dimensions1'];
-    $dimensions2 = $_POST['dimensions2'];
-    $support1 = $_POST['support1'];
-    $support2 = $_POST['support2'];
-    $date1 = $_POST['date1'];
-    $date2 = $_POST['date2'];
-    $image2w = $_POST['image2w'];
-    $image2h = $_POST['image2h'];
-    $size = getimagesize($src);
-    switch ($size["mime"]) {
+    $image1 = json_decode($_POST['image1']);
+    $image2 = json_decode($_POST['image2']); // they already use image2.
+    $section1 = json_decode($_POST['section1']);
+    $section2 = json_decode($_POST['section2']);
+
+    $image2_info = getimagesize($image2->src);
+    switch ($image2_info["mime"]) {
       case "image/jpeg":
-        $img_r = imagecreatefromjpeg($src); //jpeg file
+        $img_r = imagecreatefromjpeg($image2->src); //jpeg file
         break;
       case "image/gif":
-        $img_r = imagecreatefromgif($src); //gif file
+        $img_r = imagecreatefromgif($image2->src); //gif file
         break;
       case "image/png":
-        $img_r = imagecreatefrompng($src); //png file
+        $img_r = imagecreatefrompng($image2->src); //png file
         break;
       default:
         $img_r = false;
         break;
     }
-    $ratio_w = $targ_w / $image2w;
-    $ratio_h = $targ_h / $image2h;
-    $ratio_w = round($ratio_w, 8);
-    $ratio_h = round($ratio_h, 8);
-    $dim1W = (double) $sect_WRatio * $img1dimW;
-    $dim1H = (double) $sect_HRatio * $img1dimH;
-    $dim1W = round($dim1W, 2);
-    $dim1H = round($dim1H, 2);
-    $dim2W = (double) $ratio_w * $img2dimW;
-    $dim2H = (double) $ratio_h * $img2dimH;
-    $dim2W = round($dim2W, 2);
-    $dim2H = round($dim2H, 2);
-    $dst_r = ImageCreateTrueColor($targ_w, $targ_h);
-    // Deal with the fact that image2 is scaled.
-    $scale_factor_image_2 = $size[0] / $image2w;
-    $x = round($x * $scale_factor_image_2);
-    $y = round($y * $scale_factor_image_2);
-    $targ_w = round($targ_w * $scale_factor_image_2);
-    $targ_h = round($targ_h * $scale_factor_image_2);
 
+    /* This should be set in the Javascript at some point! */
+    $image2->derivativeWidth_px = $image2_info[0];
+    $image2->derivativeHeight_px = $image2_info[1];
+
+    /* Deal with the fact that image2 is scaled: */
+    $x = round($section2->xOffset_ratio * $image2->derivativeWidth_px);
+    $y = round($section2->yOffset_ratio * $image2->derivativeHeight_px);
+    $targ_w = round($section2->width_ratio * $image2->derivativeWidth_px);
+    $targ_h = round($section2->height_ratio * $image2->derivativeHeight_px);
+
+    $dst_r = ImageCreateTrueColor($targ_w, $targ_h);
     imagecopy($dst_r, $img_r, 0, 0, $x, $y, $targ_w, $targ_h);
-    imagejpeg($dst_r, $cropfilepath, $jpeg_quality);
+    imagejpeg($dst_r, $cropfilepath, 100);
+
+    /* Template this, and pull in the info that you want from the nodes. */
     $string = "<div>";
-    $string .= "<div>Title: $title1</div>";
-    $string .= "<div>Date: $date1</div>";
-    $string .= "<div>Support: $support1</div>";
-    $string .= "<div>Dimensions of the cropped section: $dim1W cm (W) x $dim1H cm (H)</div>";
-    $string .= "<div>(Based off the original dimensions of the painting $dimensions1)</div>";
-    $string .= "<img src='" . $sect_src . "'/>' ";
+    $string .= "Section 1: ";
+    $string .= "<img src='" . $section1->src . "'/> ";
     $string .= "<br>";
-    $string .= "<div>Title: $title2</div>";
-    $string .= "<div>Date: $date2</div>";
-    $string .= "<div>Support: $support2</div>";
-    $string .= "<div>Dimensions of the cropped section: $dim2W cm (W) x $dim2H cm (H)</div>";
-    $string .= "<div>(Based off the original dimensions of the painting $dimensions2)</div>";
-    $string .= "<img id='img" . $n . "' src='" . $cropurl . "'/>' ";
+    $string .= "Section 2: ";
+    $string .= "<img id='img" . $n . "' src='" . $cropurl . "'/> ";
     $string .= "<br/>";
     $string .= "</div>";
+
+
     echo $string;
   }
 }

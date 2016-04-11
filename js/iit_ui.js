@@ -124,6 +124,8 @@ $(function () {
         accept: ".ui-thumb",
         hoverClass: "iit-ui-state-hover",
         drop: function (event, ui) {  // ui is the object currently being dropped.
+
+
             var src = ui.draggable.find('img').attr("data-lrg_url"); // get the url of the "big" image (which at the moment is also the half-the-viewport image), e.g. http://localhost:8181/sites/default/files/styles/iit-200/public/Mona_Lisa_%28copy%2C_Hermitage%29.jpg?itok=rDQt89Lv
             var nid = ui.draggable.find('img').attr("nid");  // get the nid!
             var vfsrc = src.replace(imageSizePrefix, "800px"); // Not sure why we need vfsrc. note that vf means view form, which means it's maybe populating values to be used in the comparison viewer. Also not sure if this line of code is useful as src now includes iit-x00 instead of x00px.
@@ -152,11 +154,18 @@ $(function () {
 
             if (this.id === "image1") // Set some local variables in javascript. When are we going to use these?
             {
+                image1.src = src;
+                image1.realHeight_cm = $(this).find('img').attr('data-height');
+                image1.realWidth_cm = $(this).find('img').attr('data-width');
+
+                /* REMOVE THIS... */
                 image1_src = src;
                 image1_dimH = $(this).find('img').attr('data-height'); // Save this for the crop info tool.
                 image1_dimW = $(this).find('img').attr('data-width'); // Save this for the crop info tool.
                 image1_clientWidth = $(this).find('img').width(); // We seem to never use this again.
+                /* TO HERE */
 
+                /* DO WE NEED THE VIEW STUFF? */
                 $("#vf_img1").val(vfsrc); // code note: val() gets/sets the value of a form element. This sets the value in the "viewform" out of data-lrg_url (after failing to change the pixel size from x00px to 800px)
                 $("#cf_img1").val(src); // ditto for the crop viewer form, only this time we maybe intended use the image fitted to half the screen width size. We use this image as the source for the extracted detail. Maybe we want a higher res source?
                 var vf400img1 = new Image(); // This is how to make a new Image html thing in javascript.
@@ -175,14 +184,21 @@ $(function () {
                             $("#vf_img1").val(newvfsrc);
                         });
 
+                /* TO HERE */
             }
             else // If you dragged into the second image drop zone
             {
+                image2.src = src;
+                image2.realHeight_cm = $(this).find('img').attr('data-height');
+                image2.realWidth_cm = $(this).find('img').attr('data-width');
+
+                /* DON'T NEED THIS */
                 image2_src = src; // we don't actually use this because it gets overwritten by #vf_img2.val().
                 image2_dimH = $(this).find('img').attr('data-height');  // Save it for the crop info tool.
                 image2_dimW = $(this).find('img').attr('data-width');  // Save it for the crop info tool.
                 image2_clientWidth = $(this).find('img').width(); // We never actually use this.
 
+                /* CHECK THE VF STUFF */
                 $("#vf_img2").val(vfsrc); // Set the src of image 2 in the view form. (should have been the 800 version but isn't)
                 $("#cf_img2").val(src);  // Set the src of image 2 in the crop form.
                 var vf400img2 = new Image(); // WTF
@@ -242,9 +258,7 @@ $(function () {
                 $('#crop_target').Jcrop({onSelect: updateCoords}, function(){
                     jcrop_api.push(this);
                 }); // This means that on selecting a rectangle, it runs updateCoords.
-                image2_offset = $("#ol_i2 img").offset(); // Calculates the position of image2 relative to document (absolute position).
-                image2_height = $("#ol_i2 img").height();
-                image2_width = $("#ol_i2 img").width();
+
 
             });
             $(window).resize(function(){
@@ -333,33 +347,30 @@ $(function () {
             $("#" + myid2).toggleClass("flip");
         }
 
-        else if ($target.is(".ui-icon-info")) { // info window.
+        else if ($target.is(".ui-icon-info")) {
+            // Don't set section1 till here because there may be multiple sections
+            section1.src = $target.parent().find('img').attr("src");
+            section1.mirrored = $target.parent().find('img').hasClass('flip'); // don't do anything to this yet.
+            section1.rotation_rad = $target.parent().css('transform'); // need to parse the radians out.
+
+            // Calculate the four corners of the overlaid section.
             var sectionOffset = $target.parent().find('img').offset(); // Absolute position of the section's img. Good.
             var sectionHeight = $target.parent().find('img').height(); // Current height (after any resizing)
             var sectionWidth = $target.parent().find('img').width(); // Current width (after any resizing)
-            var sectionImage = $target.parent().find('img').attr("src"); // The source of the detail img element. This is in public://. Is it managed? Do we delete it?
-            var sectionWRatio = $target.parent().find('img').attr("data-ratiow"); // width ratio of detail to full image.
-            var sectionHRatio = $target.parent().find('img').attr("data-ratioh"); // height ratio of detail to full image.
-
             var x = sectionOffset.left; // absolute position of the section's img.
             var y = sectionOffset.top;
             var x1 = x + sectionWidth; // absolute position of right side of section.
             var y1 = y + sectionHeight; // absolute position of bottom of section.
 
-            var title1 = $("#image1").find('img').attr("alt"); // NO NEED! use the nid in the callback
-            var title2 = $("#image2").find('img').attr("alt");
+            image2.offset = $("#ol_i2 img").offset(); // Calculates the position of image2 relative to document (absolute position).
+            image2.apparentHeight_px = $("#ol_i2 img").height();
+            image2.apparentWidth_px = $("#ol_i2 img").width();
 
-            var dimensions1 = $("#image1").find('img').attr("data-dimensions"); // NO NEED! use the nid in the callback
-            var dimensions2 = $("#image2").find('img').attr("data-dimensions");
+            section2.xOffset_ratio = (sectionOffset.left - image2.offset.left) / image2.apparentWidth_px;
+            section2.yOffset_ratio = (sectionOffset.top - image2.offset.top) / image2.apparentHeight_px;
+            section2.width_ratio = sectionWidth / image2.apparentWidth_px;
+            section2.height_ratio = sectionHeight / image2.apparentHeight_px;
 
-            var date1 = $("#image1").find('img').attr("data-date"); // NO NEED! use the nid in the callback
-            var date2 = $("#image2").find('img').attr("data-date");
-
-            var support1 = $("#image1").find('img').attr("data-support"); // NO NEED! use the nid in the callback
-            var support2 = $("#image2").find('img').attr("data-support");
-
-            var image2w = $('#ol_i2').find('img').width();
-            var image2h = $('#ol_i2').find('img').height();
 
             // This math in the if statement says:
             // If the selection you've made is lying completely within image2. Need to verify the order of operations for + vs <=.
@@ -369,29 +380,11 @@ $(function () {
                     y1 >= image2_offset.top && y1 <= image2_offset.top + image2_height
                     ) {
                 var values = new Array();
-                image2_src = $("#cf_img2").val(); // Again we get the image 2 src out of the original cropform
-                values.push({name: 'sectImg', value: sectionImage});
-                values.push({name: 'sectImgW', value: sectionWidth});
-                values.push({name: 'sectImgH', value: sectionHeight});
-                values.push({name: 'image2', value: image2_src});
-                values.push({name: 'x', value: x - image2_offset.left}); // passes x as the position of the section RELATIVE TO IMAGE2
-                values.push({name: 'y', value: y - image2_offset.top}); // passes y as the position of the section RELATIVE TO IMAGE2
-                values.push({name: 'w1ratio', value: sectionWRatio}); // Oh FFS can we stop changing the names of variables? This is the width fraction (selection to whole image)
-                values.push({name: 'h1ratio', value: sectionHRatio});
-                values.push({name: 'img1_dimH', value: image1_dimH}); // "Saved for the info tool" - i think this is the real-world object dimensions.
-                values.push({name: 'img1_dimW', value: image1_dimW}); // Irrelevant - use the nid.
-                values.push({name: 'img2_dimH', value: image2_dimH}); // Irrelevant - use the nid.
-                values.push({name: 'img2_dimW', value: image2_dimW}); // Irrelevant - use the nid.
-                values.push({name: 'title1', value: title1});  // Irrelevant - use the nid.
-                values.push({name: 'title2', value: title2}); // Irrelevant - use the nid.
-                values.push({name: 'dimensions1', value: dimensions1}); // This is the formatted, "N px (height) x M px (width)" - style.  IRRELEVEANT use nid
-                values.push({name: 'dimensions2', value: dimensions2}); // Irrelevant - use the nid.
-                values.push({name: 'date1', value: date1}); // Irrelevant - use the nid.
-                values.push({name: 'date2', value: date2}); // Irrelevant - use the nid.
-                values.push({name: 'support1', value: support1}); // Irrelevant - use the nid.
-                values.push({name: 'support2', value: support2}); // Irrelevant - use the nid.
-                values.push({name: 'image2w', value: image2w}); // pixel width of the thing the section is now overlaying.
-                values.push({name: 'image2h', value: image2h}); // pixel height of the same.
+                values.push({name: 'image1', value: JSON.stringify( image1 )});
+                values.push({name: 'image2', value: JSON.stringify( image2 )});
+                values.push({name: 'section1', value: JSON.stringify( section1 )});
+                values.push({name: 'section2', value: JSON.stringify( section2 )});
+
                 $.post("agile/iit/imagecropper", values, function (data) {
                     var myWindow = window.open('', 'cmpWindow', 'width=800, height=400, scrollbars=yes, toolbar=yes');
                     myWindow.document.write(data);
