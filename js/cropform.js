@@ -39,8 +39,6 @@
                     var myOverlay = document.createElement('div');
                     myOverlay.id = 'overlay2'; // Create a thing called overlay2. We should refactor this to be a more descriptive name.
                     $('#iit_container').append(myOverlay);
-
-
                     var values = $(this).serializeArray(); // Makes an array of name: value: pairs out of the form. Note, all we need are cf_img1 and cf_img2.
                     values.push({name: "container_width", value: $('#iit_container').width()}); // Add another parameter: the current viewfield(ish) width
                     $(".img-container").hide(); // Hide the dropzones.

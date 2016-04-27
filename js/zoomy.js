@@ -16,18 +16,13 @@
 
 
 (function ($) {
-
     // @object ZoomyS Object - Holds alot of data for each instance of Zoomy
     'use strict';
-
-    // document.getElementById("p2").style.color="blue";
-
-
     var ZoomyS = {
         count: [],
         pos: null
     };
-
+    var debug = 0;
     /** @method     zoomy   Function    - Plugin for jQuery
      *  @param      event   String      - Event to initiate Zoomy
      *  @param      options object      - Options Object that holds optons for configuration
@@ -106,11 +101,23 @@
                     /* @method  css   Function  - Compiles and Object of Css properties
                      */
                     css: function (a) {
-
-                        //new
-                        //a[3]=0;
-                        //a[2]=0;
                         if (typeof a !== 'undefined' && a.length > 0) {
+                            var imag1_xy = $('#image1_info').text().split(' ');
+                            var imag2_xy = $('#image2_info').text().split(' ');
+                            var x1 = imag1_xy[0].substring(2);
+                            var y1 = imag1_xy[1].substring(2);
+                            var x2 = imag2_xy[0].substring(2);
+                            var y2 = imag2_xy[1].substring(2);
+                            var img1w = $("#ol_i1").find('img').width();
+                            var img1h = $("#ol_i1").find('img').height();
+                            var img2w = $("#ol_i2").find('img').width();
+                            var img2h = $("#ol_i2").find('img').height();
+
+                            var ratiow1 = dims.image1_width /img1w ;
+                            var ratiow2 = dims.image2_width /img2w;
+
+                            var ratioh1 = dims.image1_height/ img1h;
+                            var ratioh2 =  dims.image2_height / img2h;
 
                             var translate = 'translate3d(' + a[2] + 'px, ' + a[3] + 'px, 0)';
                             var movement = (cssTranforms) ? {
@@ -124,10 +131,29 @@
                                 'left': a[2] + 'px'
                             };
 
-                            var myextend = $.extend({'backgroundPosition': '-' + a[0] + 'px ' + '-' + a[1] + 'px'}, movement);
-
+                            // customized for dual view$
+                            $('.info_pane').dblclick(function () {
+                                $(this).text('X:0 Y:0');
+                            });
+                            $(".two_up").dblclick(function (e) {
+                                var parent_id = $(this).parent().attr('id');
+                                var parentOffset = $(this).parent().offset();
+                                var relX = e.pageX - parentOffset.left;
+                                var relY = e.pageY - parentOffset.top;
+                                if (parent_id == 'ol_i1') {
+                                    $('#image1_info').text("X:" + relX + " Y:" + relY)
+                                }
+                                if (parent_id == 'ol_i2') {
+                                    $('#image2_info').text("X:" + relX + " Y:" + relY)
+                                }
+                            });
+                            // background set in two image zooms
+                            var offset_x = Math.abs((x1 * ratiow1) - (x2 * ratiow2));
+                            var offset_y = Math.abs((y1 * ratioh1) - (y2 * ratioh2));
+                            offset_x = (x1 * ratiow1 - x2 * ratiow2) + a[0];
+                            offset_y = (y1 * ratioh1 - y1 * ratioh2) + a[1];
                             $(".zoomy").eq(1).css({
-                                'backgroundPosition': '-' + a[0] + 'px ' + '-' + a[1] + 'px',
+                                'backgroundPosition': '-' + offset_x + 'px ' + '-' + offset_y + 'px',
                                 'transform': movement
                             });
                             $(".zoomy").eq(0).css({
@@ -139,7 +165,7 @@
                             return {};
                         }
                     },
-                    //asspect ratio
+                    //aspect ratio
                     ratio: function (x, y) {
                         return x / y;
                     },

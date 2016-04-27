@@ -1,6 +1,9 @@
 <div id = twoviews_container>
     <p>
-        <input type = "button" name = "ol_close" id = "ol_close" value = "Close"/>
+        <input type = "button" name = "ol_close" id = "ol_close" value = "Closer"/>
+        <span class="info_pane" id="image1_info">X:0 Y:0</span>
+        <span class="info_pane" id="image2_info">X:0 Y:0</span>
+
     </p>
     <div id = "ol_i1">
         <a href = "<?php echo $img1_src; ?>" class = "zoom two_up"><img class="two_up_image" src = '<?php echo $img1_src ?>' style = 'float: left;'/></a>

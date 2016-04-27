@@ -9,6 +9,7 @@
     Drupal.behaviors.agileIITComparison = {
         attach: function (context, settings) {
             $(document).on('click', '#ol_close', function () {
+                var dims = [];
                 $('.zoom').find('.zoomy').remove();
                 $('#overlay2').remove();
                 $("#resizable-gallery-wrapper").show();
@@ -50,16 +51,34 @@
                         var top = Math.max($('#ol_i1').height(), $('#ol_i2').height()) + 5;
                         image1Top = top;
                         image2Top = top;
-
+                        var src1 = $("#ol_i1").find('img').attr('src');
+                        var scr2 = $("#ol_i1").find('img').attr('src');
                         $('.zoom').zoomy({
                             zoomSize: 256,
                             round: false,
                             border: '6px solid #fff'
                         });
+                        $.ajax({
+                            url: 'agile/iit/image_dimensions',
+                            type: "POST",
+                            data: {
+                                img1: $("#ol_i1").find('img').attr('src'),
+                                img2: $("#ol_i2").find('img').attr('src'),
+                            },
+                            async: false,
+                            success: function (results, status, xhr) {
+                                results = JSON.parse(results)
+                                dims = results;
+                            },
+                            error: function (data, status, xhd) {
+                                console.log("The function execute_callback has failed");
+                            }
+                        });
 
                     });
 
                 }
+
             });
 
         }
