@@ -151,7 +151,7 @@
                             var offset_x = Math.abs((x1 * ratiow1) - (x2 * ratiow2));
                             var offset_y = Math.abs((y1 * ratioh1) - (y2 * ratioh2));
                             offset_x = (x1 * ratiow1 - x2 * ratiow2) + a[0];
-                            offset_y = (y1 * ratioh1 - y1 * ratioh2) + a[1];
+                            offset_y = (y1 * ratioh1 - y2 * ratioh2) + a[1];
                             $(".zoomy").eq(1).css({
                                 'backgroundPosition': '-' + offset_x + 'px ' + '-' + offset_y + 'px',
                                 'transform': movement

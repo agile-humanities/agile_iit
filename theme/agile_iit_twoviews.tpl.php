@@ -1,6 +1,6 @@
 <div id = twoviews_container>
     <p>
-        <input type = "button" name = "ol_close" id = "ol_close" value = "Closer"/>
+        <input type = "button" name = "ol_close" id = "ol_close" value = "Close"/>
         <span class="info_pane" id="image1_info">X:0 Y:0</span>
         <span class="info_pane" id="image2_info">X:0 Y:0</span>
 
