@@ -10,5 +10,6 @@ dependencies[] = iit_image_styles
 dependencies[] = entity
 dependencies[] = file_entity
 dependencies[] = media
+dependencies[] = entityreference
 package = Agile Humanities
 version = 7.x-1.1

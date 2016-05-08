@@ -3,11 +3,20 @@ var image1Top = 350;
 var image2Top = 350;
 var image1Left = 0;
 var image2Left = 150;
+var sectionsCreatedThusFar = 0;
 
 $(function () {
+
     /* New variables for passing useful stuff. */
     var image1 = {};
     var image2 = {};
+    //var sections = [];   // i.e.: sections = [] where section is a list of section objects.
+    // var createSection = function (image1, image2, blah, bleh, ...) {
+    //   return {
+    //     section1: ....
+    //     section2: ....
+    //   };
+    // };
     var section1 = {};
     var section2 = {};
 
@@ -106,7 +115,8 @@ $(function () {
     });
 
     // Loop through .iit-thumb's child images and extract the data-width and data-height parameters, which we've set in the view.
-    // Set them as data-dimensions (which is nicer to read). We should refactor this whole thing out because we don't need the real-life dimensions at this point.
+    // Set them as data-dimensions (which is nicer to read).
+    // TODO: We should refactor this whole thing out because we don't need the real-life dimensions at this point.
     function write_attributes() {
         $('.iit-thumb img').each(function () {
             width = $(this).attr('data-width'); // This is the raw number in cm of the image, which was passed in from the view.
@@ -125,7 +135,7 @@ $(function () {
         hoverClass: "iit-ui-state-hover",
         drop: function (event, ui) {  // ui is the object currently being dropped.
 
-
+            var src_orig = ui.draggable.find('img').attr("src"); // Get the url of the original image. FIXME - encode into view.
             var src = ui.draggable.find('img').attr("data-lrg_url"); // get the url of the "big" image (which at the moment is also the half-the-viewport image), e.g. http://localhost:8181/sites/default/files/styles/iit-200/public/Mona_Lisa_%28copy%2C_Hermitage%29.jpg?itok=rDQt89Lv
             var nid = ui.draggable.find('img').attr("nid");  // get the nid!
             var vfsrc = src.replace(imageSizePrefix, "800px"); // Not sure why we need vfsrc. note that vf means view form, which means it's maybe populating values to be used in the comparison viewer. Also not sure if this line of code is useful as src now includes iit-x00 instead of x00px.
@@ -133,9 +143,14 @@ $(function () {
             $(this).find("img").remove(); // Remove an existing image; lets you drop overtop of something already there. Good.
 
             var title = ui.draggable.find('img').attr("alt"); // Obtain the title for this droppable section. Kinda nice, but not super necessary. Should we maybe or not get it from pid?
-            var dimensions = ui.draggable.find('img').attr("data-dimensions"); // obtain the pretty real-life-dimensions from the drop-ee (not needed yet)
+
+            // Rosie you're actually using these, don't delete until you refactor to get them from the node.
+            // Rosie you're actually using these, don't delete until you refactor to get them from the node.
             var height = ui.draggable.find('img').attr("data-height"); // obtain the raw real-life-dimensions from the drop-ee
             var width = ui.draggable.find('img').attr("data-width");
+
+            // Delete this crap.
+            var dimensions = ui.draggable.find('img').attr("data-dimensions"); // obtain the pretty real-life-dimensions from the drop-ee (not needed yet)
             var date = ui.draggable.find('img').attr("data-date"); // obtain the date created from the drop-ee. Definitely not needed here.
             var support = ui.draggable.find('img').attr("data-support"); // obtain some other random information about the painting. Not needed here either.
 
@@ -155,10 +170,13 @@ $(function () {
             if (this.id === "image1") // Set some local variables in javascript. When are we going to use these?
             {
                 image1.src = src;
+                image1.src_orig = src_orig;
                 image1.realHeight_cm = $(this).find('img').attr('data-height');
                 image1.realWidth_cm = $(this).find('img').attr('data-width');
+                image1.nid = nid;
 
                 /* REMOVE THIS... */
+                /*
                 image1_src = src;
                 image1_dimH = $(this).find('img').attr('data-height'); // Save this for the crop info tool.
                 image1_dimW = $(this).find('img').attr('data-width'); // Save this for the crop info tool.
@@ -189,8 +207,11 @@ $(function () {
             else // If you dragged into the second image drop zone
             {
                 image2.src = src;
+                image2.src_orig = src_orig;
                 image2.realHeight_cm = $(this).find('img').attr('data-height');
                 image2.realWidth_cm = $(this).find('img').attr('data-width');
+                image2.nid = nid;
+
 
                 /* DON'T NEED THIS */
                 image2_src = src; // we don't actually use this because it gets overwritten by #vf_img2.val().
@@ -251,7 +272,6 @@ $(function () {
 
 
             var values = $(this).serializeArray(); // Makes an array of name: value: pairs out of the form. Note, all we need are cf_img1 and cf_img2.
-            values.push({name: "container_width", value: $('#iit_container').width()}); // Add another parameter: the current viewfield(ish) width
             $(".img-container").hide(); // Hize the dropzones.
             $.post("agile/iit/crop", values, function (data) { // POST the form values to crop, which returns themed stuff to create the cropping workspace based on the images at cf_img1 and cf_img2.
                 $("#overlay2").append(data);
@@ -278,26 +298,118 @@ $(function () {
         }
     });
 
+    var createSection = function (xOffset_ratio, yOffset_ratio, width_ratio, height_ratio, width, src) {
+        var sectionId = ++sectionsCreatedThusFar;
+        var angle = 0;
+
+        var overlaidSection = {};
+
+        var serializeParameters = function () {
+            return{
+                'xOffset_ratio': xOffset_ratio,
+                'yOffset_ratio': yOffset_ratio,
+                'width_ratio': width_ratio,
+                'height_ratio': height_ratio,
+                'width': width,
+                'src': src,
+                'id': sectionId,
+                'rotation_deg': angle
+            };
+        };
+
+        var infoHandler = function (event) {
+            var target = $(event.target);
+            section1.mirrored = target.parent().find('img').hasClass('flip'); // don't do anything to this yet.
+            var rotation = target.parent().css('transform'); // returns a matrix.
+            if(rotation !== 'none') {
+                var matrix_values = rotation.split('(')[1].split(')')[0].split(',');
+                var a = matrix_values[0];
+                var b = matrix_values[1];
+                angle = Math.round(Math.atan2(b, a) * (180/Math.PI));
+            }
+            (angle < 0) ? angle +=360 : angle;
+
+            // Calculate the four corners of the overlaid section.
+            var sectionOffset = target.parent().parent().offset(); // Absolute position of the section's non-rotated div.
+            var sectionHeight = target.parent().find('img').height(); // Current height (after any resizing)
+            var sectionWidth = target.parent().find('img').width(); // Current width (after any resizing)
+            var x = sectionOffset.left; // absolute position of the section's img.
+            var y = sectionOffset.top;
+            var x1 = x + sectionWidth; // absolute position of right side of section.
+            var y1 = y + sectionHeight; // absolute position of bottom of section.
+
+            image2.offset = $("#ol_i2 img").offset(); // Calculates the position of image2 relative to document (absolute position).
+            image2.apparentHeight_px = $("#ol_i2 img").height();
+            image2.apparentWidth_px = $("#ol_i2 img").width();
+
+
+            overlaidSection.xOffset_ratio = (sectionOffset.left - image2.offset.left) / image2.apparentWidth_px;
+            overlaidSection.yOffset_ratio = (sectionOffset.top - image2.offset.top) / image2.apparentHeight_px;
+            overlaidSection.width_ratio = sectionWidth / image2.apparentWidth_px;
+            overlaidSection.height_ratio = sectionHeight / image2.apparentHeight_px;
+
+
+            // This math in the if statement says:
+            // If the selection you've made is lying completely within image2. Need to verify the order of operations for + vs <=.
+            if (x >= image2.offset.left && x <= image2.offset.left + image2.apparentWidth_px &&
+                y >= image2.offset.top && y <= image2.offset.top + image2.apparentHeight_px &&
+                x1 >= image2.offset.left && x1 <= image2.offset.left + image2.apparentWidth_px &&
+                y1 >= image2.offset.top && y1 <= image2.offset.top + image2.apparentHeight_px
+            ) {
+                var values = new Array();
+                values.push({name: 'image1', value: JSON.stringify( image1 )});
+                values.push({name: 'image2', value: JSON.stringify( image2 )});
+                values.push({name: 'section1', value: JSON.stringify( serializeParameters() )});
+                values.push({name: 'section2', value: JSON.stringify( overlaidSection )});
+
+                $.post("agile/iit/imagecropper", values, function (data) {
+                    var myWindow = window.open('', 'cmpWindow', 'width=1020, height=500, scrollbars=yes, toolbar=yes');
+                    myWindow.document.write(data);
+                    $(myWindow.document).find("head").append(
+                        "<link rel='stylesheet' href='/sites/all/modules/agile_iit/css/detail_popup_window.css' type='text/css'>"
+                    );
+                    myWindow.document.close();
+                    myWindow.focus();
+                });
+            }
+            else {
+                console.log("outbounds");
+            }
+            return false;
+        };
+
+        var postHandler = function (data) {
+            $("#results").append(data);
+            $(".draggable").draggable({containment: "window"});
+            $(".resizable").resizable({aspectRatio: true, handles: 'se'});
+            $(".rotatable").rotatable({wheelRotate: false});
+            // Add event handler on info.
+            $("#info-button-" + sectionId.toString()).on('click', infoHandler);
+        };
+
+        return {
+            initializeSection: function () {
+                $.post("agile/iit/croptool", serializeParameters(), postHandler);
+            }
+        };
+    };
 
     // This runs when you click "Extract Detail" and it throws a little detail guy under the two images.
     $(document).on('submit', '#cropform2', function (e) {
         e.preventDefault();
         if (parseInt($('#w').val())) { // Check that a crop window exists.
-            var values = $(this).serializeArray(); // Make that name: value: array out of the four input elements in the form (x,y,w,h)
+
+
+            var xOffset_ratio = $('#x').val() / $("#crop_target").width();
+            var yOffset_ratio = $('#y').val() / $("#crop_target").height();
+            var width_ratio = $('#w').val() / $("#crop_target").width();
+            var height_ratio = $('#h').val() / $("#crop_target").height();
+            var width = $('#w').val();
+
             var src = $("#cf_img1").val(); // Oddly enough, we dig back down into the original "cropform" to get this value. It's still "underneath" the crop workspace.
-            var c_w = $("#crop_target").width(); // Note that the crop_target is actually a different, hidden image, just happens to be the same size as the one we see.
-            var c_h = $("#crop_target").height();
-            values.push({name: 'src', value: src}); // Add the source of the image from cf_img1.
-            values.push({name: 'c_w', value: c_w});
-            values.push({name: 'c_h', value: c_h});
-            $.post("agile/iit/croptool", values, function (data) {
-                $("#results").append(data);
-                $(".draggable").draggable({containment: "window"});
-                $(".resizable").resizable({aspectRatio: true, handles: 'se'});
-                $(".rotatable").rotatable();
 
-            });
-
+            var newSection = createSection(xOffset_ratio, yOffset_ratio, width_ratio, height_ratio, width, src);
+            newSection.initializeSection();
         }
         else {
             alert('Please select a crop region then press submit.');
@@ -320,8 +432,7 @@ $(function () {
         }
 
     });
-
-
+    
     // Handler for the crop overlay close button.
     $(document).on('click', '#cl_close', function () {
         $('#overlay2').remove();
@@ -347,54 +458,6 @@ $(function () {
             $("#" + myid2).toggleClass("flip");
         }
 
-        else if ($target.is(".ui-icon-info")) {
-            // Don't set section1 till here because there may be multiple sections
-            section1.src = $target.parent().find('img').attr("src");
-            section1.mirrored = $target.parent().find('img').hasClass('flip'); // don't do anything to this yet.
-            section1.rotation_rad = $target.parent().css('transform'); // need to parse the radians out.
-
-            // Calculate the four corners of the overlaid section.
-            var sectionOffset = $target.parent().find('img').offset(); // Absolute position of the section's img. Good.
-            var sectionHeight = $target.parent().find('img').height(); // Current height (after any resizing)
-            var sectionWidth = $target.parent().find('img').width(); // Current width (after any resizing)
-            var x = sectionOffset.left; // absolute position of the section's img.
-            var y = sectionOffset.top;
-            var x1 = x + sectionWidth; // absolute position of right side of section.
-            var y1 = y + sectionHeight; // absolute position of bottom of section.
-
-            image2.offset = $("#ol_i2 img").offset(); // Calculates the position of image2 relative to document (absolute position).
-            image2.apparentHeight_px = $("#ol_i2 img").height();
-            image2.apparentWidth_px = $("#ol_i2 img").width();
-
-            section2.xOffset_ratio = (sectionOffset.left - image2.offset.left) / image2.apparentWidth_px;
-            section2.yOffset_ratio = (sectionOffset.top - image2.offset.top) / image2.apparentHeight_px;
-            section2.width_ratio = sectionWidth / image2.apparentWidth_px;
-            section2.height_ratio = sectionHeight / image2.apparentHeight_px;
-
-
-            // This math in the if statement says:
-            // If the selection you've made is lying completely within image2. Need to verify the order of operations for + vs <=.
-            if (x >= image2_offset.left && x <= image2_offset.left + image2_width &&
-                    y >= image2_offset.top && y <= image2_offset.top + image2_height &&
-                    x1 >= image2_offset.left && x1 <= image2_offset.left + image2_width &&
-                    y1 >= image2_offset.top && y1 <= image2_offset.top + image2_height
-                    ) {
-                var values = new Array();
-                values.push({name: 'image1', value: JSON.stringify( image1 )});
-                values.push({name: 'image2', value: JSON.stringify( image2 )});
-                values.push({name: 'section1', value: JSON.stringify( section1 )});
-                values.push({name: 'section2', value: JSON.stringify( section2 )});
-
-                $.post("agile/iit/imagecropper", values, function (data) {
-                    var myWindow = window.open('', 'cmpWindow', 'width=800, height=400, scrollbars=yes, toolbar=yes');
-                    myWindow.document.write(data);
-                    myWindow.focus();
-                });
-            }
-            else {
-                console.log("outbounds");
-            }
-        }
         return false;
     });
 });

@@ -59,6 +59,12 @@ function agile_iit_menu() {
       'type' => MENU_CALLBACK,
       'access callback' => TRUE,
     ),
+    'agile/iit/savecomparison' => array(
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('agile_iit_save_comparison_form'),
+      'access callback' => 'user_access',
+      'access arguments' => array('create iit_detail_comparison content'),
+    ),
   );
 }
 
@@ -382,4 +388,121 @@ function agile_iit_preprocess_page(&$vars, $hook) {
     drupal_add_js(drupal_get_path('module', 'agile_iit') . "/js/jquery-ui.js");
     drupal_add_js(drupal_get_path('module', 'agile_iit') . "/js/iit-gallery-view.js");
   }
+}
+
+/**
+ * Implements hook_node_info().
+ */
+
+function agile_iit_node_info(){
+  return array(
+    'iit_detail_comparison' => array(
+      'name' => t('IIT Detail Comparison'),
+      'base' => 'iit_detail_comparison',
+      'description' => t('A detail comparison.'),
+      'has_title' => TRUE,
+      'title_label' => t('Title'),
+    ),
+  );
+}
+
+
+/**
+ * Implement hook_form()
+ */
+function iit_detail_comparison_form($node, $form_state) {
+  return node_content_form($node, $form_state);
+}
+
+/**
+ * Form for saving the pair of extracted details
+ */
+function agile_iit_save_comparison_form($form, &$form_state, $node1 = NULL, $node2 = NULL, $detail1 = NULL, $detail2 = NULL, $section1 = NULL, $section2 = NULL) {
+  $form['title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Title:'),
+    '#size' => 60,
+  );
+  $form['description'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Comments:'),
+    '#rows' => 3,
+  );
+  $form['node1'] = array(
+    '#type' => 'value',
+    '#value' => $node1->nid,
+  );
+  $form['node2'] = array(
+    '#type' => 'value',
+    '#value' => $node2->nid,
+  );
+  $form['detail1'] = array(
+    '#type' => 'value',
+    '#value' => $detail1->source,
+  );
+  $form['detail2'] = array(
+    '#type' => 'value',
+    '#value' => $detail2->source,
+  );
+  $form['section1'] = array(
+    '#type' => 'value',
+    '#value' => serialize($section1),
+  );
+  $form['section2'] = array(
+    '#type' => 'value',
+    '#value' => serialize($section2),
+  );
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('submit'),
+  );
+  $form['actions']['submit']["#submit"][] = "agile_iit_save_comparison_form_submit";
+  $form['#cache'] = TRUE;
+  $form_state['cache'] = TRUE;
+  
+  return $form;
+}
+
+function agile_iit_save_comparison_form_submit($form, &$form_state) {
+  global $user;
+  $values = array(
+    'type' => 'iit_detail_comparison',
+    'uid' => $user->uid,
+    'status' => 1,
+    'comment' => 0,
+    'promote' => 0,
+  );
+  $entity = entity_create('node', $values);
+  $ewrapper = entity_metadata_wrapper('node', $entity);
+  $ewrapper->title->set($form_state['values']['title']);
+  $ewrapper->iit_comments->set($form_state['values']['description']);
+  $ewrapper->iit_nid_1->set(intval($form_state['values']['node1']));
+  $ewrapper->iit_nid_2->set(intval($form_state['values']['node2']));
+  // Set images from detail uri
+  $image1_path = $form_state['values']['detail1'];
+  $file = file_save_data(file_get_contents($image1_path), $image1_path, FILE_EXISTS_REPLACE);
+  $ewrapper->iit_detail_1->file->set($file);
+  $image2_path = $form_state['values']['detail2'];
+  $file2 = file_save_data(file_get_contents($image2_path), $image2_path, FILE_EXISTS_REPLACE);
+  $ewrapper->iit_detail_2->file->set($file2);
+  $ewrapper->iit_crop_data_1->set($form_state['values']['section1']);
+  $ewrapper->iit_crop_data_2->set($form_state['values']['section2']);
+
+  $ewrapper->save();
+
+  drupal_goto('node/' . $ewrapper->getIdentifier());
+
+
+}
+
+function agile_iit_get_local_path($url) {
+  global $base_url;
+  global $base_path;
+  $path = parse_url($url)['path'];
+  $pos = strpos($path, $base_path);
+  if ($pos === 0) {
+    $path = substr($path, strlen($base_path));
+  }
+  $path = urldecode($path);
+  return $path;
 }

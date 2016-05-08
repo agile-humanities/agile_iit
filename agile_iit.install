@@ -64,3 +64,155 @@ function _agile_iit_install_get_suggested_node_types() {
   }
   return $existing;
 }
+
+
+/**
+ * Implements hook_uninstall().
+ */
+function agile_iit_uninstall() {
+  $ournewtype = 'iit_detail_comparison';
+  $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+  $result = db_query($sql, array(':type' => $ournewtype));
+  $nodeids = array();
+  foreach ($result as $row) {
+    $nodeids[] = $row->nid;
+  }
+  node_delete_multiple($nodeids);
+  agile_iit_delete_custom_fields();
+  node_type_delete($ournewtype);
+  field_purge_batch(500);
+}
+
+/**
+ * Implements hook_install().
+ */
+function agile_iit_install() {
+  node_types_rebuild();
+  $types = node_type_get_types();
+  $types = node_type_get_names();
+  if ( !in_array('iit_detail_comparison', $types )) {
+    $new_type = array(
+      'name' => t('IIT Detail Comparison'),
+      'base' => 'iit_detail_comparison',
+      'description' => t('A detail comparison.'),
+      'has_title' => TRUE,
+      'title_label' => t('Title'),
+      'type' => 'iit_detail_comparison',
+    );
+    $new_type = node_type_set_defaults($new_type);
+    node_type_save( $new_type );
+  }
+
+  iit_add_custom_fields();
+}
+function _agile_iit_installed_fields() {
+  $t = get_t();
+  return array(
+    'iit_comments' => array(
+      'field_name' => 'iit_comments',
+      'label' => 'Comments (IIT Detail)',
+      'type' => 'text_long',
+    ),
+    'iit_detail_1' => array(
+      'field_name' => 'iit_detail_1',
+      'label' => $t('Image Detail 1'),
+      'type' => 'image',
+    ),
+    'iit_detail_2' => array(
+      'field_name' => 'iit_detail_2',
+      'label' => $t('Image Detail 2'),
+      'type' => 'image',
+    ),
+    'iit_nid_1' => array(
+      'field_name' => 'iit_nid_1',
+      'label' => $t('Node of Image 1'),
+      'type' => 'entityreference',
+    ),
+    'iit_nid_2' => array(
+      'field_name' => 'iit_nid_2',
+      'label' => $t('Node of Image 2'),
+      'type' => 'entityreference',
+    ),
+    'iit_crop_data_1' => array(
+      'field_name' => 'iit_crop_data_1',
+      'label' => $t('Crop data from section 1'),
+      'type' => 'text_long',
+    ),
+    'iit_crop_data_2' => array(
+      'field_name' => 'iit_crop_data_2',
+      'label' => $t('Crop data from section 2'),
+      'type' => 'text_long',
+    ),
+  );
+
+}
+
+function _agile_iit_installed_instances() {
+  $t = get_t();
+  return array(
+    'iit_comments' => array(
+      'field_name' => 'iit_comments',
+      'label' => $t('Detail Comments'),
+      'widget' => array(
+        'type' => 'textarea',
+      ),
+    ),
+    'iit_detail_1' => array(
+      'field_name' => 'iit_detail_1',
+      'label' => $t('Image Detail 1'),
+      'settings' => array('file_extensions' => 'jpg, jpeg, gif'),
+    ),
+    'iit_detail_2' => array(
+      'field_name' => 'iit_detail_2',
+      'label' => $t('Image Detail 2'),
+      'settings' => array('file_extensions' => 'jpg, jpeg, gif'),
+    ),
+    'iit_nid_1' => array(
+      'field_name' => 'iit_nid_1',
+      'label' => $t('Node of Image 1'),
+    ),
+    'iit_nid_2' => array(
+      'field_name' => 'iit_nid_2',
+      'label' => $t('Node of Image 2'),
+    ),
+    'iit_crop_data_1' => array(
+      'field_name' => 'iit_crop_data_1',
+      'label' => $t('Crop data from section 1'),
+    ),
+    'iit_crop_data_2' => array(
+      'field_name' => 'iit_crop_data_2',
+      'label' => $t('Crop data from section 2'),
+    ),
+  );
+}
+
+function iit_add_custom_fields() {
+  foreach (_agile_iit_installed_fields() as $field) {
+    field_create_field($field);
+  }
+  foreach (_agile_iit_installed_instances() as $fieldinstance) {
+    $fieldinstance['entity_type'] = 'node';
+    $fieldinstance['bundle'] = 'iit_detail_comparison';
+    field_create_instance($fieldinstance);
+
+  }
+}
+
+function agile_iit_delete_custom_fields() {
+  foreach (array_keys(_agile_iit_installed_fields()) as $field) {
+    field_delete_field($field);
+  }
+  $instances = field_info_instances('node', 'iit_detail_comparison');
+  foreach ($instances as $instance_name => $fieldinstance) {
+    field_delete_instance($fieldinstance);
+  }
+}
+
+/**
+ * Add the custom node type and fields for Detail Comparisons.
+*/
+function agile_iit_update_7000() {
+  node_types_rebuild();
+  $types = node_type_get_types();
+  iit_add_custom_fields();
+}
