@@ -17,7 +17,14 @@
 
 (function ($) {
     // @object ZoomyS Object - Holds alot of data for each instance of Zoomy
-    'use strict';
+    
+    // variable declaration - customization for IIT
+    var chosen_image = 'unchosen';
+    var active_selector = '0';
+    var inactive_selector = '1';
+    var offset_x = 0;
+    var offset_y = 0;
+
     var ZoomyS = {
         count: [],
         pos: null
@@ -64,8 +71,8 @@
                 }()),
                 //Change default event on touch
                 defaultEvent = (touch) ? 'touchstart' : 'click',
-                /* @object      utils   Object      - Set of utitlities needed for Zoomy
-                 * @method      pos     Object      - position utitlities
+                /* @object      utils   Object      - Set of utilities needed for Zoomy
+                 * @method      pos     Object      - position utilities
                  *
                  * @method      stop    Function    - Helper to calculate stops for crash detection
                  * @param       x       Interger    - Thumnail images position
@@ -102,6 +109,8 @@
                      */
                     css: function (a) {
                         if (typeof a !== 'undefined' && a.length > 0) {
+                            
+                            //customized behavior for IIT
                             var imag1_xy = $('#image1_info').text().split(' ');
                             var imag2_xy = $('#image2_info').text().split(' ');
                             var x1 = imag1_xy[0].substring(2);
@@ -113,11 +122,23 @@
                             var img2w = $("#ol_i2").find('img').width();
                             var img2h = $("#ol_i2").find('img').height();
 
-                            var ratiow1 = dims.image1_width /img1w ;
-                            var ratiow2 = dims.image2_width /img2w;
+                            var ratiow1 = dims.image1_width / img1w;
+                            var ratiow2 = dims.image2_width / img2w;
 
-                            var ratioh1 = dims.image1_height/ img1h;
-                            var ratioh2 =  dims.image2_height / img2h;
+                            var ratioh1 = dims.image1_height / img1h;
+                            var ratioh2 = dims.image2_height / img2h;
+
+                            $('.ol_image').mouseover(function () {
+                                if ($(this).attr('id') == 'ol_i1') {
+                                    active_selector = 0;
+                                    inactive_selector = 1;
+                                }
+                                else {
+                                    active_selector = 1;
+                                    inactive_selector = 0;
+                                }
+
+                            })
 
                             var translate = 'translate3d(' + a[2] + 'px, ' + a[3] + 'px, 0)';
                             var movement = (cssTranforms) ? {
@@ -131,7 +152,7 @@
                                 'left': a[2] + 'px'
                             };
 
-                            // customized for dual view$
+                            // customized for IIT
                             $('.info_pane').dblclick(function () {
                                 $(this).text('X:0 Y:0');
                             });
@@ -148,18 +169,28 @@
                                 }
                             });
                             // background set in two image zooms
-                            var offset_x = Math.abs((x1 * ratiow1) - (x2 * ratiow2));
-                            var offset_y = Math.abs((y1 * ratioh1) - (y2 * ratioh2));
-                            offset_x = (x1 * ratiow1 - x2 * ratiow2) + a[0];
-                            offset_y = (y1 * ratioh1 - y2 * ratioh2) + a[1];
-                            $(".zoomy").eq(1).css({
+                            var offset_x = (x1 * ratiow1) - (x2 * ratiow2);
+                            var offset_y = (y1 * ratioh1) - (y2 * ratioh2);
+
+                            if (active_selector == '1') {
+                                offset_x = (x1 * ratiow1 - x2 * ratiow2) + a[0];
+                                offset_y = (y1 * ratioh1 - y2 * ratioh2) + a[1];
+                            }
+                            else {
+                                offset_x = (x2 * ratiow2 - x1 * ratiow1) + a[0];
+                                offset_y = (y2 * ratioh2 - y1 * ratioh1) + a[1];
+                            }
+
+                            var inactive_properties = {
                                 'backgroundPosition': '-' + offset_x + 'px ' + '-' + offset_y + 'px',
                                 'transform': movement
-                            });
-                            $(".zoomy").eq(0).css({
+                            }
+                            var active_properties = {
                                 'backgroundPosition': '-' + a[0] + 'px ' + '-' + a[1] + 'px',
                                 'transform': movement
-                            });
+                            }
+                            $(".zoomy").eq(active_selector).css(active_properties);
+                            $(".zoomy").eq(inactive_selector).css(inactive_properties);
                             return {};
                         } else {
                             return {};
