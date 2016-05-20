@@ -64,3 +64,27 @@ function _agile_iit_install_get_suggested_node_types() {
   }
   return $existing;
 }
+
+
+function agile_iit_install() {
+  $help_id = agile_iit_create_page_node();
+  variable_set('agile_iit_help_node_id', $help_id);
+}
+
+function agile_iit_create_page_node() {
+  $values = array(
+    'type' => 'page',
+    'uid' => $GLOBALS['user']->uid,
+    'status' => 0,
+    'comment' => 1,
+    'promote' => 0,
+  );
+  $entity = entity_create('node', $values);
+  $wrapper = entity_metadata_wrapper('node', $entity);
+  $wrapper->title->set('Agile IIT Help Page');
+  $wrapper->body->set(array('value' => "<strong>Set default text here.</strong>"));
+  $wrapper->save(true);
+  entity_save('node', $entity);
+  return $wrapper->getIdentifier();
+}
+
