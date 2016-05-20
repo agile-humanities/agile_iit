@@ -50,7 +50,6 @@ function agile_iit_add_requirements() {
   drupal_add_css("$path/css/style2.css");
   drupal_add_css("$path/js/themes/base/jquery-ui.css");
   drupal_add_js("$path/js/comparison_viewer.js");
-  drupal_add_js("$path/js/cropform.js");
   drupal_add_js("$path/js/gridform.js");
   drupal_set_title(t('Image Tool'));
 }
