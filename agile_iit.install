@@ -65,7 +65,6 @@ function _agile_iit_install_get_suggested_node_types() {
   return $existing;
 }
 
-
 /**
  * Implements hook_uninstall().
  */
@@ -102,9 +101,12 @@ function agile_iit_install() {
     $new_type = node_type_set_defaults($new_type);
     node_type_save( $new_type );
   }
-
   iit_add_custom_fields();
+
+  $help_id = agile_iit_create_page_node();
+  variable_set('agile_iit_help_node_id', $help_id);
 }
+
 function _agile_iit_installed_fields() {
   $t = get_t();
   return array(
@@ -216,3 +218,27 @@ function agile_iit_update_7000() {
   $types = node_type_get_types();
   iit_add_custom_fields();
 }
+
+function agile_iit_update_7001() {
+  $help_id = agile_iit_create_page_node();
+  variable_set('agile_iit_help_node_id', $help_id);
+}
+
+function agile_iit_create_page_node() {
+  $values = array(
+    'type' => 'page',
+    'uid' => $GLOBALS['user']->uid,
+    'status' => 0,
+    'comment' => 1,
+    'promote' => 0,
+  );
+  $entity = entity_create('node', $values);
+  $wrapper = entity_metadata_wrapper('node', $entity);
+  $wrapper->title->set('Agile IIT Help Page');
+  $wrapper->body->set(array('value' => "<strong>Set default text here.</strong>"));
+  $wrapper->save(true);
+  entity_save('node', $entity);
+  return $wrapper->getIdentifier();
+}
+
+

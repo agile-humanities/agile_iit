@@ -64,6 +64,12 @@ function agile_iit_menu() {
       'page arguments' => array('agile_iit_save_comparison_form'),
       'access callback' => 'user_access',
       'access arguments' => array('create iit_detail_comparison content'),
+      ),
+    'agile/iit/image_dimensions' => array(
+      'file' => 'includes/callbacks.inc',
+      'page callback' => 'agile_iit_get_image_dimensions',
+      'type' => MENU_CALLBACK,
+      'access callback' => TRUE,
     ),
   );
 }
@@ -506,3 +512,4 @@ function agile_iit_get_local_path($url) {
   $path = urldecode($path);
   return $path;
 }
+

@@ -269,7 +269,6 @@ form.inline {
 }
 
 
-
 .iit-image-holder {
     width: 49%;
     padding: 0 5px;
@@ -279,4 +278,27 @@ form.inline {
 
 .iit-image-holder img {
     width: 100%;
+}
+
+.ui-rotatable-handle {
+    height: 16px;
+    width: 16px;
+    cursor: pointer;
+    background-image: url(images/rotate.png);
+    background-size: 100%;
+    left: 2px;
+    bottom: 2px;
+}
+
+.info_pane{
+    background-color: white;
+    padding: 9px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    position: relative;
+   
+   
+    top: 7px !important;
+    font-family: sans-serif;
 }

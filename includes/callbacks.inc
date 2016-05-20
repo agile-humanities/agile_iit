@@ -121,6 +121,20 @@ function agile_iit_twoviews() {
   );
 }
 
+function agile_iit_get_image_dimensions() {
+  $img1_src = filter_input(INPUT_POST, 'img1');
+  $info1 = getimagesize($img1_src);
+  $img2_src = filter_input(INPUT_POST, 'img2');
+  $info2 = getimagesize($img2_src);
+  $results = array(
+    'image1_width' => $info1[0],
+    'image1_height' => $info1[1],
+    'image2_width' => $info2[0],
+    'image2_height' => $info2[1],
+  );
+  echo json_encode($results);
+}
+
 /**
  * Callback to create the popup window of two cropped sections with details.
  */

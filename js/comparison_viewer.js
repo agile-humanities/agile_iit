@@ -9,6 +9,7 @@
     Drupal.behaviors.agileIITComparison = {
         attach: function (context, settings) {
             $(document).on('click', '#ol_close', function () {
+                var dims = [];
                 $('.zoom').find('.zoomy').remove();
                 $('#overlay2').remove();
                 $("#resizable-gallery-wrapper").show();
@@ -17,8 +18,6 @@
             $("#viewform").submit(function (e) {
                 e.preventDefault();
                 var tmp1 = $("#vf_img1").val();
-                var node1 = $("#image1").find('img').data('nid');
-                var node2 = $("#image2").find('img').data('nid');
                 var tmp2 = $("#vf_img2").val();
                 if (tmp1 === "" || tmp2 === "") {
                     alert("Two images must be selected to use comparison viewer.");
@@ -31,15 +30,16 @@
                     var container_height = $('#iit_container').height();
                     var myOverlay = document.createElement('div');
                     myOverlay.id = 'overlay2';
+                    var node1 = $("#image1").find('img').data('nid');
+                    var node2 = $("#image2").find('img').data('nid');
+                    var baseheight = Math.max($("#image1").find('img').height(), $("#image2").find('img').height());
                     $('#iit_container').append(myOverlay);
                     $('#overlay2').width(container_width);
-                    $('#overlay2').height(container_height + 100);
-                    var values = $(this).serializeArray();
-
-                    values['2'] = {name: "node1", 'value': node1};
-                    values['3'] = {name: "node2", 'value': node2};
+                    $('#overlay2').height(baseheight + 400);
+                    var values = [];
+                    values.push({name: "node1", 'value': node1});
+                    values.push({name: "node2", 'value': node2});
                     $.post("agile/iit/twoviews", values, function (data) {
-
                         $("#overlay2").append(data);
                         var ol_width = $("#overlay2").width();
                         var ol_height = $("#overlay2").height();
@@ -51,22 +51,37 @@
                         var top = Math.max($('#ol_i1').height(), $('#ol_i2').height()) + 5;
                         image1Top = top;
                         image2Top = top;
-
+                        var src1 = $("#ol_i1").find('img').attr('src');
+                        var scr2 = $("#ol_i1").find('img').attr('src');
                         $('.zoom').zoomy({
                             zoomSize: 256,
                             round: false,
                             border: '6px solid #fff'
                         });
+                        $.ajax({
+                            url: 'agile/iit/image_dimensions',
+                            type: "POST",
+                            data: {
+                                img1: $("#ol_i1").find('img').attr('src'),
+                                img2: $("#ol_i2").find('img').attr('src'),
+                            },
+                            async: false,
+                            success: function (results, status, xhr) {
+                                results = JSON.parse(results)
+                                dims = results;
+                            },
+                            error: function (data, status, xhd) {
+                                console.log("The function execute_callback has failed");
+                            }
+                        });
 
                     });
 
                 }
+
             });
 
         }
     };
 })(jQuery);
 
-
-
-// Comparison Viewer

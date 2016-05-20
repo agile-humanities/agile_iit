@@ -31,7 +31,7 @@ function agile_iit_preprocess_agile_agile_iit_cropped_view(array &$variables) {
  * Implements hook_preprocess().
  */
 function agile_iit_preprocess_agile_iit_twoviews(array &$variables) {
-  agile_iit_add_requirements();
+  agile_iit_add_requirements($variables['img1_src'], $variables['img2_src']);
 }
 
 /*
@@ -50,6 +50,7 @@ function agile_iit_add_requirements() {
   drupal_add_css("$path/css/style2.css");
   drupal_add_css("$path/js/themes/base/jquery-ui.css");
   drupal_add_js("$path/js/comparison_viewer.js");
+  drupal_add_js("$path/js/cropform.js");
   drupal_add_js("$path/js/gridform.js");
   drupal_set_title(t('Image Tool'));
 }

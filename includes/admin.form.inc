@@ -19,15 +19,28 @@
 function iit_admin(array $form, array &$form_state) {
   $fields_available = ''; // TODO: Query for existing fields of type image and display them here with their machine
   //names, their display names, and what content types they appear in, as a guide to the user.
-  $form = array(
-    'iit_image_fields' => array(
-      '#type' => 'textfield',
-      '#title' => t('Image Field'),
-      '#default_value' => variable_get('iit_image_field', 'field_image'),
-      '#description' => t('The machine name of the field that contains the image. It should exist in all content
+  $help_node = variable_get('agile_iit_help_node_id', '');
+  $namespace = variable_get('agile_coursepack_object_namespace', 'islandora');
+  if ($help_node) {
+    $form['about'] = array(
+      '#type' => 'markup',
+      '#markup' => l(t('Edit help text'), "/node/$help_node/edit"),
+    );
+  }
+  $form['agile_coursepack_about_node_id'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Node ID of Help page.'),
+    '#description' => t("The Drupal node containing the help text"),
+    '#default_value' => $help_node,
+    '#size' => 5,
+  );
+  $form['iit_image_fields'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Image Field'),
+    '#default_value' => variable_get('iit_image_field', 'field_image'),
+    '#description' => t('The machine name of the field that contains the image. It should exist in all content
       types that can be flagged with "flag_selected".'),
-      '#required' => TRUE,
-    ),
+    '#required' => TRUE,
   );
   return system_settings_form($form);
 }
