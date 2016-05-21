@@ -1,27 +1,15 @@
-// QUESTION what are these for? Don't they get overwritten in setLandscapeView?
-var image1Top = 350;
-var image2Top = 350;
-var image1Left = 0;
-var image2Left = 150;
 var sectionsCreatedThusFar = 0;
+var image1 = {}; // Image dragged into the left-hand position
+var image2 = {}; // Image dragged into the right-hand position
 
 (function ($) {
     Drupal.behaviors.agileIITCropstuff = {
         attach: function (context, settings) {
-            /* New variables for passing useful stuff. */
-            var image1 = {};
-            var image2 = {};
-            //var sections = [];   // i.e.: sections = [] where section is a list of section objects.
-            // var createSection = function (image1, image2, blah, bleh, ...) {
-            //   return {
-            //     section1: ....
-            //     section2: ....
-            //   };
-            // };
 
+            var section1 = {}; // [Croptool] section defined on the left-hand image
+            var section2 = {}; // [Croptool] section overlaid on the right-hand image.
 
-            /* OLD - delete these */
-            var image1_src, image2_src, image1_dimW, image1_dimH, image2_dimW, image2_dimH, image1_clientWidth, image2_clientWidth, imageSize, imageSizePrefix, screenRatio, previousImagePrefix;
+            var  imageSize, imageSizePrefix, screenRatio, previousImagePrefix;
 
             var vf400img1Height, vf400img2Height; // Do we ever use these?
 
@@ -61,26 +49,6 @@ var sectionsCreatedThusFar = 0;
                 return result;
             }
 
-            // QUESTION what the fuck do we ever use this? It would get invoked if we have data-orientation=portrait, but
-            // we've hardcoded it to landscape. Also it looks like someone fucked with these numbers because they make no sense.
-            function setPortraitView() {
-                image1Top = 260;
-                image2Top = 0;
-                image1Left = 410;
-                image2Left = 810;
-
-            }
-            // QUESTION What's this do?
-            // It gets invoked when we're using landscape view (which we happen to always be doing).
-            function setLandscapeView() {
-
-                image1Top = 468;
-                image2Top = 468;
-                image1Left = 0;
-                image2Left = 0;
-
-            }
-
             // This function runs through all the .ui-thumb's on the page and finds the child img,
             // and extracts the attribute 'data-lrg-url' and POSTs to agile/iit/imagederivative passing
             // a size ('next') and a path. This is the thing that takes forever and you can't move images
@@ -113,18 +81,6 @@ var sectionsCreatedThusFar = 0;
                 $(ui.helper).css('z-index', '99999'); // and make the helper super-high z-index. This good.
             });
 
-            // Loop through .iit-thumb's child images and extract the data-width and data-height parameters, which we've set in the view.
-            // Set them as data-dimensions (which is nicer to read).
-            // TODO: We should refactor this whole thing out because we don't need the real-life dimensions at this point.
-            function write_attributes() {
-                $('.iit-thumb img').each(function () {
-                    width = $(this).attr('data-width'); // This is the raw number in cm of the image, which was passed in from the view.
-                    height = $(this).attr('data-height'); // Height. raw number in cm.
-                    $(this).attr("data-dimensions", width + ' cm x ' + height + ' cm');
-                    $(this).attr("data-orientation", 'landscape');     // It also sets the data-orientation which we're not using effectively at all.
-                });
-            }
-            write_attributes();
             // This initializes all the image derivatives using imageSizePrefix. It also happens to set previousImagePrefix to the imageSizePrefix.
             replaceImagePrefix(previousImagePrefix, imageSizePrefix);
 
@@ -144,7 +100,6 @@ var sectionsCreatedThusFar = 0;
                     var title = ui.draggable.find('img').attr("alt"); // Obtain the title for this droppable section. Kinda nice, but not super necessary. Should we maybe or not get it from pid?
 
                     // Rosie you're actually using these, don't delete until you refactor to get them from the node.
-                    // Rosie you're actually using these, don't delete until you refactor to get them from the node.
                     var height = ui.draggable.find('img').attr("data-height"); // obtain the raw real-life-dimensions from the drop-ee
                     var width = ui.draggable.find('img').attr("data-width");
 
@@ -153,17 +108,9 @@ var sectionsCreatedThusFar = 0;
                     var date = ui.draggable.find('img').attr("data-date"); // obtain the date created from the drop-ee. Definitely not needed here.
                     var support = ui.draggable.find('img').attr("data-support"); // obtain some other random information about the painting. Not needed here either.
 
-                    var orientation = ui.draggable.find('img').attr("data-orientation"); // This looks like it'll be useful (but we've hard-coded it to landscape always).
-                    if (orientation === "portrait") {
-                        setPortraitView();
-                    }
-                    else if (orientation === "landscape") {
-                        setLandscapeView();
-                    }
-
                     $(this).find("h4").html(title); // Set the title of this droppable section (as described above)
                     // Create an html of a new image node. Isn't there a better javscript way to do this? [yes, see below] And we can refactor out most of these attributes.
-                    var newImage = "<a href='" + src + "'><img onerror='imgError()'  alt='" + title + "' src='" + src + "' data-nid='" + nid + "' data-dimensions='" + dimensions + "' data-height='" + height + "' data-width='" + width + "' data-orientation='" + orientation + "' data-date='" + date + "' data-support='" + support + "'> </a>";
+                    var newImage = "<a href='" + src + "'><img onerror='imgError()'  alt='" + title + "' src='" + src + "' data-nid='" + nid + "' data-dimensions='" + dimensions + "' data-height='" + height + "' data-width='" + width +  "' data-date='" + date + "' data-support='" + support + "'> </a>";
                     var newImageElm = $(newImage).appendTo(this);
 
                     if (this.id === "image1") // Set some local variables in javascript. When are we going to use these?
@@ -173,14 +120,6 @@ var sectionsCreatedThusFar = 0;
                         image1.realHeight_cm = $(this).find('img').attr('data-height');
                         image1.realWidth_cm = $(this).find('img').attr('data-width');
                         image1.nid = nid;
-
-                        /* REMOVE THIS... */
-                        /*
-                         image1_src = src;
-                         image1_dimH = $(this).find('img').attr('data-height'); // Save this for the crop info tool.
-                         image1_dimW = $(this).find('img').attr('data-width'); // Save this for the crop info tool.
-                         image1_clientWidth = $(this).find('img').width(); // We seem to never use this again.
-                         /* TO HERE */
 
                         /* DO WE NEED THE VIEW STUFF? */
                         $("#vf_img1").val(vfsrc); // code note: val() gets/sets the value of a form element. This sets the value in the "viewform" out of data-lrg_url (after failing to change the pixel size from x00px to 800px)
@@ -211,13 +150,6 @@ var sectionsCreatedThusFar = 0;
                         image2.realWidth_cm = $(this).find('img').attr('data-width');
                         image2.nid = nid;
 
-
-                        /* DON'T NEED THIS */
-                        image2_src = src; // we don't actually use this because it gets overwritten by #vf_img2.val().
-                        image2_dimH = $(this).find('img').attr('data-height');  // Save it for the crop info tool.
-                        image2_dimW = $(this).find('img').attr('data-width');  // Save it for the crop info tool.
-                        image2_clientWidth = $(this).find('img').width(); // We never actually use this.
-
                         /* CHECK THE VF STUFF */
                         $("#vf_img2").val(vfsrc); // Set the src of image 2 in the view form. (should have been the 800 version but isn't)
                         $("#cf_img2").val(src);  // Set the src of image 2 in the crop form.
@@ -239,19 +171,11 @@ var sectionsCreatedThusFar = 0;
                 }
             });
 
-            var resizeListener = function () { // Hey, we have a resize listener! Does this ever get called?
-                imageSize = Math.floor(($(window).width() * screenRatio) / 2);
-                imageSizePrefix = calculateImagePrefix(imageSize); // Find the new image prefix
-                if (imageSizePrefix !== previousImagePrefix) {
-                    replaceImagePrefix(previousImagePrefix, imageSizePrefix); // replace the image size prefixes in the ui-thumb's, which does nothing if you've already dragged your images or opened a tool.
-                }
-            };
-
-            // Resets the gallery view.
+            // Resets the gallery view, removing any images in the drop zones.
             $(document).on('submit', '#view_reset', function (e) {
                 e.preventDefault();
                 $('.img-container > a').empty();
-                $('.img-container > h4').text("Image"); // We should change this to "Drag image here".
+                $('.img-container > h4').text("Drag image here");
                 var elementExists = document.getElementById("img_overlay1"); // This removes the grids, if present.
                 if (elementExists) {
                     var element1 = document.getElementById("img_overlay1");
@@ -259,10 +183,12 @@ var sectionsCreatedThusFar = 0;
                     var element2 = document.getElementById("img_overlay2");
                     element2.parentNode.removeChild(element2);
                 }
+                image1 = {};
+                image2 = {};
 
             });
 
-            // Handler for the detail section. Note that it's called #results.
+            // Handler for the detail section. Note that the section has the id #results.
             $(document).on('click', '#results', function (event) {
                 var $item = $(this), $target = $(event.target);
 
@@ -275,27 +201,23 @@ var sectionsCreatedThusFar = 0;
                     })
                 }
                 else if ($target.is(".ui-icon-arrowstop-1-e")) { // flip arrow handler
-
                     var myid2 = $target.parent().find('img').attr('id'); // needed because the id is arbitrary and we can have multiple details.
-
                     $("#" + myid2).toggleClass("flip");
                 }
 
                 return false;
             });
-            var section1 = {};
-            var section2 = {};
 
             $(document).on('click', '#ol_close', function () {
                 $('.zoom').find('.zoomy').remove();
-                $('#overlay2').remove();
+                $('#crop-overlay').remove();
                 $("#resizable-gallery-wrapper").show();
                 $("#page-title").show();
             });
 
             // Handler for the crop overlay close button.
             $(document).on('click', '#cl_close', function () {
-                $('#overlay2').remove();
+                $('#crop-overlay').remove();
                 $("#resizable-gallery-wrapper").show();
                 $("#page-title").show();
                 $(".img-container").show();
@@ -320,14 +242,14 @@ var sectionsCreatedThusFar = 0;
                 else {
                     $(window).scrollTop(0);
                     var myOverlay = document.createElement('div');
-                    myOverlay.id = 'overlay2'; // Create a thing called overlay2. We should refactor this to be a more descriptive name.
+                    myOverlay.id = 'crop-overlay'; // Create a thing called overlay2. We should refactor this to be a more descriptive name.
                     $('#iit_container').append(myOverlay);
 
 
                     var values = $(this).serializeArray(); // Makes an array of name: value: pairs out of the form. Note, all we need are cf_img1 and cf_img2.
                     $(".img-container").hide(); // Hize the dropzones.
                     $.post("agile/iit/crop", values, function (data) { // POST the form values to crop, which returns themed stuff to create the cropping workspace based on the images at cf_img1 and cf_img2.
-                        $("#overlay2").append(data);
+                        $("#crop-overlay").append(data);
                         $('#crop_target').Jcrop({onSelect: updateCoords}, function(){
                             jcrop_api.push(this);
                         }); // This means that on selecting a rectangle, it runs updateCoords.

@@ -24,6 +24,7 @@
                     return false;
                 }
                 else {
+                    
                     $("#resizable-gallery-wrapper").hide();
                     $("#page-title").hide();
                     var container_width = $('#iit_container').width();
