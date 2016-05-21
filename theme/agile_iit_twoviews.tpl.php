@@ -6,9 +6,17 @@
 
     </p>
     <div id = "ol_i1" class = 'ol_image'>
-        <a href = "<?php echo $img1_src; ?>" class = "zoom two_up"><img class="two_up_image" src = '<?php echo $img1_src ?>' style = 'float: left;'/></a>
+        <a href = "<?php echo $img1_src; ?>" class = "zoom two_up">
+            <img class="two_up_image" src = '<?php echo $img1_src ?>' style = 'float: left;'/>
+                <div class="crosshair-vertical"/>
+                <div class="crosshair-horizontal"/>
+        </a>
     </div>
     <div id = "ol_i2" class = 'ol_image'>
-        <a href = '<?php echo $img2_src; ?>' class = "zoom two_up"><img  class="two_up_image" src = '<?php echo $img2_src; ?>' style = 'float: left;'/></a>
+        <a href = '<?php echo $img2_src; ?>' class = "zoom two_up">
+            <img  class="two_up_image" src = '<?php echo $img2_src; ?>' style = 'float: left;'/>
+            <div class="crosshair-vertical"/>
+            <div class="crosshair-horizontal"/>
+        </a>
     </div>
 </div>

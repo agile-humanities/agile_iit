@@ -153,14 +153,32 @@
                             };
 
                             // customized for IIT
-                            $('.info_pane').dblclick(function () {
+                            $('.info_pane').click(function () {
                                 $(this).text('X:0 Y:0');
+                                if ($(this).attr('id') == 'image1_info') {
+                                    var clearme = '#ol_i1';
+                                }
+                                else {
+                                    var clearme = '#ol_i2';
+                                }
+                                $(clearme).find('.crosshair-horizontal').css({
+                                    top: '0px'
+                                });
+                                $(clearme).find('.crosshair-vertical').css({
+                                    left: '0px'
+                                });
                             });
                             $(".two_up").dblclick(function (e) {
                                 var parent_id = $(this).parent().attr('id');
                                 var parentOffset = $(this).parent().offset();
                                 var relX = e.pageX - parentOffset.left;
                                 var relY = e.pageY - parentOffset.top;
+                                $(this).find('.crosshair-horizontal').css({
+                                    top: relY
+                                });
+                                $(this).find('.crosshair-vertical').css({
+                                    left: relX
+                                });
                                 if (parent_id == 'ol_i1') {
                                     $('#image1_info').text("X:" + relX + " Y:" + relY)
                                 }
