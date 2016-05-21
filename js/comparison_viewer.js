@@ -3,7 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+var image1Top, image2Top;
+var image1Left = 0;
 (function ($) {
 
     Drupal.behaviors.agileIITComparison = {

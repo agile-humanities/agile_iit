@@ -24,8 +24,6 @@
     var inactive_selector = '1';
     var offset_x = 0;
     var offset_y = 0;
-    var image1Top, image2Top;
-    var image1Left = 0;
 
     var ZoomyS = {
         count: [],
@@ -504,34 +502,30 @@
                         //new
                         image = image.replace("(", "%28");
                         image = image.replace(")", "%29");
+                        var container_width = $("#ol_i1").width();
 
                         if (id % 2 == 1) {
                             zoom.append(assets)
                                     .css({
-                                        //'background-image': 'url(' + image + ')',
-                                        // 'background-image': "url('" + image + "')",
                                         'background-image': 'url("' + image + '")',
-                                        top: image1Top + 'px',
-                                        left: image1Left + 'px',
-                                        //new
+                                        top: '',
+                                        left: container_width + 'px',
+                                        position: 'fixed',
+                                        bottom: '0px',
                                         visibility: 'visible'
-                                                // visibility: 'hidden'
                                     }).find('img').remove();
                         }
                         else {
-                            var container_width = $("#ol_i1").width();
                             var leftoffset = container_width - 280;
 
                             zoom.append(assets)
                                     .css({
-                                        //'background-image': 'url(' + image + ')',
-                                        // 'background-image': "url('" + image + "')",
                                         'background-image': 'url("' + image + '")',
-                                        top: image2Top + 'px',
+                                        top: '',
                                         left: leftoffset + 'px',
-                                        //new
+                                        position: 'fixed',
+                                        bottom: '0px',
                                         visibility: 'visible'
-                                                // visibility: 'hidden'
                                     }).find('img').remove();
 
                         }
