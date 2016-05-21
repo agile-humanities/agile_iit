@@ -208,16 +208,9 @@ var image2 = {}; // Image dragged into the right-hand position
                 return false;
             });
 
-            $(document).on('click', '#ol_close', function () {
-                $('.zoom').find('.zoomy').remove();
-                $('#crop-overlay').remove();
-                $("#resizable-gallery-wrapper").show();
-                $("#page-title").show();
-            });
-
             // Handler for the crop overlay close button.
             $(document).on('click', '#cl_close', function () {
-                $('#crop-overlay').remove();
+                $('#overlay2').remove();
                 $("#resizable-gallery-wrapper").show();
                 $("#page-title").show();
                 $(".img-container").show();
@@ -240,16 +233,18 @@ var image2 = {}; // Image dragged into the right-hand position
                     return false;
                 }
                 else {
+                    $("#resizable-gallery-wrapper").hide();
+                    $("#page-title").hide();
                     $(window).scrollTop(0);
                     var myOverlay = document.createElement('div');
-                    myOverlay.id = 'crop-overlay'; // Create a thing called overlay2. We should refactor this to be a more descriptive name.
+                    myOverlay.id = 'overlay2'; // Create a thing called overlay2. We should refactor this to be a more descriptive name.
                     $('#iit_container').append(myOverlay);
 
 
                     var values = $(this).serializeArray(); // Makes an array of name: value: pairs out of the form. Note, all we need are cf_img1 and cf_img2.
                     $(".img-container").hide(); // Hize the dropzones.
                     $.post("agile/iit/crop", values, function (data) { // POST the form values to crop, which returns themed stuff to create the cropping workspace based on the images at cf_img1 and cf_img2.
-                        $("#crop-overlay").append(data);
+                        $("#overlay2").append(data);
                         $('#crop_target').Jcrop({onSelect: updateCoords}, function(){
                             jcrop_api.push(this);
                         }); // This means that on selecting a rectangle, it runs updateCoords.
