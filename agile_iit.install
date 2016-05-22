@@ -49,6 +49,39 @@ function agile_iit_enable() {
     $permissions = array('flag selected_images', 'unflag selected_images');
     user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, $permissions);
   }
+  if (!isset($existing_flags['saved_comparisons'])) {
+    // Only install the flag if it doesn't exist already.
+    $flag = flag_flag::factory_by_entity_type('node');
+    $configuration = array(
+      'name' => 'saved_comparisons',
+      'global' => 0,
+      'show_in_links' => array(
+        'full' => 1,
+        'teaser' => 1,
+      ),
+      'show_on_form' => 1,
+      // The following UI labels aren't wrapped in t() because they are written
+      // to the DB in English. They are passed to t() later, thus allowing for
+      // multilingual sites.
+      'title' => 'Saved Comparisons',
+      'flag_short' => 'Save this comparison',
+      'flag_long' => 'Add this comparison to your personal list',
+      'flag_message' => 'This comparison has been added to your list',
+      'unflag_short' => 'Remove this',
+      'unflag_long' => 'Remove this comparison from your personal list',
+      'unflag_message' => 'This comparison has been removed from your list',
+      'types' => array('iit_detail_comparison'),
+    );
+    $flag->form_input($configuration);
+    $flag->save();
+
+    // Clear the flag cache so the new permission is seen by core.
+    drupal_static_reset('flag_get_flags');
+
+    // Grant permissions.
+    $permissions = array('flag saved_comparisons', 'unflag saved_comparisons');
+    user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, $permissions);
+  }
 }
 
 /**
@@ -222,6 +255,10 @@ function agile_iit_update_7000() {
 function agile_iit_update_7001() {
   $help_id = agile_iit_create_page_node();
   variable_set('agile_iit_help_node_id', $help_id);
+}
+
+function agile_iit_update_7002() {
+  agile_iit_enable();
 }
 
 function agile_iit_create_page_node() {

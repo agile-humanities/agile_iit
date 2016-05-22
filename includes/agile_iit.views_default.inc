@@ -11,6 +11,7 @@
  *   Default view
  */
 function agile_iit_views_default_views() {
+  // Flag Selected
   $view = new view();
   $view->name = 'iit_selected';
   $view->description = 'A page listing the current user\'s selected images at /selected.';
@@ -162,6 +163,116 @@ function agile_iit_views_default_views() {
   $handler->display->display_options['menu']['weight'] = '0';
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
+
+  // Add view to list of views to provide.
+  $views[$view->name] = $view;
+
+  // Flag Saved Comparisons
+  $view = new view();
+  $view->name = 'flag_saved_comparisons';
+  $view->description = 'A page listing the current user\'s selected images at /selected.';
+  $view->tag = 'flag';
+  $view->base_table = 'node';
+  $view->human_name = 'flag_saved_comparisons';
+  $view->core = 0;
+  $view->api_version = '3.0';
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Defaults */
+  $handler = $view->new_display('default', 'Defaults', 'default');
+  $handler->display->display_options['title'] = 'My Saved Comparisons';
+  $handler->display->display_options['use_more_always'] = FALSE;
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['access']['perm'] = 'flag saved_comparisons';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['style_plugin'] = 'grid';
+  $handler->display->display_options['row_plugin'] = 'fields';
+  /* No results behavior: Global: Text area */
+  $handler->display->display_options['empty']['text']['id'] = 'text';
+  $handler->display->display_options['empty']['text']['table'] = 'views';
+  $handler->display->display_options['empty']['text']['field'] = 'area';
+  $handler->display->display_options['empty']['text']['empty'] = TRUE;
+  $handler->display->display_options['empty']['text']['content'] = 'You have not yet selected any content. Click the "Select this" link when viewing a piece of content to add it to this list.';
+  $handler->display->display_options['empty']['text']['format'] = 'plain_text';
+  /* Relationship: Content: Author */
+  $handler->display->display_options['relationships']['uid_1']['id'] = 'uid_1';
+  $handler->display->display_options['relationships']['uid_1']['table'] = 'node';
+  $handler->display->display_options['relationships']['uid_1']['field'] = 'uid';
+  /* Relationship: Flags: saved_comparisons */
+  $handler->display->display_options['relationships']['flag_content_rel_1']['id'] = 'flag_content_rel_1';
+  $handler->display->display_options['relationships']['flag_content_rel_1']['table'] = 'node';
+  $handler->display->display_options['relationships']['flag_content_rel_1']['field'] = 'flag_content_rel';
+  $handler->display->display_options['relationships']['flag_content_rel_1']['label'] = 'saved';
+  $handler->display->display_options['relationships']['flag_content_rel_1']['flag'] = 'saved_comparisons';
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['element_type'] = 'h2';
+  $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  /* Field: Content: Detail Comments */
+  $handler->display->display_options['fields']['iit_comments']['id'] = 'iit_comments';
+  $handler->display->display_options['fields']['iit_comments']['table'] = 'field_data_iit_comments';
+  $handler->display->display_options['fields']['iit_comments']['field'] = 'iit_comments';
+  $handler->display->display_options['fields']['iit_comments']['label'] = '';
+  $handler->display->display_options['fields']['iit_comments']['element_label_colon'] = FALSE;
+  /* Field: Content: Image Detail 1 */
+  $handler->display->display_options['fields']['iit_detail_1']['id'] = 'iit_detail_1';
+  $handler->display->display_options['fields']['iit_detail_1']['table'] = 'field_data_iit_detail_1';
+  $handler->display->display_options['fields']['iit_detail_1']['field'] = 'iit_detail_1';
+  $handler->display->display_options['fields']['iit_detail_1']['label'] = '';
+  $handler->display->display_options['fields']['iit_detail_1']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['iit_detail_1']['click_sort_column'] = 'fid';
+  $handler->display->display_options['fields']['iit_detail_1']['settings'] = array(
+    'image_style' => 'thumbnail',
+    'image_link' => '',
+  );
+  /* Field: Content: Image Detail 2 */
+  $handler->display->display_options['fields']['iit_detail_2']['id'] = 'iit_detail_2';
+  $handler->display->display_options['fields']['iit_detail_2']['table'] = 'field_data_iit_detail_2';
+  $handler->display->display_options['fields']['iit_detail_2']['field'] = 'iit_detail_2';
+  $handler->display->display_options['fields']['iit_detail_2']['label'] = '';
+  $handler->display->display_options['fields']['iit_detail_2']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['iit_detail_2']['click_sort_column'] = 'fid';
+  $handler->display->display_options['fields']['iit_detail_2']['settings'] = array(
+    'image_style' => 'thumbnail',
+    'image_link' => '',
+  );
+  /* Field: Flags: Flag link */
+  $handler->display->display_options['fields']['ops']['id'] = 'ops';
+  $handler->display->display_options['fields']['ops']['table'] = 'flagging';
+  $handler->display->display_options['fields']['ops']['field'] = 'ops';
+  $handler->display->display_options['fields']['ops']['relationship'] = 'flag_content_rel_1';
+  $handler->display->display_options['fields']['ops']['label'] = '';
+  $handler->display->display_options['fields']['ops']['element_label_colon'] = FALSE;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['group'] = '0';
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'iit_detail_comparison' => 'iit_detail_comparison',
+  );
+
+  /* Display: Page */
+  $handler = $view->new_display('page', 'Page', 'page');
+  $handler->display->display_options['path'] = 'saved_comparisons';
+  $handler->display->display_options['menu']['type'] = 'normal';
+  $handler->display->display_options['menu']['title'] = 'My Saved Comparisons';
+  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['context'] = 0;
+  $handler->display->display_options['menu']['context_only_inline'] = 0;
+
 
   // Add view to list of views to provide.
   $views[$view->name] = $view;

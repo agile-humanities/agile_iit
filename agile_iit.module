@@ -496,9 +496,13 @@ function agile_iit_save_comparison_form_submit($form, &$form_state) {
 
   $ewrapper->save();
 
-  drupal_goto('node/' . $ewrapper->getIdentifier());
-
-
+  // Flag this node.
+  $nid = $ewrapper->getIdentifier();
+  $flag = flag_get_flag('saved_comparisons');
+  if ($flag) {
+    $flag->flag('flag', $nid);
+  }
+  drupal_goto('node/' . $nid);
 }
 
 function agile_iit_get_local_path($url) {
