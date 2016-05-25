@@ -9,7 +9,7 @@
  * Implements hook_preprocess().
  */
 function agile_iit_preprocess_agile_iit(array &$variables) {
-  $variables['placeholder_text'] = t("Drag image here");
+  $variables['placeholder_text'] = t("Please wait for images to load.");
   agile_iit_add_requirements();
 }
 
