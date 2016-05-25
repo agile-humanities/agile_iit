@@ -179,6 +179,8 @@
                                 $(this).find('.crosshair-vertical').css({
                                     left: relX
                                 });
+                                relX = relX.toFixed(2);
+                                relY = relY.toFixed(2);
                                 if (parent_id == 'ol_i1') {
                                     $('#image1_info').text("X:" + relX + " Y:" + relY)
                                 }
