@@ -272,7 +272,28 @@ function agile_iit_create_page_node() {
   $entity = entity_create('node', $values);
   $wrapper = entity_metadata_wrapper('node', $entity);
   $wrapper->title->set('Agile IIT Help Page');
-  $wrapper->body->set(array('value' => "<strong>Set default text here.</strong>"));
+  $wrapper->body->set(array('value' => <<<EOF
+<h1>Comparison Viewer</h1>
+
+<p>Move the mouse over either image to see a closeup of the area under the cursor. The close-up image will be at 100% resolution, meaning the natural resolution of the original image. For this reason, the images will not entirely 'overlap' unless they are of comparable original size.&nbsp;</p>
+
+<h2>Set origin</h2>
+
+<p>By default, the top-left corners of each image are mapped to each other. Double-click anywhere on each image to set the "origin" to that point. For instance, double-clicking on corresponding points of interest will allow them both to be seen in the close-up windows simultaneously. Move the mouse slightly to align the zoomed sections.</p>
+
+<p>To reset the origin, click the buttons at the top of the page displaying the coordinates of the origins.</p>
+
+<h1>Crop Tool</h1>
+
+<p>The crop tool allows you to extract corresponding areas of interest. Drag on the left-hand image to isolate a section of interest, then click "Extract Detail" to create a section containing the selected area. It will appear below both images. Drag it onto the right-hand image to a corresponding section of interest. Resize, rotate, or horizontally flip the section using the icons around the bottom edge. When alignment is complete, click the 'i' icon at the top left of the section. A pop-up window will appear containing both sections. Make sure that your browser allows pop-ups from this site.</p>
+
+<h2>Saving comparisons&nbsp;</h2>
+
+<p>If this detail comparison is one you would like to save, fill out the "title" and "description" at the bottom of the pop-up window and click "Save sections".&nbsp;</p>
+
+EOF
+
+  ));
   $wrapper->save(true);
   entity_save('node', $entity);
   return $wrapper->getIdentifier();

@@ -215,7 +215,16 @@ var image2 = {}; // Image dragged into the right-hand position
                 $("#page-title").show();
                 $(".img-container").show();
             });
-
+            // Handler for the crop overlay help button.
+            $(document).on('click', '#cl_help', function () {
+                var myWindow = window.open('', 'helpWindow', 'width=500, height=500, scrollbars=yes, toolbar=yes');
+                myWindow.focus();
+                $.get("agile/iit/help", "crop", function(data) {
+                    myWindow.document.write(data);
+                    myWindow.location.href = "#crop";
+                    myWindow.document.close();
+                });
+            });
             function updateCoords(c){ // This gets called when a rectangle is selected in the crop tool.
                 $('#x').val(c.x); // These elements are part of the form #cropform2 which has the submit button Extract Detail.
                 $('#y').val(c.y); // They get the x and y position of the top-left corner and the height and width,
@@ -334,9 +343,8 @@ var image2 = {}; // Image dragged into the right-hand position
                         values.push({name: 'section2', value: JSON.stringify( overlaidSection )});
                         var myWindow = window.open('', 'cmpWindow', 'width=1020, height=500, scrollbars=yes, toolbar=yes');
                         myWindow.focus();
-                        
-                        $.post("agile/iit/imagecropper", values, function (data) {
 
+                        $.post("agile/iit/imagecropper", values, function (data) {
                             myWindow.document.write(data);
                             $(myWindow.document).find("head").append(
                                 "<link rel='stylesheet' href='/sites/all/modules/agile_iit/css/detail_popup_window.css' type='text/css'>"

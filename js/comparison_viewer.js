@@ -16,6 +16,15 @@ var image1Left = 0;
                 $("#resizable-gallery-wrapper").show();
                 $("#page-title").show();
             });
+            $(document).on('click', '#ol_help', function () {
+                var myWindow = window.open('', 'helpWindow', 'width=500, height=500, scrollbars=yes, toolbar=yes');
+                myWindow.focus();
+                $.get("agile/iit/help", "crop", function(data) {
+                    myWindow.document.write(data);
+                    myWindow.location.href = "#comparison";
+                    myWindow.document.close();
+                });
+            });
             // Initiate comparison viewer.
             $("#viewform").submit(function (e) {
                 e.preventDefault();

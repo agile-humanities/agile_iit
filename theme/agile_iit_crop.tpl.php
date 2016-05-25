@@ -6,11 +6,11 @@
             <input type="hidden" id="y" name="y" />
             <input type="hidden" id="w" name="w" />
             <input type="hidden" id="h" name="h" />
-            <input type="submit" value="Extract Detail" class="btn btn-large btn-inverse" style=" position: relative; float:left;" />
-            <span type="button" name="iit_help" id="iit_help" value="Help"/>
+            <input type="submit" class="iit-button" value="Extract Detail" class="btn btn-large btn-inverse" style=" position: relative; float:left; margin-right: 4px;" />
 
         </form>
-        <input type="button" name="cl_close" id="cl_close" value="close"/>
+        <input type="button" class="iit-button" name="cl_help" id="cl_help" value="Help"/>
+        <input type="button" class="iit-button" name="cl_close" id="cl_close" value="Close"/>
     </div>
     <div style="clear:both;"></div>
     <div id="ol_i1" class="iit-image-holder">

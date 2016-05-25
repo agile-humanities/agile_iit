@@ -251,6 +251,7 @@ form.inline {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+    color: white;
 }
 .two_up_image {
     width:99%;
@@ -282,14 +283,17 @@ form.inline {
     left: -16px;
 }
 
-.info_pane, .big-button{
-    background-color: white;
-    padding: 9px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-    border-radius: 6px;
+.info_pane {
+    background-color: #eee;
+    color: #111;
+    padding: 3px 10px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    border-width: 1px;
+    border-style: outset;
+    border-color: buttonface;
     position: relative;
-    top: 7px !important;
     font-family: sans-serif;
 }
 
@@ -308,4 +312,16 @@ form.inline {
     position: absolute;
     opacity: 0.4;
     filter: alpha(opacity=40);
+}
+
+input.iit-button {
+    background-color: #eee;
+    color: #111;
+    padding: 3px 10px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    border-width: 1px;
+    border-style: outset;
+    border-color: buttonface;
 }

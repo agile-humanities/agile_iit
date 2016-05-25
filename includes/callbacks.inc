@@ -251,3 +251,17 @@ function agile_iit_image_derivative() {
     echo $url;
   }
 }
+
+/**
+ * Callback to return the appropriate help text.
+ */
+function agile_iit_get_help_node($tool = 'crop') {
+  $nid = variable_get('agile_iit_help_node_id', '');
+  $node = node_load($nid);
+  if (!$node) {
+    return "Please set the help node ID in the IIT Configuration.";
+  }
+  $wrapper = entity_metadata_wrapper('node', $node);
+  $text = $wrapper->body->value->value();
+  echo $text;
+}
