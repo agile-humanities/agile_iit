@@ -282,7 +282,7 @@ form.inline {
     left: -16px;
 }
 
-.info_pane{
+.info_pane, .big-button{
     background-color: white;
     padding: 9px;
     -moz-border-radius: 6px;

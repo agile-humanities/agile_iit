@@ -16,6 +16,7 @@ var image1Left = 0;
                 $("#resizable-gallery-wrapper").show();
                 $("#page-title").show();
             });
+            // Initiate comparison viewer.
             $("#viewform").submit(function (e) {
                 e.preventDefault();
                 var tmp1 = $("#vf_img1").val();
@@ -43,6 +44,7 @@ var image1Left = 0;
                     values.push({name: "node2", 'value': node2});
                     $.post("agile/iit/twoviews", values, function (data) {
                         $("#overlay2").append(data);
+                        $(window).scrollTop(0);
                         var ol_width = $("#overlay2").width();
                         var ol_height = $("#overlay2").height();
                         // Set image dimensions before calling zoomy.

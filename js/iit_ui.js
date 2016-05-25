@@ -223,7 +223,8 @@ var image2 = {}; // Image dragged into the right-hand position
                 $('#h').val(c.h);
             }
             var jcrop_api = [];
-            // Set the submit handlers for the cropform, viewform, gridform.
+            
+            // Initiate the crop form
             $("#cropform").submit(function (e) {
                 e.preventDefault();
                 var tmp1 = $("#cf_img1").val();
@@ -331,15 +332,16 @@ var image2 = {}; // Image dragged into the right-hand position
                         values.push({name: 'image2', value: JSON.stringify( image2 )});
                         values.push({name: 'section1', value: JSON.stringify( serializeParameters() )});
                         values.push({name: 'section2', value: JSON.stringify( overlaidSection )});
-
+                        var myWindow = window.open('', 'cmpWindow', 'width=1020, height=500, scrollbars=yes, toolbar=yes');
+                        myWindow.focus();
+                        
                         $.post("agile/iit/imagecropper", values, function (data) {
-                            var myWindow = window.open('', 'cmpWindow', 'width=1020, height=500, scrollbars=yes, toolbar=yes');
+
                             myWindow.document.write(data);
                             $(myWindow.document).find("head").append(
                                 "<link rel='stylesheet' href='/sites/all/modules/agile_iit/css/detail_popup_window.css' type='text/css'>"
                             );
                             myWindow.document.close();
-                            myWindow.focus();
                         });
                     }
                     else {

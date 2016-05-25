@@ -158,7 +158,7 @@
                                 if ($(this).attr('id') == 'image1_info') {
                                     var clearme = '#ol_i1';
                                 }
-                                else {
+                                else if ($(this).attr('id') == 'image2_info') {
                                     var clearme = '#ol_i2';
                                 }
                                 $(clearme).find('.crosshair-horizontal').css({
