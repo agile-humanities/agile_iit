@@ -262,6 +262,6 @@ function agile_iit_get_help_node($tool = 'crop') {
     return "Please set the help node ID in the IIT Configuration.";
   }
   $wrapper = entity_metadata_wrapper('node', $node);
-  $text = $wrapper->body->value->value();
-  echo $text;
+  $text = $wrapper->body->raw();
+  echo $text['value'];
 }
