@@ -39,7 +39,6 @@ var image1Left = 0;
                     $("#resizable-gallery-wrapper").hide();
                     $("#page-title").hide();
                     var container_width = $('#iit_container').width();
-                    var container_height = $('#iit_container').height();
                     var myOverlay = document.createElement('div');
                     myOverlay.id = 'overlay2';
                     var node1 = $("#image1").find('img').data('nid');

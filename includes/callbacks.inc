@@ -109,14 +109,48 @@ function agile_iit_twoviews() {
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $field = variable_get('iit_image_fields', 'field_image');
     $node1 = node_load(filter_input(INPUT_POST, 'node1'));
-    $img1_src = file_create_url($node1->{$field}['und'][0]['uri']);
     $node2 = node_load(filter_input(INPUT_POST, 'node2'));
-    $img2_src = file_create_url($node2->{$field}['und'][0]['uri']);
+    $img1_src = $node1->{$field}['und'][0]['uri'];
+    $img2_src = $node2->{$field}['und'][0]['uri'];
+    $size1 = image_get_info($img1_src);
+    $size2 = image_get_info($img2_src);
+    if (!($size1 && $size2)) {
+      return;
+    }
+    $max_width = min($size1['width'], $size2['width']);
+    if ($max_width > 2900) {
+      $style = 'iit-3000';
+    } elseif ($max_width > 2399) {
+      $style = 'iit-2400';
+    } elseif ($max_width > 1999) {
+      $style = 'iit-2000';
+    } elseif ($max_width > 1799) {
+      $style = 'iit-1800';
+    } elseif ($max_width > 1599) {
+      $style = 'iit-1600';
+    } elseif ($max_width > 1399) {
+      $style = 'iit-1400';
+    } elseif ($max_width > 1199) {
+      $style = 'iit-1200';
+    } elseif ($max_width > 999) {
+      $style = 'iit-1000';
+    } elseif ($max_width > 799) {
+      $style = 'iit-800';
+    } elseif ($max_width > 599) {
+      $style = 'iit-600';
+    } elseif ($max_width > 399) {
+      $style = 'iit-400';
+    } else {
+      $style = 'iit-200';
+    }
+    $derivative1src =  image_style_url($style, $img1_src);
+    $derivative2src =  image_style_url($style, $img2_src);
+
   }
 
   echo theme('agile_iit_twoviews', array(
-    'img1_src' => $img1_src,
-    'img2_src' => $img2_src,
+    'img1_src' => $derivative1src,
+    'img2_src' => $derivative2src,
       )
   );
 }
