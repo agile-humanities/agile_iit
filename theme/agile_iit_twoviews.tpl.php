@@ -1,7 +1,7 @@
 <div id = twoviews_container>
-    <p> Origin (click to reset):
-        <span class="info_pane iit-button" id="image1_info">X:0 Y:0</span>
-        <span class="info_pane iit-button" id="image2_info">X:0 Y:0</span>
+    <p><span>Origin (click to reset):</span>
+        <input type="button" class="info_pane iit-button" id="image1_info" value="X:0 Y:0"/>
+        <input type="button" class="info_pane iit-button" id="image2_info" value="X:0 Y:0"/>
         <input type="button" class="iit-button" name="ol_help" id="ol_help" value="Help"/>
         <input type="button" class="iit-button" name="ol_close" id="ol_close" value = "Close"/>
 

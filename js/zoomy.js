@@ -111,8 +111,8 @@
                         if (typeof a !== 'undefined' && a.length > 0) {
                             
                             //customized behavior for IIT
-                            var imag1_xy = $('#image1_info').text().split(' ');
-                            var imag2_xy = $('#image2_info').text().split(' ');
+                            var imag1_xy = $('#image1_info').attr('value').split(' ');
+                            var imag2_xy = $('#image2_info').attr('value').split(' ');
                             var x1 = imag1_xy[0].substring(2);
                             var y1 = imag1_xy[1].substring(2);
                             var x2 = imag2_xy[0].substring(2);
@@ -154,7 +154,7 @@
 
                             // customized for IIT
                             $('.info_pane').click(function () {
-                                $(this).text('X:0 Y:0');
+                                $(this).attr('value','X:0 Y:0' );
                                 if ($(this).attr('id') == 'image1_info') {
                                     var clearme = '#ol_i1';
                                 }
@@ -182,10 +182,10 @@
                                 relX = relX.toFixed(2);
                                 relY = relY.toFixed(2);
                                 if (parent_id == 'ol_i1') {
-                                    $('#image1_info').text("X:" + relX + " Y:" + relY)
+                                    $('#image1_info').attr('value', "X:" + relX + " Y:" + relY)
                                 }
                                 if (parent_id == 'ol_i2') {
-                                    $('#image2_info').text("X:" + relX + " Y:" + relY)
+                                    $('#image2_info').attr('value', "X:" + relX + " Y:" + relY)
                                 }
                             });
                             // background set in two image zooms

@@ -7,10 +7,9 @@
             <input type="hidden" id="w" name="w" />
             <input type="hidden" id="h" name="h" />
             <input type="submit" class="iit-button" value="Extract Detail" class="btn btn-large btn-inverse" style=" position: relative; float:left; margin-right: 4px;" />
-
+            <input type="button" class="iit-button" name="cl_help" id="cl_help" value="Help"/>
+            <input type="button" class="iit-button" name="cl_close" id="cl_close" value="Close"/>
         </form>
-        <input type="button" class="iit-button" name="cl_help" id="cl_help" value="Help"/>
-        <input type="button" class="iit-button" name="cl_close" id="cl_close" value="Close"/>
     </div>
     <div style="clear:both;"></div>
     <div id="ol_i1" class="iit-image-holder">
