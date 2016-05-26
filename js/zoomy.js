@@ -809,9 +809,12 @@
 
                 // listen for a load
                 nImg.one("load", function () {
-
+                    var i = 1;
+                    if (ele.parent().attr('id') == 'ol_i1') {
+                        i = 0;
+                    }
                     // Ready to build zoom
-                    build.zoom(ele, ZoomyS.count.length);
+                    build.zoom(ele, i);
 
                 }).each(function () {
 
