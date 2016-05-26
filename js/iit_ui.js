@@ -79,7 +79,8 @@ var image2 = {}; // Image dragged into the right-hand position
                     cursor: "move",
                     revert: "false",
                     helper: "clone",
-                    scroll: false
+                    scroll: false,
+                    cursorAt: { left: 5, top: 5 }
 
                 }).on('dragstart', function (e, ui) {
                     $(ui.helper).css('z-index', '99999'); // and make the helper super-high z-index. This good.
