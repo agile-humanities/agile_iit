@@ -514,7 +514,8 @@ function agile_iit_save_comparison_form_submit($form, &$form_state) {
 function agile_iit_get_local_path($url) {
   global $base_url;
   global $base_path;
-  $path = parse_url($url)['path'];
+  $path = parse_url($url);
+  $path = $path['path'];
   $pos = strpos($path, $base_path);
   if ($pos === 0) {
     $path = substr($path, strlen($base_path));
