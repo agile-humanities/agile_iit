@@ -36,8 +36,8 @@ function agile_iit_get_candidates() {
  *   Candidate fields as associative array.
  */
 function agile_iit_get_number_fields($entity_type = NULL) {
-  $fields_available = [];
-  $candidates = [];
+  $fields_available = array();
+  $candidates = array();
   if (!$entity_type) {
     $all_instances = field_info_instances('node');
     foreach ($all_instances as $bundle => $fields) {
