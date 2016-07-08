@@ -53,39 +53,66 @@ var image1Left = 0;
                     $.post("agile/iit/twoviews", values, function (data) {
                         $("#overlay2").append(data);
                         $(window).scrollTop(0);
-                        var ol_width = $("#overlay2").width();
-                        var ol_height = $("#overlay2").height();
+                        var ol_width = $("#overlay2").width()/2 - 2;
+                        var ol_height = $(window).height()/2 - 28;
                         // Set image dimensions before calling zoomy.
+                        //Except now we want to do it based on the height.
+
                         var height = ol_height.toString() + 'px';
-                        $("#ol_i1").css("width", ol_width / 2 - 50);
-                        $("#ol_i2").css("width", ol_width / 2 - 50); // note: this gets called during window resize.
+                        // we still want the containers to be half-width sized...
+                        $("#ol_i1").css("width", ol_width);
+                        $("#ol_i2").css("width", ol_width);
+                        $('.two_up_image').css("height", height);
 
                         var top = Math.max($('#ol_i1').height(), $('#ol_i2').height()) + 5;
                         image1Top = top;
                         image2Top = top;
                         var src1 = $("#ol_i1").find('img').attr('src');
-                        var scr2 = $("#ol_i1").find('img').attr('src');
-                        $('.zoom').zoomy({
-                            zoomSize: 256,
-                            round: false,
-                            border: '6px solid #fff'
-                        });
-                        $.ajax({
-                            url: 'agile/iit/image_dimensions',
-                            type: "POST",
-                            data: {
-                                img1: $("#ol_i1").find('img').attr('src'),
-                                img2: $("#ol_i2").find('img').attr('src'),
-                            },
-                            async: false,
-                            success: function (results, status, xhr) {
-                                results = JSON.parse(results)
-                                dims = results;
-                            },
-                            error: function (data, status, xhd) {
-                                console.log("The function execute_callback has failed");
-                            }
-                        });
+                        var src2 = $("#ol_i1").find('img').attr('src');
+                        var img1loaded = 0; // we have to wait for both images to load to determine what size to use.
+                        var img2loaded = 0;
+                        var img1 = new Image();
+                        img1.onload = function() {
+                            if (img2loaded) {go()}
+                            img1loaded = 1;
+                        }
+                        img1.src = src1;
+                        var img2 = new Image();
+                        img2.onload = function() {
+                            if (img1loaded) {go()}
+                            img2loaded = 1;
+                        }
+                        img2.src = src2;
+
+                        var go = function(){
+                            var minwidth = Math.min(img1.width, img2.width);
+                            var minheight = Math.min(img1.height, img2.height);
+                            var zoomyWidth = Math.min(minwidth, ol_width);
+                            var zoomyHeight = Math.min(minheight, ol_height);
+                            $('.zoom').zoomy({
+                                round: false,
+                                border: '1px solid #fff',
+                                zoomWidth: zoomyWidth,
+                                zoomHeight: zoomyHeight
+                            });
+                            $.ajax({
+                                url: 'agile/iit/image_dimensions',
+                                type: "POST",
+                                data: {
+                                    img1: $("#ol_i1").find('img').attr('src'),
+                                    img2: $("#ol_i2").find('img').attr('src'),
+                                },
+                                async: false,
+                                success: function (results, status, xhr) {
+                                    results = JSON.parse(results)
+                                    dims = results;
+                                },
+                                error: function (data, status, xhd) {
+                                    console.log("The function execute_callback has failed");
+                                }
+                            });
+                        }
+
 
                     });
 

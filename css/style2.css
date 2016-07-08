@@ -250,15 +250,19 @@ form.inline {
     margin-right: auto;
     color: white;
 }
-.two_up_image {
-    width:99%;
-}
 
 #ol_i1, #ol_i2 {
     float:left;
 }
 
+.two_up_image {
+    margin: 0 5px; !important
 
+}
+
+.narrow-band {
+    margin: 0;
+}
 .iit-image-holder {
     width: 49%;
     padding: 0 5px;

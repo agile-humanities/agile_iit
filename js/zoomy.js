@@ -39,12 +39,14 @@
 
         // @variable defaults Object - Is overwritten by options Object
         var defaults = {
-            zoomSize: 250,
+            zoomSize: 500,
+            zoomHeight: 250,
+            zoomWidth: 250,
             round: false,
             glare: false,
             clickable: false,
             attr: 'href',
-            border: '5px solid #999',
+            border: '1px solid #999',
             zoomInit: null, //callback for when zoom initializes
             zoomStart: null, // callback for when zoom starts
             zoomStop: null // callback for when the zoom ends
@@ -226,16 +228,21 @@
 
                         ZoomyS[id].size = {};
                         ZoomyS[id].size.full = options.zoomSize + (ZoomyS[id].zoom.border * 2);
-                        ZoomyS[id].size.half = ZoomyS[id].size.full / 2;
+                        ZoomyS[id].size.height = options.zoomHeight + (ZoomyS[id].zoom.border * 2);
+                        ZoomyS[id].size.width = options.zoomWidth + (ZoomyS[id].zoom.border * 2);
+
+                        ZoomyS[id].size.halfHeight = ZoomyS[id].size.height / 2;
+                        ZoomyS[id].size.halfWidth = ZoomyS[id].size.width / 2;
                         ZoomyS[id].size.ratioX = utils.ratio(ZoomyS[id].css.width, ZoomyS[id].zoom.x);
                         ZoomyS[id].size.ratioY = utils.ratio(ZoomyS[id].css.height, ZoomyS[id].zoom.y);
-                        ZoomyS[id].size.zoomX = ZoomyS[id].zoom.x - ZoomyS[id].size.full;
-                        ZoomyS[id].size.zoomY = ZoomyS[id].zoom.y - ZoomyS[id].size.full;
+                        ZoomyS[id].size.zoomX = ZoomyS[id].zoom.x - ZoomyS[id].size.width;
+                        ZoomyS[id].size.zoomY = ZoomyS[id].zoom.y - ZoomyS[id].size.height;
 
                         ZoomyS[id].stop = {};
-                        ZoomyS[id].stop.main = ZoomyS[id].size.half - (ZoomyS[id].size.half * ZoomyS[id].size.ratioX) - (ZoomyS[id].zoom.border * ZoomyS[id].size.ratioX) + ZoomyS[id].zoom.border;
-                        ZoomyS[id].stop.right = utils.pos.stop(ZoomyS[id].css.width, ZoomyS[id].size.full, ZoomyS[id].zoom.border, ZoomyS[id].stop.main);
-                        ZoomyS[id].stop.bottom = utils.pos.stop(ZoomyS[id].css.height, ZoomyS[id].size.full, ZoomyS[id].zoom.border, ZoomyS[id].stop.main);
+                        ZoomyS[id].stop.top = ZoomyS[id].size.halfHeight - (ZoomyS[id].size.halfHeight * ZoomyS[id].size.ratioX) - (ZoomyS[id].zoom.border * ZoomyS[id].size.ratioX) + ZoomyS[id].zoom.border;
+                        ZoomyS[id].stop.left = ZoomyS[id].size.halfWidth - (ZoomyS[id].size.halfWidth * ZoomyS[id].size.ratioX) - (ZoomyS[id].zoom.border * ZoomyS[id].size.ratioX) + ZoomyS[id].zoom.border;
+                        ZoomyS[id].stop.right = utils.pos.stop(ZoomyS[id].css.width, ZoomyS[id].size.width, ZoomyS[id].zoom.border, ZoomyS[id].stop.left);
+                        ZoomyS[id].stop.bottom = utils.pos.stop(ZoomyS[id].css.height, ZoomyS[id].size.height, ZoomyS[id].zoom.border, ZoomyS[id].stop.top);
                     }
 
                 },
@@ -266,10 +273,10 @@
             collision: function (posX, posY, dataset) {
 
                 // Test for collisions
-                var a = -dataset.stop.main <= posX,
-                        e2 = -dataset.stop.main > posX,
-                        b = -dataset.stop.main <= posY,
-                        f = -dataset.stop.main > posY,
+                var a = -dataset.stop.left <= posX,
+                        e2 = -dataset.stop.left > posX,
+                        b = -dataset.stop.top <= posY,
+                        f = -dataset.stop.top > posY,
                         d = dataset.stop.bottom > posY,
                         g = dataset.stop.bottom <= posY,
                         c = dataset.stop.right > posX,
@@ -285,15 +292,15 @@
                     // In the Center
                     0: [leftX, topY, posX, posY],
                     // On Left Side
-                    1: [0, topY, -dataset.stop.main, posY],
+                    1: [0, topY, -dataset.stop.left, posY],
                     // On the Top Left Corner
-                    2: [0, 0, -dataset.stop.main, -dataset.stop.main],
+                    2: [0, 0, -dataset.stop.left, -dataset.stop.top],
                     //On the Bottom Left Corner
-                    3: [0, dataset.size.zoomY, -dataset.stop.main, dataset.stop.bottom],
+                    3: [0, dataset.size.zoomY, -dataset.stop.left, dataset.stop.bottom],
                     // On the Top
-                    4: [leftX, 0, posX, -dataset.stop.main],
+                    4: [leftX, 0, posX, -dataset.stop.top],
                     //On the Top Right Corner
-                    5: [dataset.size.zoomX, 0, dataset.stop.right, -dataset.stop.main],
+                    5: [dataset.size.zoomX, 0, dataset.stop.right, -dataset.stop.top],
                     //On the Right Side
                     6: [dataset.size.zoomX, topY, dataset.stop.right, posY],
                     //On the Bottom Right Corner
@@ -314,10 +321,10 @@
                         dataset = ZoomyS[id],
                         yOffset = (touch) ? -70 : 0,
                         // only dynamic variables
-                        posX = utils.pos.mouse(e.pageX, l.left, dataset.size.half),
-                        posY = utils.pos.mouse(e.pageY + yOffset, l.top, dataset.size.half),
-                        leftX = utils.pos.zoom(e.pageX, l.left, dataset.size.ratioX, dataset.size.half, ZoomyS[id].zoom.border),
-                        topY = utils.pos.zoom(e.pageY + yOffset, l.top, dataset.size.ratioY, dataset.size.half, ZoomyS[id].zoom.border),
+                        posX = utils.pos.mouse(e.pageX, l.left, dataset.size.halfWidth),
+                        posY = utils.pos.mouse(e.pageY + yOffset, l.top, dataset.size.halfHeight),
+                        leftX = utils.pos.zoom(e.pageX, l.left, dataset.size.ratioX, dataset.size.halfWidth, ZoomyS[id].zoom.border),
+                        topY = utils.pos.zoom(e.pageY + yOffset, l.top, dataset.size.ratioY, dataset.size.halfHeight, ZoomyS[id].zoom.border),
                         cssArrIndex = change.collision(posX, posY, dataset),
                         //Compile CSS object to move Zoomy
 
@@ -465,14 +472,20 @@
 
                 if (!options.glare) {
                     zoom.children('span').css({
+                        /*
                         height: options.zoomSize - 10,
                         width: options.zoomSize - 10
+                        */
+                        height: options.zoomHeight - 10,
+                        width: options.zoomWidth - 10
                     });
                 }
 
                 zoom.css({
-                    height: options.zoomSize,
-                    width: options.zoomSize,
+                    /*height: options.zoomSize,
+                    width: options.zoomSize,*/
+                    height: options.zoomHeight,
+                    width: options.zoomWidth,
                     top: 0,
                     left: 0,
                     'border-radius': style.round(undefined, border[1]),
@@ -524,12 +537,12 @@
                         image = image.replace(")", "%29");
                         var container_width = $("#ol_i1").width();
 
-                        if (id % 2 == 1) {
+                        if (id % 2 == 1) { // If you're on zoomy window 1
                             zoom.append(assets)
                                     .css({
                                         'background-image': 'url("' + image + '")',
                                         top: '',
-                                        left: container_width + 'px',
+                                        left: container_width + 5 + 'px',
                                         position: 'fixed',
                                         bottom: '0px',
                                         visibility: 'visible'
@@ -542,7 +555,8 @@
                                     .css({
                                         'background-image': 'url("' + image + '")',
                                         top: '',
-                                        left: leftoffset + 'px',
+                                        left:'',
+                                        right: container_width + 5 + 'px',
                                         position: 'fixed',
                                         bottom: '0px',
                                         visibility: 'visible'

@@ -102,7 +102,7 @@ function agile_iit_create_cropped_image($src, $xOffset_ratio, $yOffset_ratio, $w
 }
 
 /**
- * Menu driven callback to push off double image view.
+ * Callback to create the comparison viewer.
  */
 function agile_iit_twoviews() {
 
@@ -117,31 +117,42 @@ function agile_iit_twoviews() {
     if (!($size1 && $size2)) {
       return;
     }
-    $max_width = min($size1['width'], $size2['width']);
-    if ($max_width > 2900) {
-      $style = 'iit-3000';
-    } elseif ($max_width > 2399) {
-      $style = 'iit-2400';
-    } elseif ($max_width > 1999) {
-      $style = 'iit-2000';
-    } elseif ($max_width > 1799) {
-      $style = 'iit-1800';
-    } elseif ($max_width > 1599) {
-      $style = 'iit-1600';
-    } elseif ($max_width > 1399) {
-      $style = 'iit-1400';
-    } elseif ($max_width > 1199) {
-      $style = 'iit-1200';
-    } elseif ($max_width > 999) {
-      $style = 'iit-1000';
-    } elseif ($max_width > 799) {
-      $style = 'iit-800';
-    } elseif ($max_width > 599) {
-      $style = 'iit-600';
-    } elseif ($max_width > 399) {
-      $style = 'iit-400';
+    /**
+     * Get the size of the window, minus the toolbars. 
+     * We will scale the images to have the same height now instead of the same
+     * width. So we find the largest common image style and use that for the 
+     * zoom window.
+     * 
+     * However we'll keep scaling the two down - together - so that their 
+     * heights stay the same while the whole images fit in the box.
+     */
+    $max_height = min($size1['height'], $size2['height']);
+    if ($max_height > 2900) {
+      $style = 'iit-h3000';
+    } elseif ($max_height > 2399) {
+      $style = 'iit-h2400';
+    } elseif ($max_height > 1999) {
+      $style = 'iit-h2000';
+    } elseif ($max_height > 1799) {
+      $style = 'iit-h1800';
+    } elseif ($max_height > 1599) {
+      $style = 'iit-h1600';
+    } elseif ($max_height > 1399) {
+      $style = 'iit-h1400';
+    } elseif ($max_height > 1199) {
+      $style = 'iit-h1200';
+    } elseif ($max_height > 999) {
+      $style = 'iit-h1000';
+    } elseif ($max_height > 799) {
+      $style = 'iit-h800';
+    } elseif ($max_height > 699) {
+      $style = 'iit-h700';
+    } elseif ($max_height > 599) {
+      $style = 'iit-h600';
+    } elseif ($max_height > 399) {
+      $style = 'iit-h400';
     } else {
-      $style = 'iit-200';
+      $style = 'iit-h200';
     }
     $derivative1src =  image_style_url($style, $img1_src);
     $derivative2src =  image_style_url($style, $img2_src);
