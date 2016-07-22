@@ -86,8 +86,6 @@ function close_compview() {
                     setTimeout(resizeend, delta);
                 } else {
                     timeout = false;
-                    alert('Done resizing');
-                    console.log("resizing");
                     $("#ol_close").trigger('click');
                     $("#viewform").trigger('submit');
                 }
