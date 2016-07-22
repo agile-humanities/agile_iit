@@ -74,10 +74,12 @@ function close_compview() {
             var timeout = false;
             var delta = 200;
             $(window).resize(function () {
-                rtime = new Date();
-                if (timeout === false) {
-                    timeout = true;
-                    setTimeout(resizeend, delta);
+                if ($('#overlay2').length) {
+                    rtime = new Date();
+                    if (timeout === false) {
+                        timeout = true;
+                        setTimeout(resizeend, delta);
+                    }
                 }
             });
 
