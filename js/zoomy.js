@@ -536,7 +536,7 @@
                                     }).find('img').remove();
                         }
                         else {
-                            var leftoffset = container_width * .49; //moves left hand image
+                            var leftoffset = container_width * .505; //moves left hand image
 
                             zoom.append(assets)
                                     .css({
