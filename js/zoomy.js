@@ -529,14 +529,14 @@
                                     .css({
                                         'background-image': 'url("' + image + '")',
                                         top: '',
-                                        left: container_width + 'px',
+                                        left: (container_width * 1.1) + 'px', //moves right hand image
                                         position: 'fixed',
                                         bottom: '0px',
                                         visibility: 'visible'
                                     }).find('img').remove();
                         }
                         else {
-                            var leftoffset = container_width - 280;
+                            var leftoffset = container_width * .49; //moves left hand image
 
                             zoom.append(assets)
                                     .css({

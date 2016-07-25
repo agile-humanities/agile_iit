@@ -29,15 +29,16 @@ function comp_view() {
         // Set image dimensions before calling zoomy.
         var height = ol_height.toString() + 'px';
         $("#ol_i1").css("width", ol_width / 2 - 50);
-        $("#ol_i2").css("width", ol_width / 2 - 50); // note: this gets called during window resize.
+        $("#ol_i2").css("width", ol_width / 2 - 50); // note: this is called during window resize.
 
         var top = Math.max($('#ol_i1').height(), $('#ol_i2').height()) + 5;
         image1Top = top;
         image2Top = top;
         var src1 = $("#ol_i1").find('img').attr('src');
         var scr2 = $("#ol_i1").find('img').attr('src');
+        var container_width = $("#ol_i1").width();
         $('.zoom').zoomy({
-            zoomSize: 256,
+            zoomSize: container_width / 2,
             round: false,
             border: '6px solid #fff'
         });
