@@ -17,6 +17,12 @@
  *   The Drupal form definition.
  */
 function iit_admin(array $form, array &$form_state) {
+  $image_styles = image_styles();
+  $mapped_styles['none'] = t('None');
+  foreach ($image_styles as $style => $values) {
+    $mapped_styles[$style] = $values['label'];
+  }
+
   $fields_available = ''; // TODO: Query for existing fields of type image and display them here with their machine
   //names, their display names, and what content types they appear in, as a guide to the user.
   $help_node = variable_get('agile_iit_help_node_id', '');
@@ -33,7 +39,7 @@ function iit_admin(array $form, array &$form_state) {
     '#default_value' => $help_node,
     '#size' => 5,
   );
-  $form['iit_image_fields'] = array(
+  $form['iit_image_field'] = array(
     '#type' => 'textfield',
     '#title' => t('Image Field'),
     '#default_value' => variable_get('iit_image_field', 'field_image'),
@@ -49,7 +55,7 @@ function iit_admin(array $form, array &$form_state) {
  */
 function iit_admin_validate($form, &$form_state) {
   // Test whether that field exists.
-  $field_name = $form_state['values']['iit_image_fields'];
+  $field_name = $form_state['values']['iit_image_field'];
   $fields = field_info_field_map();
   if (!isset($fields[$field_name])) {
     form_set_error('iit_image_fields', t('<em>Image field</em> must exist.'));

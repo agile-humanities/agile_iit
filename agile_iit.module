@@ -20,7 +20,7 @@ function agile_iit_views_api() {
  */
 function agile_iit_menu() {
   return array(
-    'admin/config/iit' => array(
+    'admin/config/media/iit' => array(
       'title' => 'Image Investigation Toolkit',
       'description' => "Configure settings associated with IIT.",
       'page callback' => 'drupal_get_form',

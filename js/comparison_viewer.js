@@ -75,7 +75,7 @@ function close_compview() {
             var timeout = false;
             var delta = 200;
             $(window).resize(function () {
-                if ($('#overlay2').length) {
+                if ($('#overlay2').length && $('#twoviews_container').length) {
                     rtime = new Date();
                     if (timeout === false) {
                         timeout = true;

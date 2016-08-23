@@ -16,8 +16,8 @@ function agile_iit_crop_callback() {
     $theme_args = array(
       'img1_src' => filter_input(INPUT_POST, 'cf_img1'),
       'img2_src' => filter_input(INPUT_POST, 'cf_img2'),
-     );
-  echo theme('agile_iit_crop', $theme_args);
+    );
+    echo theme('agile_iit_crop', $theme_args);
   }
 }
 
@@ -107,11 +107,11 @@ function agile_iit_create_cropped_image($src, $xOffset_ratio, $yOffset_ratio, $w
 function agile_iit_twoviews() {
 
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $field = variable_get('iit_image_fields', 'field_image');
+    $field = variable_get('iit_image_fields', 'field_object_image');
     $node1 = node_load(filter_input(INPUT_POST, 'node1'));
-    $img1_src = file_create_url($node1->{$field}['und'][0]['uri']);
+    $img1_src = image_style_url('iit-800', $node1->{$field}['und'][0]['uri']);
     $node2 = node_load(filter_input(INPUT_POST, 'node2'));
-    $img2_src = file_create_url($node2->{$field}['und'][0]['uri']);
+    $img2_src = image_style_url('iit-800', $node2->{$field}['und'][0]['uri']);;
   }
 
   echo theme('agile_iit_twoviews', array(
@@ -157,7 +157,8 @@ function agile_iit_image_cropper() {
       // Create cropped section of image 2
       $section2->src = $image2->src_orig;
       $detail2 = agile_iit_create_cropped_image($section2->src, $section2->xOffset_ratio, $section2->yOffset_ratio, $section2->width_ratio, $section2->height_ratio);
-    } else {
+    }
+    else {
       $theta = deg2rad($section1->rotation_deg);
       $image = image_load(agile_iit_get_local_path($image2->src_orig));
       // Calculate the center of the section from the image. x_c for x from center.
@@ -200,19 +201,19 @@ function agile_iit_image_cropper() {
     image_save($detail2);
 
     // Calculate approximate sizes based on real life dimensions.
-    if (!isset($image1->realWidth_cm) or !isset($image1->realHeight_cm)) {
+    if (!isset($image1->realWidth_cm) or ! isset($image1->realHeight_cm)) {
       $section1_dimensions = t("Dimensions not found.");
     }
     else {
       $section1_dimensions = "Section dimensions: " . round($image1->realWidth_cm * $section1->width_ratio, 2) .
-        " cm x " . round($image1->realHeight_cm * $section1->height_ratio, 2) . " cm.";
+          " cm x " . round($image1->realHeight_cm * $section1->height_ratio, 2) . " cm.";
     }
-    if (!isset($image2->realWidth_cm) or !isset($image2->realHeight_cm)) {
+    if (!isset($image2->realWidth_cm) or ! isset($image2->realHeight_cm)) {
       $section2_dimensions = t("Dimensions not found.");
     }
     else {
       $section2_dimensions = "Section dimensions: " . round($image2->realWidth_cm * $section2->width_ratio, 2) .
-        " cm x " . round($image2->realHeight_cm * $section2->height_ratio, 2) . " cm.";
+          " cm x " . round($image2->realHeight_cm * $section2->height_ratio, 2) . " cm.";
     }
     /* Template this, and pull in the info that you want from the nodes. */
     $node1_rendered = drupal_render(node_view($node1, 'iit_crop_info'));
@@ -238,7 +239,6 @@ function agile_iit_image_cropper() {
   }
 }
 
-
 /**
  * Callback to return the URL of an image derivative.
  */
@@ -247,6 +247,7 @@ function agile_iit_image_derivative() {
     $path = filter_input(INPUT_POST, 'path');
     $style = 'iit-' . filter_input(INPUT_POST, 'size');
     $style = str_replace('px', '', $style);
+    file_get_contents (image_style_url('iit-200', $path));
     $url = image_style_url($style, $path);
     echo $url;
   }

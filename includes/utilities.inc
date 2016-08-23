@@ -29,8 +29,8 @@ function agile_iit_get_candidates() {
 /**
  * Returns number fields from enity type.
  *
- * @param type $entity_type
- *   Entity type of node
+ * @param string $entity_type
+ *   Entity type of node.
  *
  * @return array
  *   Candidate fields as associative array.
@@ -59,7 +59,7 @@ function agile_iit_get_number_fields($entity_type = NULL) {
  * Determines whether nid is of node type with one or more number fields.
  *
  * @param string $nid
- *  Node identifier
+ *   Node identifier.
  *
  * @return bool
  *   True if node type has number field
