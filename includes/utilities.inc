@@ -77,3 +77,33 @@ function agile_iit_has_number_type($nid) {
   }
   return count($candidates) > 0;
 }
+
+/**
+ * Returns formatted image for view.
+ *
+ * @param stdClass $data
+ *   Data from view
+ *
+ * @return HTML
+ *   Styled image html
+ */
+function agile_iit_make_image($data) {
+  $node = node_load($data->nid);
+  $wrapper = entity_metadata_wrapper('node', $node);
+  $image_property = $wrapper->field_object_image->raw();
+  $variables = array(
+    'style_name' => 'iit-200',
+    'path' => $image_property['uri'],
+    'alt' => $node->title,
+    'title' => $node->title,
+    'attributes' => array(
+      'data-width' => $wrapper->field_dimensions_width->raw(),
+      'data-height' => $wrapper->field_dimensions_height->raw(),
+      'data-date' => '1999',
+      'nid' => $node->nid,
+      'data-support' => "canvas",
+      'data-lrg-url'=>$image_property['uri'],
+    ),
+  );
+  return theme_image_style($variables);
+}

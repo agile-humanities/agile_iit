@@ -162,7 +162,8 @@ function agile_iit_image_cropper() {
     }
     else {
       $theta = deg2rad($section1->rotation_deg);
-      $image = image_load(agile_iit_get_local_path($image2->src_orig));
+      $orig_uri = file_create_url($node2->field_object_image['und'][0]['uri']);
+      $image = image_load(agile_iit_get_local_path($orig_uri));
       // Calculate the center of the section from the image. x_c for x from center.
       $x_c = $section2->xOffset_ratio + ($section2->width_ratio / 2) - 0.5;
       $y_c = $section2->yOffset_ratio + ($section2->height_ratio / 2) - 0.5;
