@@ -505,7 +505,6 @@
 
                 //Move the Zoomy out of the screen view while loading img
                 zoom.show().css({top: '-9999px', left: '-9999px'});
-
                 if (zoom.find('img').attr('src') !== image) {
                     zoom.find('img').attr('src', image).load(function () {
 
@@ -566,7 +565,7 @@
             },
             // Add zoom element to page
             zoom: function (ele, i) {
-
+console.dir(ele)
                 //Adding Initial State
                 ZoomyS[i] = {
                     state: null,

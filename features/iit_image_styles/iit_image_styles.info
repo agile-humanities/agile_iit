@@ -4,6 +4,7 @@ core = 7.x
 package = Features
 dependencies[] = image
 features[features_api][] = api:2
+features[image][] = iit-1200
 features[image][] = iit-200
 features[image][] = iit-400
 features[image][] = iit-600
