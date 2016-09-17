@@ -22,7 +22,8 @@ function iit_admin(array $form, array &$form_state) {
   foreach ($image_styles as $style => $values) {
     $mapped_styles[$style] = $values['label'];
   }
-
+  $styles = image_style_options();
+  $default_style = variable_get('iit_image_style', 'iit-1200');
   $fields_available = ''; // TODO: Query for existing fields of type image and display them here with their machine
   //names, their display names, and what content types they appear in, as a guide to the user.
   $help_node = variable_get('agile_iit_help_node_id', '');
@@ -32,6 +33,14 @@ function iit_admin(array $form, array &$form_state) {
       '#markup' => l(t('Edit help text'), "/node/$help_node/edit"),
     );
   }
+  $form['iit_image_style'] =
+      array(
+        '#type' => 'select',
+        '#title' => t('Image style for Comparison viewer'),
+        '#description' => t('Image style to be used on comparison insets.'),
+        '#default_value' => $default_style,
+        '#options' => $styles,
+      );
   $form['agile_iit_help_node_id'] = array(
     '#type' => 'textfield',
     '#title' => t('Node ID of Help page.'),

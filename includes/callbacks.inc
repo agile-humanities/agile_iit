@@ -107,11 +107,12 @@ function agile_iit_create_cropped_image($src, $xOffset_ratio, $yOffset_ratio, $w
 function agile_iit_twoviews() {
 
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $style = variable_get('iit_image_style', 'iit-1200');
     $field = variable_get('iit_image_fields', 'field_object_image');
     $node1 = node_load(filter_input(INPUT_POST, 'node1'));
-    $img1_src = image_style_url('iit-1200', $node1->{$field}['und'][0]['uri']);
+    $img1_src = image_style_url($style, $node1->{$field}['und'][0]['uri']);
     $node2 = node_load(filter_input(INPUT_POST, 'node2'));
-    $img2_src = image_style_url('iit-1200', $node2->{$field}['und'][0]['uri']);
+    $img2_src = image_style_url($style, $node2->{$field}['und'][0]['uri']);
   }
 
   echo theme('agile_iit_twoviews', array(
@@ -150,13 +151,13 @@ function agile_iit_image_cropper() {
 
     $original1 = $node1->field_object_image['und'][0]['uri'];
     // Create cropped section of image 1
-    $section1->src =  file_create_url($node1->field_object_image['und'][0]['uri']);
+    $section1->src = file_create_url($node1->field_object_image['und'][0]['uri']);
     $detail1 = agile_iit_create_cropped_image($section1->src, $section1->xOffset_ratio, $section1->yOffset_ratio, $section1->width_ratio, $section1->height_ratio);
 
     if ($section1->rotation_deg == 0) {
       // Create cropped section of image 2
       $section2->src = $image2->src_orig;
-      $section2->src =  file_create_url($node2->field_object_image['und'][0]['uri']);
+      $section2->src = file_create_url($node2->field_object_image['und'][0]['uri']);
 
       $detail2 = agile_iit_create_cropped_image($section2->src, $section2->xOffset_ratio, $section2->yOffset_ratio, $section2->width_ratio, $section2->height_ratio);
     }
@@ -250,7 +251,7 @@ function agile_iit_image_derivative() {
     $path = filter_input(INPUT_POST, 'path');
     $style = 'iit-' . filter_input(INPUT_POST, 'size');
     $style = str_replace('px', '', $style);
-    file_get_contents (image_style_url('iit-200', $path));
+    file_get_contents(image_style_url('iit-200', $path));
     $url = image_style_url($style, $path);
     echo $url;
   }
