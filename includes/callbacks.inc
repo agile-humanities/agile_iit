@@ -197,13 +197,13 @@ function agile_iit_image_cropper() {
       echo "Image sections could not be created. Please check Drupal logs.";
       return;
     }
+    $width = max($detail1->info['width'], $detail2->info['width']);
+    $width = $width > 500 ? 500 : $width;
 
-    $width = 500;
     image_scale($detail1, $width, NULL, TRUE);
     image_save($detail1);
     image_scale($detail2, $width, NULL, TRUE);
     image_save($detail2);
-
     // Calculate approximate sizes based on real life dimensions.
     if (!isset($image1->realWidth_cm) or ! isset($image1->realHeight_cm)) {
       $section1_dimensions = t("Dimensions not found.");
