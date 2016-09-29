@@ -113,7 +113,7 @@
     background: rgba(0,0,0,1.0);
     cursor: pointer;
     width: 100%;
-    min-height: 100%;
+    min-height: 1200px;
     z-index: 700;
 }
 
@@ -249,6 +249,7 @@ form.inline {
     margin-left: auto;
     margin-right: auto;
     color: white;
+    min-height: 1200px;
 }
 .two_up_image {
     width:99%;
