@@ -511,16 +511,18 @@ function agile_iit_save_comparison_form_submit($form, &$form_state) {
   drupal_goto('node/' . $nid);
 }
 
-function agile_iit_get_local_path($url) {
-  global $base_url;
-  global $base_path;
-  $path = parse_url($url);
-  $path = $path['path'];
-  $pos = strpos($path, $base_path);
-  if ($pos === 0) {
-    $path = substr($path, strlen($base_path));
-  }
-  $path = urldecode($path);
-  return $path;
-}
 
+
+/**
+ * Implements hook_entity_info_alter().
+ */
+function agile_iit_entity_info_alter(&$entity_info) {
+  $entity_info['node']['view modes']['iit_crop_info'] = array(
+    'label' => t('IIT Crop Info'),
+    'custom settings' => TRUE,
+  );
+    $entity_info['node']['view modes']['iit_detail_comparison'] = array(
+    'label' => t('IIT Detail Comparison'),
+    'custom settings' => TRUE,
+  );
+}

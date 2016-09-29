@@ -74,6 +74,7 @@ function agile_iit_crop_tool_callback() {
  * returns $image, a Drupal image object.
  */
 function agile_iit_create_cropped_image($src, $xOffset_ratio, $yOffset_ratio, $width_ratio, $height_ratio) {
+  module_load_include('inc', 'agile_iit', 'includes/utilities');
   $src = agile_iit_get_local_path($src); // convert the url to a local path.
   $image = image_load($src);
   if (!$image) {

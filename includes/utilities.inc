@@ -107,3 +107,27 @@ function agile_iit_make_image($data) {
   );
   return theme_image_style($variables);
 }
+
+/**
+ * Returns local path for given URL.
+ *
+ * @global type $base_url
+ * @global type $base_path
+ * @param url $url
+ *   url to be parsed and returned
+ *
+ * @return string
+ *  local path
+ */
+function agile_iit_get_local_path($url) {
+  global $base_url;
+  global $base_path;
+  $path = parse_url($url);
+  $path = $path['path'];
+  $pos = strpos($path, $base_path);
+  if ($pos === 0) {
+    $path = substr($path, strlen($base_path));
+  }
+  $path = urldecode($path);
+  return $path;
+}
