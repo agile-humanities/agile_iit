@@ -182,7 +182,6 @@ function agile_iit_image_effect_info() {
     'label' => t('Scale with field data'),
     'help' => t('Resize an image using data in the host entity, making a scaled-to-life representation.'),
     'effect callback' => 'agile_iit_resize_effect',
-    'dimensions callback' => 'agile_iit_resize_dimensions',
     'form callback' => 'agile_iit_resize_form',
     'summary theme' => 'agile_iit_resize_summary',
   );
