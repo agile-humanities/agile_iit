@@ -64,7 +64,7 @@ function agile_iit_menu() {
       'page arguments' => array('agile_iit_save_comparison_form'),
       'access callback' => 'user_access',
       'access arguments' => array('create iit_detail_comparison content'),
-      ),
+    ),
     'agile/iit/image_dimensions' => array(
       'file' => 'includes/callbacks.inc',
       'page callback' => 'agile_iit_get_image_dimensions',
@@ -318,15 +318,22 @@ function agile_iit_resize_effect(&$image, $data) {
       $wrapper = entity_metadata_wrapper('node', $parent_node);
     }
     if ($wrapper && property_exists($parent_node, $data['dimensions']['width_field'])) {
-      $physical_width = $wrapper->{$data['dimensions']['width_field']}->value();
-      $use_default = FALSE;
+      $test_width = $wrapper->{$data['dimensions']['width_field']}->value();
+      if ($test_width) {
+        $physical_width = $test_width;
+        $use_default = FALSE;
+      }
     }
     if ($wrapper && property_exists($parent_node, $data['dimensions']['height_field'])) {
-      $physical_height = $wrapper->{$data['dimensions']['height_field']}->value();
-      $use_default = FALSE;
+      $test_height = $wrapper->{$data['dimensions']['height_field']}->value();
+      if ($test_height) {
+        $physical_height = $test_height;
+        $use_default = FALSE;
+      }
     }
     if ($wrapper && $use_default && property_exists($parent_node, $data['dimensions']['diameter_field'])) {
       $physical_height = $wrapper->{$data['dimensions']['diameter_field']}->value();
+      $physical_width = $physical_height;
     }
   }
   if ($physical_width) {
@@ -407,8 +414,7 @@ function agile_iit_preprocess_page(&$vars, $hook) {
 /**
  * Implements hook_node_info().
  */
-
-function agile_iit_node_info(){
+function agile_iit_node_info() {
   return array(
     'iit_detail_comparison' => array(
       'name' => t('IIT Detail Comparison'),
@@ -419,7 +425,6 @@ function agile_iit_node_info(){
     ),
   );
 }
-
 
 /**
  * Implement hook_form()
@@ -473,7 +478,7 @@ function agile_iit_save_comparison_form($form, &$form_state, $node1 = NULL, $nod
   $form['actions']['submit']["#submit"][] = "agile_iit_save_comparison_form_submit";
   $form['#cache'] = TRUE;
   $form_state['cache'] = TRUE;
-  
+
   return $form;
 }
 
@@ -513,8 +518,6 @@ function agile_iit_save_comparison_form_submit($form, &$form_state) {
   drupal_goto('node/' . $nid);
 }
 
-
-
 /**
  * Implements hook_entity_info_alter().
  */
@@ -523,7 +526,7 @@ function agile_iit_entity_info_alter(&$entity_info) {
     'label' => t('IIT Crop Info'),
     'custom settings' => TRUE,
   );
-    $entity_info['node']['view modes']['iit_detail_comparison'] = array(
+  $entity_info['node']['view modes']['iit_detail_comparison'] = array(
     'label' => t('IIT Detail Comparison'),
     'custom settings' => TRUE,
   );
